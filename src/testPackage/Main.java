@@ -14,6 +14,8 @@ import de.yadrone.base.navdata.HDVideoStreamData;
 import de.yadrone.base.navdata.VideoListener;
 import de.yadrone.base.navdata.VideoStreamData;
 import de.yadrone.base.video.ImageListener;
+import managers.PilotManager;
+
 
 public class Main {
 
@@ -26,12 +28,14 @@ public class Main {
         try {
 
             drone = new ARDrone();
+            drone.start();
+            PilotManager pilotTest = new PilotManager(drone);
 
             CommandManager cmd = drone.getCommandManager();
-            drone.start();
+
+
             drone.addExceptionListener(new IExceptionListener() {
-                public void exeptionOccurred(ARDroneException exc)
-                {
+                public void exeptionOccurred(ARDroneException exc) {
                     exc.printStackTrace();
                 }
             });
@@ -42,10 +46,22 @@ public class Main {
             TutorialCommander commander = new TutorialCommander(drone);
 
             // Tutorial Section 3
-            TutorialVideoListener testVid =new TutorialVideoListener(drone);
+            TutorialVideoListener testVid = new TutorialVideoListener(drone);
 
             //Since you cant change a jar-file, you would need to resize the image accordingly, els it will show a 640x360 image
-            testVid.setSize(1280,720);
+            testVid.setSize(1280, 720);
+
+            //pilotTest.TakeOfAndLand();
+            pilotTest.takeOff();
+            pilotTest.hover(5000);
+            /*int i = 0;
+            while (i < 10) {
+                pilotTest.spinLeft(500);
+                i++;
+        }*/
+            pilotTest.land();
+            //cmd.takeOff().doFor(10000L);
+            //cmd.landing();
 
             VideoListener tes = new VideoListener() {
                 @Override
@@ -58,11 +74,6 @@ public class Main {
 
                 }
             };
-            // VideoListener test = new VideoListener(drone);
-            cmd.doFor(10000);
-
-            FlightAnimationCommand AniCmd;
-            //drone.getVideoManager().addImageListener();
 
 
         }catch (Exception exp) {
