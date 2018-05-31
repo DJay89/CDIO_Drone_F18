@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="yadrone_032" level="project" />
+    <orderEntry type="library" name="xuggle-xuggler-5.4" level="project" />
   </component>
 </module>
