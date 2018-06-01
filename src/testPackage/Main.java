@@ -53,14 +53,14 @@ public class Main {
             testVid.setSize(1280, 720);
 
             //pilotTest.TakeOfAndLand();
-            pilotTest.takeOff();
-            pilotTest.hover(5000);
+           // pilotTest.takeOff();
+            //pilotTest.hover(5000);
             /*int i = 0;
             while (i < 10) {
                 pilotTest.spinLeft(500);
                 i++;
         }*/
-            pilotTest.land();
+            //pilotTest.land();
             //cmd.takeOff().doFor(10000L);
             //cmd.landing();
 

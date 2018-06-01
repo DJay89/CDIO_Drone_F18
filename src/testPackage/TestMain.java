@@ -10,17 +10,18 @@ public class TestMain
 
     public static void main(String[] args) {
         IARDrone drone = new ARDrone();
-        PilotManager pilotManager = new PilotManager(drone);
+        
+        // PilotManager pilotManager = new PilotManager(drone);
 
-       pilotManager.takeOff();
-       pilotManager.hover(2000);
+       // pilotManager.takeOff();
+       // pilotManager.hover(2000);
 
-        CenteringController test = new CenteringController(drone, pilotManager);
+        // CenteringController test = new CenteringController(drone, pilotManager);
 
-        test.tagIsCentered();
-        pilotManager.hover(2000);
-        pilotManager.land();
-        System.out.println("End");
+        // test.tagIsCentered();
+        // pilotManager.hover(2000);
+        // pilotManager.land();
+        // System.out.println("End");
         //drone.stop();
 
     }
