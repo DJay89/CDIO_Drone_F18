@@ -1,5 +1,6 @@
 package managers;
 
+import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.video.ImageListener;
@@ -18,6 +19,13 @@ public class PilotManager {
          this.drone = drone;
          this.cmd = this.drone.getCommandManager();
     }
+    public PilotManager() {
+        this.drone = new ARDrone();
+        drone.start();
+        this.cmd = this.drone.getCommandManager();
+        droneCamCapture();
+
+    }
 
     public void takeOffAndLand() {
          cmd.takeOff();
@@ -29,7 +37,7 @@ public class PilotManager {
         drone.getVideoManager().addImageListener(new ImageListener() {
             @Override
             public void imageUpdated(BufferedImage bufferedImage) {
-                    PilotManager.this.setImg(bufferedImage);
+                PilotManager.this.setImg(bufferedImage);
             }
         });
     }
@@ -37,7 +45,7 @@ public class PilotManager {
         this.img = bufferedImage;
     }
 
-    public BufferedImage getImg(){
+    public  BufferedImage getImg(){
         return this.img;
     }
 

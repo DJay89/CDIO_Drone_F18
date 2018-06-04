@@ -7,20 +7,25 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="yadrone_032" level="project" />
-    <orderEntry type="library" name="xuggle-xuggler-5.4" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.2" level="project" />
-    <orderEntry type="library" name="slf4j-jdk14-1.7.2" level="project" />
-    <orderEntry type="library" name="xuggle-xuggler-5.4" level="project" />
-    <orderEntry type="library" name="slf4j-jdk14-1.7.2" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.2" level="project" />
-    <orderEntry type="library" name="yadrone_032" level="project" />
     <orderEntry type="library" name="slf4j-api-1.7.2" level="project" />
     <orderEntry type="library" name="slf4j-jdk14-1.7.2" level="project" />
     <orderEntry type="library" name="xuggle-xuggler-5.4" level="project" />
     <orderEntry type="library" name="yadrone_032" level="project" />
-    <orderEntry type="library" name="opencv-340" level="project" />
     <orderEntry type="library" name="core-2.2" level="project" />
     <orderEntry type="library" name="javase-2.2" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/opencv/build/java/opencv-341.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <NATIVE>
+          <root url="file://C:/opencv/build/java/x86" />
+        </NATIVE>
+        <SOURCES>
+          <root url="jar://C:/opencv/build/java/opencv-341.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

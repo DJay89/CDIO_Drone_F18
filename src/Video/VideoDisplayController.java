@@ -1,8 +1,13 @@
 package Video;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import managers.PilotManager;
+import object_recogniztion.image_recogniztion.ImageRecognition;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
@@ -21,7 +26,6 @@ public class VideoDisplayController {
     // the FXML image view
     @FXML
     private ImageView currentFrame;
-
     // a timer for acquiring the video stream
     private ScheduledExecutorService timer;
     // the OpenCV object that realizes the video capture
@@ -29,7 +33,11 @@ public class VideoDisplayController {
     // a flag to change the button behavior
     private boolean cameraActive = false;
     // the id of the camera to be used
-    private static int cameraId = 0;
+    private Thread TIR;
+
+    private static PilotManager pm = new PilotManager();
+    private ImageRecognition IR = new ImageRecognition(pm);
+    private  Runnable frameGrabber;
 
     /**
      * The action triggered by pushing the button on the GUI
@@ -42,22 +50,17 @@ public class VideoDisplayController {
     {
         if (!this.cameraActive)
         {
-            // start the video capture
-            this.capture.open(cameraId);
-
-            // is the video stream available?
-            if (this.capture.isOpened())
-            {
+            if(pm != null){
                 this.cameraActive = true;
-
+                TIR = new Thread((ImageRecognition) IR);
+                TIR.start();
                 // grab a frame every 33 ms (30 frames/sec)
-                Runnable frameGrabber = new Runnable() {
-
+                frameGrabber = new Runnable() {
                     @Override
                     public void run()
                     {
                         // effectively grab and process a single frame
-                        Mat frame = grabFrame();
+                        Mat frame = bufferedImageToMat(pm.getImg());
                         // convert and show the frame
                         Image imageToShow = Utils.mat2Image(frame);
                         updateImageView(currentFrame, imageToShow);
@@ -70,11 +73,7 @@ public class VideoDisplayController {
                 // update the button content
                 this.button.setText("Stop Camera");
             }
-            else
-            {
-                // log the error
-                System.err.println("Impossible to open the camera connection...");
-            }
+
         }
         else
         {
@@ -121,6 +120,14 @@ public class VideoDisplayController {
         }
 
         return frame;
+    }
+
+    private Mat bufferedImageToMat(BufferedImage bi)
+    {
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        mat.put(0, 0, data);
+        return mat;
     }
 
     /**
