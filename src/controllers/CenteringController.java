@@ -9,6 +9,7 @@ public class CenteringController {
     private PilotManager pilot = null;
     private IARDrone drone = null;
 
+    private boolean isCentered;
     private int horizontalDiameter;
     private char turnDirection = 'n';
 
@@ -24,12 +25,14 @@ public class CenteringController {
     }
 
     public boolean centerDroneOnCircle() {
+        this.isCentered = isCenteredCircle();
         tagIsCentered();
         angleAdjusted();
         return true;
     }
 
     public boolean centerDroneOnQR() {
+        this.isCentered = isCenteredQR();
         tagIsCentered();
         return true;
     }
@@ -42,7 +45,7 @@ public class CenteringController {
         int j = 0;
 
         // Actual code
-        while (!isCentered()) {
+        while (!isCentered) { // and circle or qr found (otherwise endless loop)
             int x = getXAxis();
             int y = getYAxis();
 
@@ -168,7 +171,18 @@ public class CenteringController {
         return this.hDia;
     }
 
-    private boolean isCentered() {
-        return this.xAxis == 0 && this.yAxis == 0;
+    private boolean isCenteredQR() {
+        if(this.xAxis == 0 && this.yAxis == 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    private boolean isCenteredCircle() {
+        if(this.xAxis == 0 && this.yAxis == 0) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
