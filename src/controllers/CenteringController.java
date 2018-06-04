@@ -9,9 +9,15 @@ public class CenteringController {
     private PilotManager pilot = null;
     private IARDrone drone = null;
 
+    private int hori;
+
+    private char turnDirection = 'n';
+
     // simulation
     private int xAxis = -1;
     private int yAxis = -1;
+    private int hDia = 5;
+    private int vDia = 5;
 
     public CenteringController (IARDrone drone, PilotManager pilot) {
         this.drone = drone;
@@ -68,6 +74,59 @@ public class CenteringController {
         return true;
     }
 
+    //Placing the drone in front of the circle
+    public boolean placingCircle () {
+/* Whats needed:
+* Diamenter
+* højde
+* bredde
+* radius
+* */
+if (getHoriDiamenter() != getVertiDiamenter() ) {
+
+    //Virkelig ikke tilfreds med dette stykke kode.
+if (turnDirection == 'n') {
+    hori = getHoriDiamenter();
+
+    spinLeft();
+
+    if (hori > getHoriDiamenter()) {
+        turnDirection = 'L';
+        hori = getHoriDiamenter();
+
+    } else {
+        turnDirection = 'R';
+        hori = getHoriDiamenter();
+    }
+    return false;
+}
+    switch (turnDirection) {
+        case 'L':
+            spinLeft();
+            if (hori < getHoriDiamenter()) {
+                turnDirection = 'R';
+            }
+            break;
+        case 'R':
+            spinRight();
+            if (hori < getHoriDiamenter()) {
+                turnDirection = 'L';
+            }
+
+            break;
+    }
+
+    hori = getHoriDiamenter();
+
+return false;
+}
+else {
+    turnDirection = 'n';
+    return true;
+}
+
+    }
+
     private void up() {
         pilot.up(50);
     }
@@ -81,6 +140,12 @@ public class CenteringController {
         pilot.tiltRight(50);
     }
 
+    private void spinRight() {
+        pilot.spinRight(25);
+    }
+    private void spinLeft() {
+        pilot.spinLeft(25);
+    }
 
     // simulation
     private int getXAxis() {
@@ -90,11 +155,17 @@ public class CenteringController {
         return this.yAxis;
     }
 
+    private int getVertiDiamenter () {
+        return this.vDia;
+    }
+    private int getHoriDiamenter () {
+        return this.hDia;
+   }
+
     private boolean isCentered() {
         if (this.xAxis == 0 && this.yAxis == 0) {
             return true;
         }
         return false;
     }
-
 }
