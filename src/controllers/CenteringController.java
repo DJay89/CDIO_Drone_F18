@@ -9,8 +9,7 @@ public class CenteringController {
     private PilotManager pilot = null;
     private IARDrone drone = null;
 
-    private int hori;
-
+    private int horizontalDiameter;
     private char turnDirection = 'n';
 
     // simulation
@@ -19,24 +18,35 @@ public class CenteringController {
     private int hDia = 5;
     private int vDia = 5;
 
-    public CenteringController (IARDrone drone, PilotManager pilot) {
+    public CenteringController(IARDrone drone, PilotManager pilot) {
         this.drone = drone;
         this.pilot = pilot;
     }
 
+    public boolean centerDroneOnCircle() {
+        tagIsCentered();
+        angleAdjusted();
+        return true;
+    }
 
-    public boolean tagIsCentered () {
+    public boolean centerDroneOnQR() {
+        tagIsCentered();
+        return true;
+    }
+
+
+    private boolean tagIsCentered() {
 
         // simulation
         int i = 0;
         int j = 0;
 
         // Actual code
-        while(!isCentered()) {
+        while (!isCentered()) {
             int x = getXAxis();
             int y = getYAxis();
 
-            switch(y) {
+            switch (y) {
                 case -1:
                     right();
                     break;
@@ -47,7 +57,7 @@ public class CenteringController {
                     break;
             }
 
-            switch(x) {
+            switch (x) {
                 case -1:
                     up();
                     break;
@@ -75,67 +85,60 @@ public class CenteringController {
     }
 
     //Placing the drone in front of the circle
-    public boolean placingCircle () {
-/* Whats needed:
-* Diamenter
-* højde
-* bredde
-* radius
-* */
-if (getHoriDiamenter() != getVertiDiamenter() ) {
+    private boolean angleAdjusted() {
 
-    //Virkelig ikke tilfreds med dette stykke kode.
-if (turnDirection == 'n') {
-    hori = getHoriDiamenter();
+        if (getHoriDiamenter() != getVertiDiamenter()) {
 
-    spinLeft();
-
-    if (hori > getHoriDiamenter()) {
-        turnDirection = 'L';
-        hori = getHoriDiamenter();
-
-    } else {
-        turnDirection = 'R';
-        hori = getHoriDiamenter();
-    }
-    return false;
-}
-    switch (turnDirection) {
-        case 'L':
-            spinLeft();
-            if (hori < getHoriDiamenter()) {
-                turnDirection = 'R';
-            }
-            break;
-        case 'R':
-            spinRight();
-            if (hori < getHoriDiamenter()) {
-                turnDirection = 'L';
+            switch (turnDirection) {
+                // turn direction not yet decided
+                case 'n':
+                    spinLeft();
+                    turnDirection = 'L';
+                    break;
+                // turn direction is left
+                case 'L':
+                    if (horizontalDiameter > getHoriDiamenter()) {
+                        spinLeft();
+                    } else {
+                        spinRight();
+                        turnDirection = 'R';
+                    }
+                    break;
+                // turn direction is right
+                case 'R':
+                    if (horizontalDiameter > getHoriDiamenter()) {
+                        spinRight();
+                    } else {
+                        spinLeft();
+                        turnDirection = 'L';
+                    }
+                    break;
+                default:
+                    break;
             }
 
-            break;
+            horizontalDiameter = getHoriDiamenter();
+            return false;
+        }
+
+        // The angle is now correct
+        turnDirection = 'n';
+        return true;
     }
 
-    hori = getHoriDiamenter();
-
-return false;
-}
-else {
-    turnDirection = 'n';
-    return true;
-}
-
-    }
 
     private void up() {
         pilot.up(50);
     }
+
     private void down() {
         pilot.down(50);
     }
+
     private void left() {
         pilot.tiltLeft(50);
     }
+
     private void right() {
         pilot.tiltRight(50);
     }
@@ -143,6 +146,7 @@ else {
     private void spinRight() {
         pilot.spinRight(25);
     }
+
     private void spinLeft() {
         pilot.spinLeft(25);
     }
@@ -151,21 +155,20 @@ else {
     private int getXAxis() {
         return this.xAxis;
     }
+
     private int getYAxis() {
         return this.yAxis;
     }
 
-    private int getVertiDiamenter () {
+    private int getVertiDiamenter() {
         return this.vDia;
     }
-    private int getHoriDiamenter () {
+
+    private int getHoriDiamenter() {
         return this.hDia;
-   }
+    }
 
     private boolean isCentered() {
-        if (this.xAxis == 0 && this.yAxis == 0) {
-            return true;
-        }
-        return false;
+        return this.xAxis == 0 && this.yAxis == 0;
     }
 }
