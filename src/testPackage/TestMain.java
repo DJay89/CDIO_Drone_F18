@@ -17,7 +17,7 @@ public class TestMain
 
         CenteringController test = new CenteringController(drone, pilotManager);
 
-        test.tagIsCentered();
+        test.centerDroneOnCircle();
         pilotManager.hover(2000);
         pilotManager.land();
         System.out.println("End");
