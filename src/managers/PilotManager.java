@@ -1,12 +1,17 @@
 package managers;
 
+import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
+import de.yadrone.base.video.ImageListener;
+
+import java.awt.image.BufferedImage;
 
 public class PilotManager {
 
     private IARDrone drone;
     private CommandManager cmd;
+    private BufferedImage img;
     private final int SPEED = 25;
 
 
@@ -14,11 +19,35 @@ public class PilotManager {
          this.drone = drone;
          this.cmd = this.drone.getCommandManager();
     }
+    public PilotManager() {
+        this.drone = new ARDrone();
+        drone.start();
+        this.cmd = this.drone.getCommandManager();
+        droneCamCapture();
+
+    }
 
     public void takeOffAndLand() {
          cmd.takeOff();
          cmd.waitFor(5000);
          cmd.landing();
+    }
+
+    public void droneCamCapture() {
+        drone.getVideoManager().addImageListener(new ImageListener() {
+            @Override
+            public void imageUpdated(BufferedImage bufferedImage) {
+                PilotManager.this.setImg(bufferedImage);
+            }
+        });
+    }
+
+    public void setImg(BufferedImage bufferedImage){
+        this.img = bufferedImage;
+    }
+
+    public  BufferedImage getImg(){
+        return this.img;
     }
 
     public void takeOff() {
