@@ -20,7 +20,7 @@ public class AutoDroneMain extends Application {
         pm = new PilotManager();
         vd = new VideoDisplay(pm);
         IR = new ImageRecognition(pm);
-        qr = new QRsearch(IR);
+        qr = new QRsearch(IR, pm);
         vd.start(s);
         while (pm.getImg() == null && devMode == false) {
             // wait for camera
@@ -30,7 +30,8 @@ public class AutoDroneMain extends Application {
         imgThread = new Thread(IR);
         imgThread.start();
 
-        pm.hover(2000);
+        pm.takeOff();
+        pm.hover(5000);
         if ( qr.searchLvlZero() == 1 ){
             System.out.println( qr.searchLvlZero());
             pm.land();

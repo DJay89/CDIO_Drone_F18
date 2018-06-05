@@ -1,28 +1,24 @@
 package managers;
 
-import de.yadrone.base.command.CommandManager;
 import object_recogniztion.image_recogniztion.ImageRecognition;
-import object_recogniztion.qr_scanner.QRscanner;
-
-import java.awt.*;
-import java.util.ArrayList;
 
 public class QRsearch {
 
-    private PilotManager cmd;
+    private PilotManager pm;
     private ImageRecognition IR;
     private long time = 5000;
     private int resultQR = 0;
     private int result = -1;
 
-    public QRsearch(ImageRecognition IR) {
+    public QRsearch(ImageRecognition IR, PilotManager pm) {
     this.IR = IR;
+    this.pm = pm;
     }
 
     public int searchLvlZero() {
 
         if (IR.getqr().get_qr_txt() == null) {
-            cmd.spinLeft(time);
+            pm.spinLeft(time);
             return 0;
         }
 
@@ -43,7 +39,7 @@ public class QRsearch {
     public String searchLvlOne() {
 
 
-        cmd.land();
+        pm.land();
         return "LANDING SUCCESSFUL";
         /*
         if ( qr.get_qr_txt().equals(null) ) {
