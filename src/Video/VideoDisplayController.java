@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.scene.control.RadioButton;
 import managers.PilotManager;
-import object_recogniztion.image_recogniztion.ImageRecognition;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -40,12 +39,14 @@ public class VideoDisplayController {
 
     private static int cameraId = 0;
 
-    private static PilotManager pm = new PilotManager();
-    private ImageRecognition IR = new ImageRecognition(pm);
-    private  Runnable frameGrabber;
+    private PilotManager pm;
+    private Runnable frameGrabber;
     private Boolean webcam = false;
     private Boolean filter = false;
 
+    public void setPM(PilotManager pm){
+        this.pm = pm;
+    }
     /**
      * The action triggered by pushing the button on the GUI
      *
@@ -88,7 +89,6 @@ public class VideoDisplayController {
                     // update the button content
                     this.button.setText("Stop Camera");
                 }
-
             }
             else
             {

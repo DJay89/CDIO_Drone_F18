@@ -20,6 +20,8 @@ package object_recogniztion.qr_scanner;
 public class qr{
 
     private String qrTxt = "";
+    private int x = 0;
+    private int y = 0;
 
     public String get_qr_txt(){
         return qrTxt;
@@ -50,6 +52,7 @@ public class qr{
                 y += rp.getY();
             }
             x = (x/res.getResultPoints().length);
+            y = (y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             Logger.getLogger(qr.class.getName()).log(Level.SEVERE, null, ex);
