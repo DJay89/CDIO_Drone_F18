@@ -7,7 +7,7 @@ import managers.PilotManager;
 import managers.QRsearch;
 import object_recogniztion.image_recogniztion.ImageRecognition;
 
-public class main extends Application {
+public class AutoDroneMain extends Application {
 
     private VideoDisplay vd;
     private PilotManager pm;
@@ -31,11 +31,12 @@ public class main extends Application {
         imgThread.start();
 
         pm.hover(2000);
-        if ( qr.searchLvlZero() == 1 )
+        if ( qr.searchLvlZero() == 1 ){
+            System.out.println( qr.searchLvlZero());
+            pm.land();
+        }
+        System.out.println( qr.searchLvlZero());
         pm.land();
-
-
-
 
     }
     public static void main(String [] args)
