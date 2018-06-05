@@ -10,6 +10,8 @@ package object_recogniztion.qr_scanner;
         import java.awt.image.DataBufferByte;
         import java.util.logging.Level;
         import java.util.logging.Logger;
+
+        import object_recogniztion.misc.ImageConverter;
         import org.opencv.core.Mat;
         import org.opencv.imgproc.Imgproc;
 
@@ -22,6 +24,7 @@ public class QRscanner {
     private String qrTxt = "";
     private int x = 0;
     private int y = 0;
+    private ImageConverter IC;
 
     public String get_qr_txt(){
         return qrTxt;
@@ -33,9 +36,6 @@ public class QRscanner {
 
     public int getY() {
         return y;
-    }
-
-    private void qrCapture(){
     }
 
     public boolean decodeQR(Mat mat)
@@ -64,6 +64,7 @@ public class QRscanner {
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
+            qrTxt = null;
             return false;
         }
         return true;
