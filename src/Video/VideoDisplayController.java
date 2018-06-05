@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javafx.scene.control.RadioButton;
 import managers.PilotManager;
 import object_recogniztion.image_recogniztion.ImageRecognition;
 import org.opencv.core.CvType;
@@ -26,6 +27,8 @@ public class VideoDisplayController {
     // the FXML image view
     @FXML
     private ImageView currentFrame;
+    @FXML
+    private RadioButton radioButton;
     // a timer for acquiring the video stream
     private ScheduledExecutorService timer;
     // the OpenCV object that realizes the video capture
@@ -35,9 +38,13 @@ public class VideoDisplayController {
     // the id of the camera to be used
     private Thread TIR;
 
+    private static int cameraId = 0;
+
     private static PilotManager pm = new PilotManager();
     private ImageRecognition IR = new ImageRecognition(pm);
     private  Runnable frameGrabber;
+    private Boolean webcam = false;
+    private Boolean filter = false;
 
     /**
      * The action triggered by pushing the button on the GUI
@@ -48,44 +55,117 @@ public class VideoDisplayController {
     @FXML
     protected void startCamera(ActionEvent event)
     {
-        if (!this.cameraActive)
+        camera();
+    }
+
+    private void camera()
+    {
+        if(!webcam) // drone cam
         {
-            if(pm != null){
-                this.cameraActive = true;
-                TIR = new Thread((ImageRecognition) IR);
-                TIR.start();
-                // grab a frame every 33 ms (30 frames/sec)
-                frameGrabber = new Runnable() {
-                    @Override
-                    public void run()
-                    {
-                        // effectively grab and process a single frame
-                        Mat frame = bufferedImageToMat(pm.getImg());
-                        // convert and show the frame
-                        Image imageToShow = Utils.mat2Image(frame);
-                        updateImageView(currentFrame, imageToShow);
-                    }
-                };
+            if (!this.cameraActive)
+            {
+                if(pm != null){
+                    this.cameraActive = true;
+                    //TIR = new Thread((ImageRecognition) IR);
+                    //TIR.start();
 
-                this.timer = Executors.newSingleThreadScheduledExecutor();
-                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+                    // grab a frame every 33 ms (30 frames/sec)
+                    frameGrabber = new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            // effectively grab and process a single frame
+                            Mat frame = bufferedImageToMat(pm.getImg());
+                            // convert and show the frame
+                            Image imageToShow = Utils.mat2Image(frame);
+                            updateImageView(currentFrame, imageToShow);
+                        }
+                    };
 
-                // update the button content
-                this.button.setText("Stop Camera");
+                    this.timer = Executors.newSingleThreadScheduledExecutor();
+                    this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+
+                    // update the button content
+                    this.button.setText("Stop Camera");
+                }
+
             }
-
+            else
+            {
+                // the camera is not active at this point
+                this.cameraActive = false;
+                // update again the button content
+                this.button.setText("Start Camera");
+                // stop the timer
+                this.stopAcquisition();
+            }
         }
-        else
+        else // start webcam
         {
-            // the camera is not active at this point
-            this.cameraActive = false;
-            // update again the button content
-            this.button.setText("Start Camera");
+            if (!this.cameraActive)
+            {
+                // start the video capture
+                this.capture.open(cameraId);
 
-            // stop the timer
-            this.stopAcquisition();
+                // is the video stream available?
+                if (this.capture.isOpened())
+                {
+                    this.cameraActive = true;
+
+                    // grab a frame every 33 ms (30 frames/sec)
+                    Runnable frameGrabber = new Runnable() {
+
+                        @Override
+                        public void run()
+                        {
+                            // effectively grab and process a single frame
+                            Mat frame = grabFrame();
+                            // convert and show the frame
+                            Image imageToShow = Utils.mat2Image(frame);
+                            updateImageView(currentFrame, imageToShow);
+                        }
+                    };
+
+                    this.timer = Executors.newSingleThreadScheduledExecutor();
+                    this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+
+                    // update the button content
+                    this.button.setText("Stop Camera");
+                }
+                else
+                {
+                    // log the error
+                    System.err.println("Impossible to open the camera connection...");
+                }
+            }
+		else
+            {
+                // the camera is not active at this point
+                this.cameraActive = false;
+                // update again the button content
+                this.button.setText("Start Camera");
+
+                // stop the timer
+                this.stopAcquisition();
+            }
         }
     }
+
+    @FXML
+    protected void setWebcam(ActionEvent event)
+    {
+        this.stopAcquisition();
+        if( radioButton.isSelected() )
+        {
+            webcam = true;
+        }
+        else{
+            webcam = false;
+        }
+        cameraActive = false;
+        camera();
+    }
+
 
     /**
      * Get a frame from the opened video stream (if any)
@@ -106,7 +186,7 @@ public class VideoDisplayController {
                 this.capture.read(frame);
 
                 // if the frame is not empty, process it
-                if (!frame.empty())
+                if (!frame.empty() && filter == true)
                 {
                     Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
                 }

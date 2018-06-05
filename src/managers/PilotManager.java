@@ -41,6 +41,7 @@ public class PilotManager {
             }
         });
     }
+
     public void setImg(BufferedImage bufferedImage){
         this.img = bufferedImage;
     }

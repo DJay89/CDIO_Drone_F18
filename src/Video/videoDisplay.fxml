@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -18,4 +21,11 @@
     <center>
         <ImageView fx:id="currentFrame" />
     </center>
+   <top>
+      <RadioButton fx:id="radioButton" mnemonicParsing="false" onAction="#setWebcam" text="Webcam" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </RadioButton>
+   </top>
 </BorderPane>

@@ -16,13 +16,9 @@ public class ImageConverter {
     }
     public Mat bufferedImageToMat(BufferedImage bi)
     {
-        System.out.println("1");
         Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
-        System.out.println("2");
         byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-        System.out.println("3");
         mat.put(0, 0, data);
-        System.out.println("4");
         return mat;
     }
 

@@ -1,5 +1,6 @@
 package testPackage;
 
+import Video.VideoDisplay;
 import de.yadrone.apps.tutorial.TutorialAttitudeListener;
 import de.yadrone.apps.tutorial.TutorialCommander;
 import de.yadrone.apps.tutorial.TutorialVideoListener;
@@ -14,6 +15,7 @@ import de.yadrone.base.navdata.HDVideoStreamData;
 import de.yadrone.base.navdata.VideoListener;
 import de.yadrone.base.navdata.VideoStreamData;
 import de.yadrone.base.video.ImageListener;
+import javafx.stage.Stage;
 import managers.PilotManager;
 
 
