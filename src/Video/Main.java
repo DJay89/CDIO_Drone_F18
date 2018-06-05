@@ -17,13 +17,14 @@ public class Main extends Application {
     public void start(Stage s){
         pm = new PilotManager();
         vd = new VideoDisplay(pm);
+        IR = new ImageRecognition(pm);
         vd.start(s);
         while (pm.getImg() == null && devMode == false) {
             // wait for camera
         }
 
         System.out.println("Camera ready");
-        imgThread = new Thread( (ImageRecognition) IR);
+        imgThread = new Thread(IR);
         imgThread.start();
 
     }

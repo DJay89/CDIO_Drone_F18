@@ -40,6 +40,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.frame = new Mat();
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
+        this.qr = new QRscanner();
     }
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
@@ -76,8 +77,11 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                     return;
                 }
             }
-
             if (!frame.empty()) {
+                if(qr.decodeQR(getFrame())){
+                    System.out.println(qr.get_qr_txt());
+                }
+                //qr.decodeQrWithFilters(getFrame());
 
             //    ring.findRedRing(getFrame());
             }

@@ -38,9 +38,8 @@ public class QRscanner {
     private void qrCapture(){
     }
 
-    public void decodeQR(Mat mat)
+    public boolean decodeQR(Mat mat)
     {
-
         Image image = Mat2BufferedImage(mat);
         LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
         HybridBinarizer hb = new HybridBinarizer(ls);
@@ -50,6 +49,7 @@ public class QRscanner {
 
         try {
             Result res = qrr.decode(bm);
+
             qrTxt = res.getText();
 
             int x = 0;
@@ -63,8 +63,10 @@ public class QRscanner {
             y = (y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
-            Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+        return true;
     }
 
     public void decodeQrWithFilters(Mat mat)
