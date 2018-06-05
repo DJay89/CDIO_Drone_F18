@@ -59,8 +59,8 @@ public class QRscanner {
                 x += rp.getX();
                 y += rp.getY();
             }
-            x = (x/res.getResultPoints().length);
-            y = (y/res.getResultPoints().length);
+            x = (int)(x/res.getResultPoints().length);
+            y = (int)(y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
