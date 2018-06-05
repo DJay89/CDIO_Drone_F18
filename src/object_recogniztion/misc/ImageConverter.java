@@ -9,13 +9,16 @@ import java.awt.image.DataBufferByte;
 public class ImageConverter {
 
     public Mat convertImage2Mat(BufferedImage img){
+    	System.out.println("debug 1");
         byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+    	System.out.println("debug 2");
         Mat mat = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC3);
+    	System.out.println("debug 3");
         mat.put(0,0,data);
+    	System.out.println("debug 4");
 
-        Mat mat1 = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC3);
 
-        return mat1;
+        return mat;
     }
 
     public BufferedImage convertMat2BufferedImage(Mat frame){

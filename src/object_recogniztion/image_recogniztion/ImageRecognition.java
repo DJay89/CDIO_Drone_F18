@@ -26,8 +26,10 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     public ImageRecognition(VideoTest droneController) {
         this.controller = droneController;
         this.imageManipulation = new ImageManipulation(droneController);
+        this.imageConverter = new ImageConverter();
 
         this.ring = new RedRingFinder();
+        this.frame = new Mat();
     }
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
@@ -35,6 +37,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     }
 
     public Mat convertImage2Mat(BufferedImage bufferedImage) {
+    	System.out.println("lol");
         return imageConverter.convertImage2Mat(bufferedImage);
     }
 
@@ -48,10 +51,13 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
     @Override
     public void run() {
+    	System.out.println("Image recogniztion started.");
 
         while(!Thread.interrupted()) {
 
             try {
+				System.out.println("test 1");
+
                 Mat tempFrame = convertImage2Mat(controller.getbufImg());
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
@@ -65,8 +71,18 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 }
             }
 
+			System.out.println("test 2");
+			boolean lol =frame.empty();
+			System.out.println("test 2");
             if (!frame.empty()) {
+            	
+				System.out.println("test 3");
                 ring.findRedRing(getFrame());
+				System.out.println("test 3");
+            }
+            else
+            {
+				System.out.println("test 4");
             }
 
         }

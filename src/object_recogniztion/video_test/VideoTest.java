@@ -19,7 +19,7 @@ public class VideoTest extends JFrame {
         this.drone = drone;
         imageRecog = new ImageRecognition(this);
 
-        setSize(640,360);
+        setSize(1280, 720);
         setVisible(true);
 
         imageCapture();
