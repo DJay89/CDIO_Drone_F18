@@ -10,6 +10,8 @@ package object_recogniztion.qr_scanner;
         import java.awt.image.DataBufferByte;
         import java.util.logging.Level;
         import java.util.logging.Logger;
+
+        import object_recogniztion.misc.ImageConverter;
         import org.opencv.core.Mat;
         import org.opencv.imgproc.Imgproc;
 
@@ -17,20 +19,27 @@ package object_recogniztion.qr_scanner;
  *
  * @author Bruger
  */
-public class qr{
+public class QRscanner {
 
     private String qrTxt = "";
+    private int x = 0;
+    private int y = 0;
+    private ImageConverter IC;
 
     public String get_qr_txt(){
         return qrTxt;
     }
 
-    private void qrCapture(){
+    public int getX() {
+        return x;
     }
 
-    public void decodeQR(Mat mat)
-    {
+    public int getY() {
+        return y;
+    }
 
+    public boolean decodeQR(Mat mat)
+    {
         Image image = Mat2BufferedImage(mat);
         LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
         HybridBinarizer hb = new HybridBinarizer(ls);
@@ -40,6 +49,7 @@ public class qr{
 
         try {
             Result res = qrr.decode(bm);
+
             qrTxt = res.getText();
 
             int x = 0;
@@ -50,10 +60,14 @@ public class qr{
                 y += rp.getY();
             }
             x = (x/res.getResultPoints().length);
+            y = (y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
-            Logger.getLogger(qr.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
+            qrTxt = null;
+            return false;
         }
+        return true;
     }
 
     public void decodeQrWithFilters(Mat mat)
@@ -89,7 +103,7 @@ public class qr{
                     filterAmount += 5;
                 }
             } catch (NotFoundException | ChecksumException | FormatException ex) {
-                Logger.getLogger(qr.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while(done);
     }

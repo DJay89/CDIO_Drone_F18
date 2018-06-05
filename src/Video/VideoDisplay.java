@@ -1,4 +1,5 @@
 package Video;
+import managers.PilotManager;
 import org.opencv.core.Core;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -8,13 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
-public class VideoDisplay extends Application {
+public class VideoDisplay {
+    private PilotManager pm;
 
-    public VideoDisplay(){
+    public VideoDisplay(PilotManager pm){
+
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        this.pm = pm;
     }
 
-    @Override
     public void start(Stage primaryStage)
     {
         try
@@ -35,6 +38,8 @@ public class VideoDisplay extends Application {
 
             // set the proper behavior on closing the application
             VideoDisplayController controller = loader.getController();
+            controller.setPM(this.pm);
+
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)
                 {
@@ -46,14 +51,5 @@ public class VideoDisplay extends Application {
         {
             e.printStackTrace();
         }
-    }
-
-
-
-    public static void main(String [] args)
-    {
-        // load the native OpenCV library
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        launch(args);
     }
 }

@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.scene.control.RadioButton;
 import managers.PilotManager;
-import object_recogniztion.image_recogniztion.ImageRecognition;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -34,17 +33,20 @@ public class VideoDisplayController {
     // the OpenCV object that realizes the video capture
     private VideoCapture capture = new VideoCapture();
     // a flag to change the button behavior
-    private boolean cameraActive = false;
+    private boolean cameraActive = true;
     // the id of the camera to be used
     private Thread TIR;
 
     private static int cameraId = 0;
 
-    private static PilotManager pm = new PilotManager();
-    private ImageRecognition IR = new ImageRecognition(pm);
-    private  Runnable frameGrabber;
-    private Boolean webcam = false;
+    private PilotManager pm;
+    private Runnable frameGrabber;
+    private Boolean devMode = false;
     private Boolean filter = false;
+
+    public void setPM(PilotManager pm){
+        this.pm = pm;
+    }
 
     /**
      * The action triggered by pushing the button on the GUI
@@ -60,7 +62,7 @@ public class VideoDisplayController {
 
     private void camera()
     {
-        if(!webcam) // drone cam
+        if(!devMode) // drone cam
         {
             if (!this.cameraActive)
             {
@@ -88,7 +90,6 @@ public class VideoDisplayController {
                     // update the button content
                     this.button.setText("Stop Camera");
                 }
-
             }
             else
             {
@@ -100,7 +101,7 @@ public class VideoDisplayController {
                 this.stopAcquisition();
             }
         }
-        else // start webcam
+        else // start devMode
         {
             if (!this.cameraActive)
             {
@@ -152,20 +153,19 @@ public class VideoDisplayController {
     }
 
     @FXML
-    protected void setWebcam(ActionEvent event)
+    protected void setDevMode(ActionEvent event)
     {
         this.stopAcquisition();
         if( radioButton.isSelected() )
         {
-            webcam = true;
+            devMode = true;
         }
         else{
-            webcam = false;
+            devMode = false;
         }
         cameraActive = false;
         camera();
     }
-
 
     /**
      * Get a frame from the opened video stream (if any)

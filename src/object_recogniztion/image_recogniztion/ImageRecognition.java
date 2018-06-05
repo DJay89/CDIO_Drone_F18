@@ -3,6 +3,7 @@ package object_recogniztion.image_recogniztion;
 import managers.PilotManager;
 import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.misc.RedRingFinder;
+import object_recogniztion.qr_scanner.QRscanner;
 import object_recogniztion.video_test.VideoTest;
 import org.opencv.core.Mat;
 
@@ -21,6 +22,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private ImageConverter imageConverter;
     private RedRingFinder ring;
     private PilotManager pm;
+    private QRscanner qr;
 
     private Mat frame;
 
@@ -38,6 +40,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.frame = new Mat();
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
+        this.qr = new QRscanner();
     }
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
@@ -74,10 +77,14 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                     return;
                 }
             }
+            if (!frame.empty()) {
+                if(qr.decodeQR(getFrame())){
+                    System.out.println(qr.get_qr_txt());
+                }
+                //qr.decodeQrWithFilters(getFrame());
 
-            //if (!frame.empty()) {
             //    ring.findRedRing(getFrame());
-            //}
+            }
 
         }
         System.err.println("Image recogniztion stopped.");
