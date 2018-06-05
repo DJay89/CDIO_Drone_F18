@@ -1,55 +1,52 @@
 package managers;
 
 import de.yadrone.base.command.CommandManager;
+import object_recogniztion.image_recogniztion.ImageRecognition;
+import object_recogniztion.qr_scanner.QRscanner;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class QRsearch {
 
-    private CommandManager cmd;
+    private PilotManager cmd;
+    private ImageRecognition IR;
     private long time = 5000;
     private int resultQR = 0;
     private int result = -1;
 
-    public QRsearch() {
-
+    public QRsearch(ImageRecognition IR) {
+    this.IR = IR;
     }
 
-    public boolean searchLvlZero() {
+    public int searchLvlZero() {
 
-
-        //// RUN QR CODE LISTENER
-        cmd.hover();
-
-       if (  qr not localized ) {
+        if (IR.getqr().get_qr_txt() == null) {
             cmd.spinLeft(time);
+            return 0;
         }
 
-        else {
-            // SCAN QR and save result in list
+      //  else if (result + 1 == qr.get_qr_txt()) {
 
-            if ( result+1 == QRresult )
-            {
-                result = QRresult;
-                // fly through ring //
-            }
-
-            else {
-                searchLvlOne();
-            }
-
+          else {
+            result = Integer.parseInt(IR.getqr().get_qr_txt());
+            return 1;
         }
-
+        /*else {
+            searchLvlOne();
+            return 0;
+        }
+*/
     }
 
 
-    public void searchLvlOne() {
+    public String searchLvlOne() {
 
 
-        // RUN QR CODE LISTENER //
-
-        if ( qr not localized ) {
-            // generate random number and fly according to these pin points. spin 360 at every stop.
+        cmd.land();
+        return "LANDING SUCCESSFUL";
+        /*
+        if ( qr.get_qr_txt().equals(null) ) {
 
         }
 
@@ -70,6 +67,8 @@ public class QRsearch {
 
     public boolean searchLvlTwo() {
 
+    }
+*/
     }
 
 }
