@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import managers.PilotManager;
 import object_recogniztion.image_recogniztion.ImageRecognition;
 
-public class Main extends Application {
+public class AutoDroneMain extends Application {
 
     private VideoDisplay vd;
     private PilotManager pm;
