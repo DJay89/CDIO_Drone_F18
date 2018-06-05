@@ -17,7 +17,7 @@ package object_recogniztion.qr_scanner;
  *
  * @author Bruger
  */
-public class qr{
+public class QRscanner {
 
     private String qrTxt = "";
     private int x = 0;
@@ -25,6 +25,14 @@ public class qr{
 
     public String get_qr_txt(){
         return qrTxt;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     private void qrCapture(){
@@ -55,7 +63,7 @@ public class qr{
             y = (y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
-            Logger.getLogger(qr.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -92,7 +100,7 @@ public class qr{
                     filterAmount += 5;
                 }
             } catch (NotFoundException | ChecksumException | FormatException ex) {
-                Logger.getLogger(qr.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while(done);
     }

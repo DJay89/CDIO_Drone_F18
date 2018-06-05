@@ -13,6 +13,7 @@ public class VideoDisplay {
     private PilotManager pm;
 
     public VideoDisplay(PilotManager pm){
+
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         this.pm = pm;
     }
@@ -38,6 +39,7 @@ public class VideoDisplay {
             // set the proper behavior on closing the application
             VideoDisplayController controller = loader.getController();
             controller.setPM(this.pm);
+
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)
                 {

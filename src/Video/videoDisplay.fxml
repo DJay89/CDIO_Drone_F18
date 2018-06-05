@@ -22,7 +22,7 @@
         <ImageView fx:id="currentFrame" />
     </center>
    <top>
-      <RadioButton fx:id="radioButton" mnemonicParsing="false" onAction="#setWebcam" text="Webcam" BorderPane.alignment="CENTER">
+      <RadioButton fx:id="radioButton" mnemonicParsing="false" onAction="#setDevMode" text="Webcam" BorderPane.alignment="CENTER">
          <font>
             <Font size="10.0" />
          </font>

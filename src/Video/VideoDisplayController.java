@@ -33,7 +33,7 @@ public class VideoDisplayController {
     // the OpenCV object that realizes the video capture
     private VideoCapture capture = new VideoCapture();
     // a flag to change the button behavior
-    private boolean cameraActive = false;
+    private boolean cameraActive = true;
     // the id of the camera to be used
     private Thread TIR;
 
@@ -41,12 +41,13 @@ public class VideoDisplayController {
 
     private PilotManager pm;
     private Runnable frameGrabber;
-    private Boolean webcam = false;
+    private Boolean devMode = false;
     private Boolean filter = false;
 
     public void setPM(PilotManager pm){
         this.pm = pm;
     }
+
     /**
      * The action triggered by pushing the button on the GUI
      *
@@ -61,7 +62,7 @@ public class VideoDisplayController {
 
     private void camera()
     {
-        if(!webcam) // drone cam
+        if(!devMode) // drone cam
         {
             if (!this.cameraActive)
             {
@@ -100,7 +101,7 @@ public class VideoDisplayController {
                 this.stopAcquisition();
             }
         }
-        else // start webcam
+        else // start devMode
         {
             if (!this.cameraActive)
             {
@@ -152,20 +153,19 @@ public class VideoDisplayController {
     }
 
     @FXML
-    protected void setWebcam(ActionEvent event)
+    protected void setDevMode(ActionEvent event)
     {
         this.stopAcquisition();
         if( radioButton.isSelected() )
         {
-            webcam = true;
+            devMode = true;
         }
         else{
-            webcam = false;
+            devMode = false;
         }
         cameraActive = false;
         camera();
     }
-
 
     /**
      * Get a frame from the opened video stream (if any)
