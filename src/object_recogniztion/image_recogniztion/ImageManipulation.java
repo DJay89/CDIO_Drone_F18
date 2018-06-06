@@ -1,10 +1,9 @@
 package object_recogniztion.image_recogniztion;
 
-import object_recogniztion.video_test.VideoTest;
+import controller.Drone;
 
 public class ImageManipulation {
 
-    //Change VideoTest input to DroneController once its made.
-    public ImageManipulation(VideoTest droneController) {
+    public ImageManipulation(Drone droneController) {
     }
 }

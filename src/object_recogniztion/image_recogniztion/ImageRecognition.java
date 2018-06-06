@@ -1,10 +1,10 @@
 package object_recogniztion.image_recogniztion;
 
+import controller.Drone;
 import managers.PilotManager;
 import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.misc.RedRingFinder;
 import object_recogniztion.qr_scanner.QRscanner;
-import object_recogniztion.video_test.VideoTest;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
@@ -14,7 +14,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     /*
     TESTING
      */
-    private VideoTest controller;
+    private Drone controller;
     //
 
     private ImageManipulation imageManipulation;
@@ -26,8 +26,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
     private Mat frame;
 
-    //Change VideoTest input to DroneController once its made.
-    public ImageRecognition(VideoTest droneController) {
+    public ImageRecognition(Drone droneController) {
         this.controller = droneController;
         this.imageManipulation = new ImageManipulation(droneController);
         this.frame = new Mat();
