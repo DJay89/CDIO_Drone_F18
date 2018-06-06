@@ -21,11 +21,10 @@ public class AutoDroneMain extends Application {
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
     private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = true;
+    private Boolean testRun = false;
 
-    public void start(Stage s){
-
-
+    public void start(Stage s)
+    {
         if(devMode)
         {
             drone = new ARDrone();
@@ -63,12 +62,15 @@ public class AutoDroneMain extends Application {
             {
                 System.out.println("test start");
                 pm.takeOff();
-                pm.hover(5000);
+                pm.hover(2000);
                 //int value = gr.searchLvlZero();
+                /*
                 if ( qr.searchLvlZero() == 1 ){
                     System.out.println( qr.searchLvlZero());
                     pm.land();
                 }
+                */
+
                 System.out.println( qr.searchLvlZero());
                 pm.land();
             }

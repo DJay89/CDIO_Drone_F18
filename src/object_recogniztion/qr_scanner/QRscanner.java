@@ -55,7 +55,6 @@ public class QRscanner {
 
         try {
             Result res = qrr.decode(bm);
-
             qrTxt = res.getText();
 
             int x = 0;
