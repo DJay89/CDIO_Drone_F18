@@ -1,5 +1,7 @@
 package Video;
 
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.IARDrone;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -11,34 +13,56 @@ public class AutoDroneMain extends Application {
 
     private VideoDisplay vd;
     private PilotManager pm;
+    private IARDrone drone;
     private ImageRecognition IR;
     private Thread imgThread;
     private QRsearch qr;
-    private Boolean devMode = false;
+
+    //Toggle debugmode, if true when the webcam will be use for Image Recognition
+    private Boolean devMode = true;
+    // Toggle Flight mode, this will a launch of the drone
+    private Boolean testRun = false;
 
     public void start(Stage s){
-        pm = new PilotManager();
-        vd = new VideoDisplay(pm);
-        IR = new ImageRecognition(pm);
-        qr = new QRsearch(IR, pm);
-        vd.start(s);
-        while (pm.getImg() == null && devMode == false) {
-            // wait for camera
+
+
+        if(devMode)
+        {
+            drone = new ARDrone();
+            pm = new PilotManager(drone);
+            vd = new VideoDisplay(pm);
+            vd.start(s); //starts video controller
+            IR = new ImageRecognition(pm);
+            imgThread = new Thread(IR);
+            imgThread.start();
+            qr = new QRsearch(IR, pm);
         }
+        else
+        {
+            drone = new ARDrone();
+            pm = new PilotManager(drone);
+            pm.droneCamCapture(); // start drone image listener
 
-        System.out.println("Camera ready");
-        imgThread = new Thread(IR);
-        imgThread.start();
+            while (pm.getImg() == null && devMode == false) {
+                // wait for drone camera to get ready
+            }
+            vd = new VideoDisplay(pm);
+            vd.start(s); //starts video controller
+            IR = new ImageRecognition(pm);
+            imgThread = new Thread(IR);
+            imgThread.start();
 
-        pm.takeOff();
-        pm.hover(5000);
-        if ( qr.searchLvlZero() == 1 ){
+            if( testRun )
+                pm.takeOff();
+            pm.hover(5000);
+            if ( qr.searchLvlZero() == 1 ){
+                System.out.println( qr.searchLvlZero());
+                pm.land();
+            }
             System.out.println( qr.searchLvlZero());
             pm.land();
         }
-        System.out.println( qr.searchLvlZero());
-        pm.land();
-
+                System.out.println("Camera ready");
     }
     public static void main(String [] args)
     {
