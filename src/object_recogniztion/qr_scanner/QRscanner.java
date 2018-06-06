@@ -3,11 +3,14 @@ package object_recogniztion.qr_scanner;
         import com.google.zxing.*;
         import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
         import com.google.zxing.common.HybridBinarizer;
+        import com.google.zxing.oned.rss.FinderPattern;
         import com.google.zxing.qrcode.QRCodeReader;
         import de.yadrone.apps.paperchase.QRCodeScanner;
         import java.awt.Image;
         import java.awt.image.BufferedImage;
         import java.awt.image.DataBufferByte;
+        import java.util.EnumMap;
+        import java.util.Hashtable;
         import java.util.logging.Level;
         import java.util.logging.Logger;
 
@@ -29,6 +32,7 @@ public class QRscanner {
     public String get_qr_txt(){
         return qrTxt;
     }
+    public double theta;
 
     public int getX() {
         return x;
@@ -41,9 +45,11 @@ public class QRscanner {
     public boolean decodeQR(Mat mat)
     {
         Image image = Mat2BufferedImage(mat);
+
         LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
         HybridBinarizer hb = new HybridBinarizer(ls);
         BinaryBitmap bm = new BinaryBitmap(hb);
+
         QRCodeReader qrr = new QRCodeReader();
         QRCodeScanner qrcs = new QRCodeScanner();
 
@@ -58,9 +64,7 @@ public class QRscanner {
             for(int i = 0; i < resPoints.length; i++)
             {
                 ResultPoint rp = resPoints[i];
-                rp.getX();
-                rp.getY();
-                System.out.println("["+i+"]: x=");
+                System.out.println("["+i+"]: x = " + rp.getX() + "| y = " + rp.getY());
             }
 
             for(ResultPoint rp: res.getResultPoints()){
@@ -73,6 +77,37 @@ public class QRscanner {
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
             qrTxt = null;
+            return false;
+        }
+        return true;
+    }
+
+    public boolean imageUpdated(Mat mat) {
+        BufferedImage image = Mat2BufferedImage(mat);
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        MultiFormatReader reader = new MultiFormatReader();
+        double theta = 0.0D / 0.0;
+        Result scanResult = null;
+        try {
+            scanResult = reader.decode(bitmap);
+            qrTxt = scanResult.getText();
+            ResultPoint[] points = scanResult.getResultPoints();
+            ResultPoint a = points[1];
+            ResultPoint b = points[2];
+            double z = (double)Math.abs(a.getX() - b.getX());
+            double x = (double)Math.abs(a.getY() - b.getY());
+            theta = Math.atan(x / z);
+            theta *= 57.29577951308232D;
+            if (b.getX() < a.getX() && b.getY() > a.getY()) {
+                theta = 180.0D - theta;
+            } else if (b.getX() < a.getX() && b.getY() < a.getY()) {
+                theta += 180.0D;
+            } else if (b.getX() > a.getX() && b.getY() < a.getY()) {
+                theta = 360.0D - theta;
+            }
+        } catch (NotFoundException e) {
+            //e.printStackTrace();
             return false;
         }
         return true;
