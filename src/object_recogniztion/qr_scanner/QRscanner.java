@@ -35,11 +35,11 @@ public class QRscanner {
     public double theta;
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public boolean decodeQR(Mat mat)
@@ -51,7 +51,6 @@ public class QRscanner {
         BinaryBitmap bm = new BinaryBitmap(hb);
 
         QRCodeReader qrr = new QRCodeReader();
-        QRCodeScanner qrcs = new QRCodeScanner();
 
         try {
             Result res = qrr.decode(bm);
@@ -67,8 +66,8 @@ public class QRscanner {
                 y += Math.round( rp.getY() );
                 System.out.println("["+i+"]: x = " + rp.getX() + "| y = " + rp.getY());
             }
-            x = Math.round(x/res.getResultPoints().length);
-            y = Math.round(y/res.getResultPoints().length);
+            this.x = Math.round(x/res.getResultPoints().length);
+            this.y = Math.round(y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);

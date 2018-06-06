@@ -9,6 +9,8 @@ import managers.PilotManager;
 import managers.QRsearch;
 import object_recogniztion.image_recogniztion.ImageRecognition;
 
+import java.awt.image.BufferedImage;
+
 public class AutoDroneMain extends Application {
 
     private VideoDisplay vd;
@@ -41,12 +43,16 @@ public class AutoDroneMain extends Application {
             drone = new ARDrone();
             pm = new PilotManager(drone);
             pm.droneCamCapture(); // start drone image listener
-
-            while (pm.getImg() == null) {
-                // wait for drone camera to get ready
-            }
             vd = new VideoDisplay(pm);
             vd.start(s); //starts video controller
+
+            BufferedImage BI = pm.getImg();
+            while (BI == null) {
+                BI = pm.getImg();
+                // wait for drone camera to get ready
+            }
+            System.out.println("BI ==");
+
             System.out.println("Camera ready");
             try {
                 Thread.sleep(5000);

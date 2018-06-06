@@ -83,11 +83,6 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                     System.out.println(qr.get_qr_txt());
                     System.out.println("x: "+ qr.getX() + " y: "+qr.getY());
                 }
-                if(qr.imageUpdated( getFrame() ))
-                {
-                    System.out.println(qr.get_qr_txt());
-                    System.out.println("x: "+ qr.getX() + " y: "+qr.getY());
-                }
 
                 //qr.decodeQrWithFilters(getFrame());
 
