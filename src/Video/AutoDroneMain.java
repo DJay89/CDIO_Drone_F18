@@ -18,10 +18,10 @@ public class AutoDroneMain extends Application {
     private Thread imgThread;
     private QRsearch qr;
 
-    //Toggle debugmode, if true when the webcam will be use for Image Recognition
-    private Boolean devMode = true;
+    //Toggle debugmode, if true when the webcam will øbe use for Image Recognition
+    private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = false;
+    private Boolean testRun = true;
 
     public void start(Stage s){
 
