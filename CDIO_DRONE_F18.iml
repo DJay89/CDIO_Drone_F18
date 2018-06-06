@@ -21,12 +21,12 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="opencv-340" level="project" />
-    <orderEntry type="library" name="core-2.2" level="project" />
-    <orderEntry type="library" name="javase-2.2" level="project" />
-    <orderEntry type="library" name="slf4j-api-1.7.2" level="project" />
-    <orderEntry type="library" name="slf4j-jdk14-1.7.2" level="project" />
-    <orderEntry type="library" name="xuggle-xuggler-5.4" level="project" />
-    <orderEntry type="library" name="yadrone_032" level="project" />
+    <orderEntry type="library" exported="" name="opencv-340" level="project" />
+    <orderEntry type="library" exported="" name="core-2.2" level="project" />
+    <orderEntry type="library" exported="" name="javase-2.2" level="project" />
+    <orderEntry type="library" exported="" name="slf4j-api-1.7.2" level="project" />
+    <orderEntry type="library" exported="" name="slf4j-jdk14-1.7.2" level="project" />
+    <orderEntry type="library" exported="" name="xuggle-xuggler-5.4" level="project" />
+    <orderEntry type="library" exported="" name="yadrone_032" level="project" />
   </component>
 </module>
