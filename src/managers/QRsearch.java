@@ -25,8 +25,13 @@ public class QRsearch {
                 pm.spinLeft(time);
             }
             */
-            pm.spinLeft(2000);
-            return 0;
+           int i = 0;
+           while(i < 100){
+               pm.spinLeft(25);
+               pm.hover(5);
+               i++;
+           }
+           return 0;
         }
 
       //  else if (result + 1 == qr.get_qr_txt()) {

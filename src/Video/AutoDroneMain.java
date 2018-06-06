@@ -21,7 +21,7 @@ public class AutoDroneMain extends Application {
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
     private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = true;
+    private Boolean testRun = false;
 
     public void start(Stage s)
     {
