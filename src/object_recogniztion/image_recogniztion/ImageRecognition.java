@@ -80,7 +80,9 @@ public class ImageRecognition implements IImageRecognition, Runnable {
             if (!frame.empty()) {
                 if(qr.decodeQR(getFrame())){
                     System.out.println(qr.get_qr_txt());
+                    System.out.println("x: "+ qr.getX() + " y: "+qr.getY());
                 }
+
                 //qr.decodeQrWithFilters(getFrame());
 
             //    ring.findRedRing(getFrame());

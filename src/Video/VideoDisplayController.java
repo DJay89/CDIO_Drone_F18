@@ -238,7 +238,7 @@ public class VideoDisplayController {
     }
 
     /**
-     * Update the {@link ImageView} in the JavaFX main thread
+     * Update the {@link ImageView} in the JavaFX AutoDroneMain thread
      *
      * @param view
      *            the {@link ImageView} to update
