@@ -64,6 +64,8 @@ public class QRscanner {
             for(int i = 0; i < resPoints.length; i++)
             {
                 ResultPoint rp = resPoints[i];
+                x += rp.getX();
+                y += rp.getY();
                 System.out.println("["+i+"]: x = " + rp.getX() + "| y = " + rp.getY());
             }
 

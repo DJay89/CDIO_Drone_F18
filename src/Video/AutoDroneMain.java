@@ -21,7 +21,7 @@ public class AutoDroneMain extends Application {
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
     private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = false;
+    private Boolean testRun = true;
 
     public void start(Stage s){
 
@@ -49,6 +49,11 @@ public class AutoDroneMain extends Application {
             vd = new VideoDisplay(pm);
             vd.start(s); //starts video controller
             System.out.println("Camera ready");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             IR = new ImageRecognition(pm);
             qr = new QRsearch(IR, pm);
             imgThread = new Thread(IR);
