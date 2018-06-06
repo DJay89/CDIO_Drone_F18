@@ -35,7 +35,6 @@ public class AutoDroneMain extends Application {
             IR = new ImageRecognition(pm);
             imgThread = new Thread(IR);
             imgThread.start();
-            qr = new QRsearch(IR, pm);
         }
         else
         {
@@ -50,19 +49,23 @@ public class AutoDroneMain extends Application {
             vd = new VideoDisplay(pm);
             vd.start(s); //starts video controller
             IR = new ImageRecognition(pm);
+            qr = new QRsearch(IR, pm);
             imgThread = new Thread(IR);
             imgThread.start();
 
             if( testRun )
+            {
+                System.out.println("test start");
                 pm.takeOff();
-            pm.hover(5000);
-             //int value = gr.searchLvlZero();
-            if ( qr.searchLvlZero() == 1 ){
-            System.out.println( qr.searchLvlZero());
-            pm.land();
-        }
-            System.out.println( qr.searchLvlZero());
-            pm.land();
+                pm.hover(5000);
+                //int value = gr.searchLvlZero();
+                if ( qr.searchLvlZero() == 1 ){
+                    System.out.println( qr.searchLvlZero());
+                    pm.land();
+                }
+                System.out.println( qr.searchLvlZero());
+                pm.land();
+            }
         }
                 System.out.println("Camera ready");
     }

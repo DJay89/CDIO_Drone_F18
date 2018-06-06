@@ -29,7 +29,7 @@ public class QRsearch {
 
       //  else if (result + 1 == qr.get_qr_txt()) {
 
-          else {
+        else {
             result = Integer.parseInt(IR.getqr().get_qr_txt());
             return 1;
         }
