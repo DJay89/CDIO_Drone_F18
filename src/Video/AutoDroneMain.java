@@ -19,9 +19,9 @@ public class AutoDroneMain extends Application {
     private QRsearch qr;
 
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
-    private Boolean devMode = true;
+    private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = false;
+    private Boolean testRun = true;
 
     public void start(Stage s){
 
@@ -39,6 +39,7 @@ public class AutoDroneMain extends Application {
         }
         else
         {
+            System.out.println("HEJ");
             drone = new ARDrone();
             pm = new PilotManager(drone);
             pm.droneCamCapture(); // start drone image listener
@@ -55,6 +56,7 @@ public class AutoDroneMain extends Application {
             if( testRun )
                 pm.takeOff();
             pm.hover(5000);
+             //int value = gr.searchLvlZero();
             if ( qr.searchLvlZero() == 1 ){
                 System.out.println( qr.searchLvlZero());
                 pm.land();
