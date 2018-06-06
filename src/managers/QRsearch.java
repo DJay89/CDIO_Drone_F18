@@ -19,11 +19,13 @@ public class QRsearch {
 
         if (IR.getqr().get_qr_txt() == null) {
 
-            long spinTime = System.currentTimeMillis() + 5000;
+           /* long spinTime = System.currentTimeMillis() + 5000;
             while ( System.currentTimeMillis() - time != 0)
             {
                 pm.spinLeft(time);
             }
+            */
+            pm.spinLeft(2000);
             return 0;
         }
 
