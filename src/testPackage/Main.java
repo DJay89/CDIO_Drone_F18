@@ -27,6 +27,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("YaDrone is now a jar package");
         IARDrone drone = null;
+
         try {
 
             drone = new ARDrone();
