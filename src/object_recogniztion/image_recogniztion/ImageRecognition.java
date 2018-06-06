@@ -91,6 +91,10 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         }
         System.err.println("Image recogniztion stopped.");
     }
+
+    public QRscanner getqr() {
+        return qr;
+    }
 }
 
 
