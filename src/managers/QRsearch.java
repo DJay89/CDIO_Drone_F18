@@ -6,7 +6,7 @@ public class QRsearch {
 
     private PilotManager pm;
     private ImageRecognition IR;
-    private long time = 5000;
+    private long time = 25;
     private int resultQR = 0;
     private int result = -1;
 
@@ -18,7 +18,12 @@ public class QRsearch {
     public int searchLvlZero() {
 
         if (IR.getqr().get_qr_txt() == null) {
-            pm.spinLeft(time);
+
+            long spinTime = System.currentTimeMillis() + 5000;
+            while ( System.currentTimeMillis() - time != 0)
+            {
+                pm.spinLeft(time);
+            }
             return 0;
         }
 

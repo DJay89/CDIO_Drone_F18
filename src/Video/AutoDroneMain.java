@@ -58,9 +58,9 @@ public class AutoDroneMain extends Application {
             pm.hover(5000);
              //int value = gr.searchLvlZero();
             if ( qr.searchLvlZero() == 1 ){
-                System.out.println( qr.searchLvlZero());
-                pm.land();
-            }
+            System.out.println( qr.searchLvlZero());
+            pm.land();
+        }
             System.out.println( qr.searchLvlZero());
             pm.land();
         }
