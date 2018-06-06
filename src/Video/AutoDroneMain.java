@@ -43,11 +43,12 @@ public class AutoDroneMain extends Application {
             pm = new PilotManager(drone);
             pm.droneCamCapture(); // start drone image listener
 
-            while (pm.getImg() == null && devMode == false) {
+            while (pm.getImg() == null) {
                 // wait for drone camera to get ready
             }
             vd = new VideoDisplay(pm);
             vd.start(s); //starts video controller
+            System.out.println("Camera ready");
             IR = new ImageRecognition(pm);
             qr = new QRsearch(IR, pm);
             imgThread = new Thread(IR);
@@ -67,7 +68,7 @@ public class AutoDroneMain extends Application {
                 pm.land();
             }
         }
-                System.out.println("Camera ready");
+
     }
     public static void main(String [] args)
     {
