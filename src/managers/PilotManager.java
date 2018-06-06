@@ -7,13 +7,13 @@ import de.yadrone.base.video.ImageListener;
 
 import java.awt.image.BufferedImage;
 
+
 public class PilotManager {
 
     private IARDrone drone;
     private CommandManager cmd;
     private BufferedImage img;
     private final int SPEED = 25;
-
 
     public PilotManager(IARDrone drone) {
          this.drone = drone;
