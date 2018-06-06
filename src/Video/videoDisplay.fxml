@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="234.0" prefWidth="259.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Video.VideoDisplayController">
+    <bottom>
+        <HBox alignment="center">
+            <padding>
+                <Insets bottom="25" left="25" right="25" top="25" />
+            </padding>
+            <children>
+                <Button fx:id="button" alignment="center" onAction="#startCamera" text="Start Camera" />
+            </children>
+        </HBox>
+    </bottom>
+    <center>
+        <ImageView fx:id="currentFrame" />
+    </center>
+   <top>
+      <RadioButton fx:id="radioButton" mnemonicParsing="false" onAction="#setDevMode" text="Webcam" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </RadioButton>
+   </top>
+</BorderPane>
