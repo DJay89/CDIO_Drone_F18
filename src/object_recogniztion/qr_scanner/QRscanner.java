@@ -32,6 +32,7 @@ public class QRscanner {
     public String get_qr_txt(){
         return qrTxt;
     }
+    public double theta;
 
     public int getX() {
         return x;
@@ -81,7 +82,8 @@ public class QRscanner {
         return true;
     }
 
-    public void imageUpdated(BufferedImage image) {
+    public boolean imageUpdated(Mat mat) {
+        BufferedImage image = Mat2BufferedImage(mat);
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         MultiFormatReader reader = new MultiFormatReader();
@@ -106,7 +108,9 @@ public class QRscanner {
             }
         } catch (NotFoundException e) {
             //e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void decodeQrWithFilters(Mat mat)
