@@ -18,12 +18,14 @@ public class QRsearch {
     public int searchLvlZero() {
 
         if (IR.getqr().get_qr_txt() == null) {
-
+/*
             long spinTime = System.currentTimeMillis() + 5000;
             while ( System.currentTimeMillis() - time != 0)
             {
                 pm.spinLeft(time);
             }
+            */
+            pm.spinLeft(2000);
             return 0;
         }
 

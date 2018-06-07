@@ -50,11 +50,15 @@ public class PilotManager {
     }
 
     public void takeOff() {
-        cmd.takeOff().doFor(5000);
+        cmd.takeOff().doFor(2000);
     }
 
     public void land() {
         cmd.landing();
+    }
+
+    public void move3D (int speedX, int speedY, int speedZ, int speedSpin, long ms) {
+        cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
     }
 
     public void spinRight (long ms){
@@ -90,4 +94,7 @@ public class PilotManager {
     public void hover(long ms) {
         cmd.hover().doFor(ms);
     }
+
+
+  //  public void spin360(long ms) { cmd.move()}
 }
