@@ -63,7 +63,6 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     public void run() {
 
         while(!Thread.interrupted()) {
-
             try {
                 BufferedImage BI = pm.getImg();
                 Mat tempFrame = convertImage2Mat(BI);

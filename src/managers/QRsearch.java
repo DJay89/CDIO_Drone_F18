@@ -34,10 +34,9 @@ public class QRsearch implements Runnable{
             }
             if (IR.getqr().get_qr_txt() != null){
                 System.out.println("Worked");
-                pm.land();
+                notify();
                 return 1;
             }
-        pm.land();
         return 0;
 
 
