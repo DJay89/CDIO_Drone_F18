@@ -52,6 +52,7 @@ public class AutoDroneMain extends Application {
             qr = new QRsearch(IR, pm);
             imgThread = new Thread(IR);
             imgThread.start();
+            imgThread.
 
 
             if( testRun )

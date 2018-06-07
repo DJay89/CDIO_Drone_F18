@@ -37,6 +37,7 @@ public class PilotManager {
             @Override
             public void imageUpdated(BufferedImage bufferedImage) {
                 PilotManager.this.setImg(bufferedImage);
+
             }
         });
     }

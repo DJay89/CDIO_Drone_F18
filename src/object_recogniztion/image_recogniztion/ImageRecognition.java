@@ -70,7 +70,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");
-                e.printStackTrace();
+                //e.printStackTrace();
 
                 try {
                     Thread.sleep(500);
