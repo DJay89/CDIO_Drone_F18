@@ -12,8 +12,8 @@ public class QRsearch implements Runnable{
 
 
     public QRsearch(ImageRecognition IR, PilotManager pm) {
-    this.IR = IR;
-    this.pm = pm;
+        this.IR = IR;
+        this.pm = pm;
     }
 
     public void run(){
@@ -34,10 +34,9 @@ public class QRsearch implements Runnable{
             }
             if (IR.getqr().get_qr_txt() != null){
                 System.out.println("Worked");
-                pm.land();
+                notify();
                 return 1;
             }
-        pm.land();
         return 0;
 
 

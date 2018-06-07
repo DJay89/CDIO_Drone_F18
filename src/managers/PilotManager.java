@@ -18,7 +18,6 @@ public class PilotManager {
     public PilotManager(IARDrone drone) {
          this.drone = drone;
          this.cmd = this.drone.getCommandManager();
-
     }
     public PilotManager() {
         this.drone = new ARDrone();

@@ -54,6 +54,7 @@ public class AutoDroneMain extends Application {
             imgThread.start();
 
 
+
             if( testRun )
             {
                 System.out.println("test start");
@@ -67,6 +68,12 @@ public class AutoDroneMain extends Application {
                     searchTread = new Thread(qr);
                     searchTread.start();
 
+                try {
+                    wait();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
 
                 //pm.takeOffAndLand();
