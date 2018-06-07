@@ -53,6 +53,11 @@ public class PilotManager {
         cmd.takeOff().doFor(2000);
     }
 
+    public void takeOff(long ms) {
+        cmd.takeOff().doFor(ms);
+    }
+
+
     public void land() {
         cmd.landing();
     }

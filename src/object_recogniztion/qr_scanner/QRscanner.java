@@ -55,7 +55,7 @@ public class QRscanner {
                 ResultPoint rp = resPoints[i];
                 x += Math.round( rp.getX() );
                 y += Math.round( rp.getY() );
-                System.out.println(i+" - "+"x: "+rp.getX()+"y: "+rp.getY());
+                //System.out.println(i+" - "+"x: "+rp.getX()+"y: "+rp.getY());
             }
             this.x = Math.round(x/result.getResultPoints().length);
             this.y = Math.round(y/result.getResultPoints().length);

@@ -17,13 +17,13 @@ public class AutoDroneMain extends Application {
     private PilotManager pm;
     private IARDrone drone;
     private ImageRecognition IR;
-    private Thread imgThread;
+    private Thread imgThread, searchTread;
     private QRsearch qr;
 
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
     private Boolean devMode = false;
     // Toggle Flight mode, this will a launch of the drone
-    private Boolean testRun = true;
+    private Boolean testRun = false;
 
     public void start(Stage s){
 
@@ -58,27 +58,24 @@ public class AutoDroneMain extends Application {
             {
                 System.out.println("test start");
                 pm.takeOff();
-
-                /*
-                long spinTime = System.currentTimeMillis() + 5000;
-                while ( System.currentTimeMillis() - 5000 != 0)
-                {
-                    pm.hover(25);
-                    pm.move3D(10, 0);
+                pm.hover(2000);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                    searchTread = new Thread(qr);
+                    searchTread.start();
 
-                */
+
+
                 //pm.takeOffAndLand();
                // pm.move3D(0, 0, 0, 2, 2000);
-                pm.move3D(2, -1, 0 , 25, 1000);
-                pm.hover(500);
-                pm.move3D(2, -1, 0 , 25, 1000);
-                pm.hover(500);
-                pm.land();
+
                 //int value = gr.searchLvlZero();
 
-               // if ( qr.searchLvlZero() == 1 ){
-                   //aSystem.out.println( qr.searchLvlZero());
+               //
+                   //a;
                //     pm.land();
               //A  }
 
