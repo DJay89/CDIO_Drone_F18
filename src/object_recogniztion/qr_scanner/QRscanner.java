@@ -3,111 +3,71 @@ package object_recogniztion.qr_scanner;
         import com.google.zxing.*;
         import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
         import com.google.zxing.common.HybridBinarizer;
-        import com.google.zxing.oned.rss.FinderPattern;
         import com.google.zxing.qrcode.QRCodeReader;
-        import de.yadrone.apps.paperchase.QRCodeScanner;
         import java.awt.Image;
         import java.awt.image.BufferedImage;
         import java.awt.image.DataBufferByte;
-        import java.util.EnumMap;
-        import java.util.Hashtable;
         import java.util.logging.Level;
         import java.util.logging.Logger;
 
-        import object_recogniztion.misc.ImageConverter;
+        import de.yadrone.apps.paperchase.QRCodeScanner;
         import org.opencv.core.Mat;
         import org.opencv.imgproc.Imgproc;
 
 /**
  *
- * @author Bruger
+ * @author Patrick
  */
 public class QRscanner {
 
-    private String qrTxt = "";
+    private String qr_return = "";
     private int x = 0;
     private int y = 0;
-    private ImageConverter IC;
 
     public String get_qr_txt(){
-        return qrTxt;
+        return qr_return;
     }
-    public double theta;
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public boolean decodeQR(Mat mat)
     {
         Image image = Mat2BufferedImage(mat);
-
-        LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
-        HybridBinarizer hb = new HybridBinarizer(ls);
-        BinaryBitmap bm = new BinaryBitmap(hb);
-
-        QRCodeReader qrr = new QRCodeReader();
-        QRCodeScanner qrcs = new QRCodeScanner();
+        LuminanceSource bufferedImageLuminanceSource = new BufferedImageLuminanceSource((BufferedImage)image);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(bufferedImageLuminanceSource));
+        QRCodeReader qrCodeReader = new QRCodeReader();
 
         try {
-            Result res = qrr.decode(bm);
-            qrTxt = res.getText();
+            Result result = qrCodeReader.decode(binaryBitmap);
+            this.qr_return = result.getText();
 
             int x = 0;
             int y = 0;
-            ResultPoint[] resPoints = res.getResultPoints();
+            ResultPoint[] resPoints = result.getResultPoints();
             for(int i = 0; i < resPoints.length; i++)
             {
                 ResultPoint rp = resPoints[i];
                 x += Math.round( rp.getX() );
                 y += Math.round( rp.getY() );
-                System.out.println("["+i+"]: x = " + rp.getX() + "| y = " + rp.getY());
+                System.out.println(i+" - "+"x: "+rp.getX()+"y: "+rp.getY());
             }
-            x = Math.round(x/res.getResultPoints().length);
-            y = Math.round(y/res.getResultPoints().length);
+            this.x = Math.round(x/result.getResultPoints().length);
+            this.y = Math.round(y/result.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
-            qrTxt = null;
+            qr_return = null;
             return false;
         }
         return true;
     }
 
-    public boolean imageUpdated(Mat mat) {
-        BufferedImage image = Mat2BufferedImage(mat);
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        MultiFormatReader reader = new MultiFormatReader();
-        double theta = 0.0D / 0.0;
-        Result scanResult = null;
-        try {
-            scanResult = reader.decode(bitmap);
-            qrTxt = scanResult.getText();
-            ResultPoint[] points = scanResult.getResultPoints();
-            ResultPoint a = points[1];
-            ResultPoint b = points[2];
-            double z = (double)Math.abs(a.getX() - b.getX());
-            double x = (double)Math.abs(a.getY() - b.getY());
-            theta = Math.atan(x / z);
-            theta *= 57.29577951308232D;
-            if (b.getX() < a.getX() && b.getY() > a.getY()) {
-                theta = 180.0D - theta;
-            } else if (b.getX() < a.getX() && b.getY() < a.getY()) {
-                theta += 180.0D;
-            } else if (b.getX() > a.getX() && b.getY() < a.getY()) {
-                theta = 360.0D - theta;
-            }
-        } catch (NotFoundException e) {
-            //e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
 
     public void decodeQrWithFilters(Mat mat)
     {
@@ -134,7 +94,7 @@ public class QRscanner {
                 String tmp = res.getText();
                 if(tmp.isEmpty() && tmp.length() > 3)
                 {
-                    qrTxt = tmp;
+                    qr_return = tmp;
                     done = true;
                 }
                 else
