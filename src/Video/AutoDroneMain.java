@@ -51,7 +51,6 @@ public class AutoDroneMain extends Application {
                 BI = pm.getImg();
                 // wait for drone camera to get ready
             }
-            System.out.println("BI ==");
 
             System.out.println("Camera ready");
             try {
