@@ -18,15 +18,30 @@ public class QRsearch {
     public int searchLvlZero() {
 
         if (IR.getqr().get_qr_txt() == null) {
+<<<<<<< HEAD
 /*
             long spinTime = System.currentTimeMillis() + 5000;
+=======
+
+           /* long spinTime = System.currentTimeMillis() + 5000;
+>>>>>>> origin/SearchAlgorithm
             while ( System.currentTimeMillis() - time != 0)
             {
                 pm.spinLeft(time);
             }
             */
+<<<<<<< HEAD
             pm.spinLeft(2000);
             return 0;
+=======
+           int i = 0;
+           while(i < 100){
+               pm.spinLeft(25);
+               pm.hover(5);
+               i++;
+           }
+           return 0;
+>>>>>>> origin/SearchAlgorithm
         }
 
       //  else if (result + 1 == qr.get_qr_txt()) {

@@ -55,7 +55,6 @@ public class QRscanner {
 
         try {
             Result res = qrr.decode(bm);
-
             qrTxt = res.getText();
 
             int x = 0;
@@ -64,15 +63,12 @@ public class QRscanner {
             for(int i = 0; i < resPoints.length; i++)
             {
                 ResultPoint rp = resPoints[i];
+                x += Math.round( rp.getX() );
+                y += Math.round( rp.getY() );
                 System.out.println("["+i+"]: x = " + rp.getX() + "| y = " + rp.getY());
             }
-
-            for(ResultPoint rp: res.getResultPoints()){
-                x += rp.getX();
-                y += rp.getY();
-            }
-            x = (int)(x/res.getResultPoints().length);
-            y = (int)(y/res.getResultPoints().length);
+            x = Math.round(x/res.getResultPoints().length);
+            y = Math.round(y/res.getResultPoints().length);
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
