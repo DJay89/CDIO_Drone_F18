@@ -1,12 +1,15 @@
 package object_recogniztion.video_test;
 
 import controller.Drone;
+import org.opencv.core.Mat;
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import managers.QRsearch;
 import object_recogniztion.image_recogniztion.ImageRecognition;
+import object_recogniztion.image_recogniztion.SquareDetection.squareDetection;
+
 
 public class AutoDroneMain extends Application {
 
@@ -18,7 +21,7 @@ public class AutoDroneMain extends Application {
     private QRsearch qr;
 
     //Toggle debugmode, if true when the webcam will be use for Image Recognition
-    private Boolean devMode = false;
+    private Boolean devMode =true;
     // Toggle Flight mode, this will a launch of the drone
     private Boolean testRun = true;
 
@@ -35,9 +38,11 @@ public class AutoDroneMain extends Application {
             IR = new ImageRecognition(droneController);
             imgThread = new Thread(IR);
             imgThread.start();
+
         }
         else
         {
+            /*
             drone = new ARDrone();
             droneController = new Drone(drone);
             droneController.droneCamCapture(); // start drone image listener
@@ -47,10 +52,13 @@ public class AutoDroneMain extends Application {
             qr = new QRsearch(IR, droneController);
             imgThread = new Thread(IR);
             imgThread.start();
-
+*/
 
             if( testRun )
             {
+
+
+                /*
                 System.out.println("test start");
                 droneController.takeOff();
                 droneController.hover(2000);
@@ -61,7 +69,7 @@ public class AutoDroneMain extends Application {
                 }
                     searchTread = new Thread(qr);
                     searchTread.start();
-
+*/
                 //pm.takeOffAndLand();
                // pm.move3D(0, 0, 0, 2, 2000);
 

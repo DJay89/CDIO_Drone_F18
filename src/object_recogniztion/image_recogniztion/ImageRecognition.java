@@ -1,6 +1,7 @@
 package object_recogniztion.image_recogniztion;
 
 import controller.Drone;
+import object_recogniztion.image_recogniztion.SquareDetection.squareDetection;
 import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.RingFinder.RedRingFinder;
 import object_recogniztion.qr_scanner.QRscanner;
@@ -17,6 +18,8 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private ImageConverter imageConverter;
     private RedRingFinder ring;
     private QRscanner qr;
+    private squareDetection sd;
+
 
     private Mat frame;
 
@@ -27,6 +30,8 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
+        this.sd = new squareDetection();
+
     }
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
@@ -64,6 +69,13 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 }
             }
             if (!frame.empty()) {
+
+                try {
+                    sd.findRectangle(getFrame());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 if(qr.decodeQR(getFrame())){
                     System.out.println(qr.get_qr_txt());
                 }
