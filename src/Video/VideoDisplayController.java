@@ -27,7 +27,12 @@ public class VideoDisplayController {
     @FXML
     private ImageView currentFrame;
     @FXML
-    private RadioButton radioButton;
+    private RadioButton webcamRB;
+
+    @FXML
+    private RadioButton filterRB;
+
+
     // a timer for acquiring the video stream
     private ScheduledExecutorService timer;
     // the OpenCV object that realizes the video capture
@@ -77,7 +82,14 @@ public class VideoDisplayController {
                         public void run()
                         {
                             // effectively grab and process a single frame
-                            Mat frame = bufferedImageToMat(pm.getImg());
+                            Mat frame = new Mat();
+                            if(filter == true){
+                                grabFrame();
+                            }
+                            else
+                            {
+                               frame = bufferedImageToMat(pm.getImg());
+                            }
                             // convert and show the frame
                             Image imageToShow = Utils.mat2Image(frame);
                             updateImageView(currentFrame, imageToShow);
@@ -156,7 +168,7 @@ public class VideoDisplayController {
     protected void setDevMode(ActionEvent event)
     {
         this.stopAcquisition();
-        if( radioButton.isSelected() )
+        if( webcamRB.isSelected() )
         {
             devMode = true;
         }
@@ -165,6 +177,15 @@ public class VideoDisplayController {
         }
         cameraActive = false;
         camera();
+    }
+
+    @FXML
+    protected void setFilter(ActionEvent event){
+        if(filterRB.isSelected()){
+            filter = true;
+        }
+        else
+            filter = false;
     }
 
     /**
@@ -177,28 +198,38 @@ public class VideoDisplayController {
         // init everything
         Mat frame = new Mat();
 
-        // check if the capture is open
-        if (this.capture.isOpened())
-        {
-            try
+        if(devMode){
+            // check if the capture is open
+            if (this.capture.isOpened())
             {
-                // read the current frame
-                this.capture.read(frame);
+                try
+                {
+                    // read the current frame
+                    this.capture.read(frame);
 
-                // if the frame is not empty, process it
-                if (!frame.empty() && filter == true)
+                    // if the frame is not empty, process it
+                    if (!frame.empty() && filter == true)
+                    {
+                        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    // log the error
+                    System.err.println("Exception during the image elaboration: " + e);
+                }
+            }
+        }
+        else
+            if(pm != null){
+            BufferedImage BI = pm.getImg();
+            frame = bufferedImageToMat(BI);
+            if (!frame.empty())
                 {
                     Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
                 }
-
             }
-            catch (Exception e)
-            {
-                // log the error
-                System.err.println("Exception during the image elaboration: " + e);
-            }
-        }
-
         return frame;
     }
 

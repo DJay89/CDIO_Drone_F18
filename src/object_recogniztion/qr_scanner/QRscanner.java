@@ -62,7 +62,7 @@ public class QRscanner {
 
         } catch (NotFoundException | ChecksumException | FormatException ex) {
             //Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
-            qr_return = null;
+            qr_return = "";
             return false;
         }
         return true;

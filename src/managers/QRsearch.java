@@ -22,8 +22,10 @@ public class QRsearch implements Runnable{
 
     public int searchLvlZero() {
         long spinTime = System.currentTimeMillis() + 20000;
-            while ( System.currentTimeMillis() - spinTime <= 0 || IR.getqr().get_qr_txt() == null)
+        String temp = IR.getqr().get_qr_txt();
+        while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals(""))
             {
+                System.out.println("Worked");
                 pm.move3D(2, -1, 0 , 20, 500);
                 pm.hover(5);
                 try {
@@ -31,12 +33,15 @@ public class QRsearch implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                temp = IR.getqr().get_qr_txt();
             }
-            if (IR.getqr().get_qr_txt() != null){
-                System.out.println("Worked");
-                notify();
+            if (!temp.isEmpty()){
+                System.out.println("Worked, temp: "+temp);
+
+                pm.land();
                 return 1;
             }
+        pm.land();
         return 0;
 
 
