@@ -32,13 +32,6 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.frame = new Mat();
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
-    }
-    public ImageRecognition(PilotManager pm) {
-        this.pm = pm;
-        this.ring = new RedRingFinder();
-        this.frame = new Mat();
-        this.ring = new RedRingFinder();
-        this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
     }
 

@@ -10,8 +10,12 @@ public class RedRingFinder {
 
     public Mat findRedRing(Mat frame) {
 
+        Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
         Mat mask = new Mat();
+
+        Imgproc.blur(frame, blurredImage, new Size(7, 7));
+        Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
         /*
         Setting the values to search for our colour red.
@@ -19,6 +23,7 @@ public class RedRingFinder {
          */
         Scalar minValues = new Scalar(0, 144, 124);
         Scalar maxValues = new Scalar(18, 255, 255);
+
         Core.inRange(hsvImage, minValues, maxValues, mask); //Doesn't recognise this method.
 
         frame = drawRing(mask, frame);
