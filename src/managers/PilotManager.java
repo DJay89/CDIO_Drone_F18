@@ -1,18 +1,28 @@
 package managers;
 
+import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
+import de.yadrone.base.video.ImageListener;
+
+import java.awt.image.BufferedImage;
+
 
 public class PilotManager {
 
     private IARDrone drone;
     private CommandManager cmd;
+    private BufferedImage img;
     private final int SPEED = 25;
-
 
     public PilotManager(IARDrone drone) {
          this.drone = drone;
          this.cmd = this.drone.getCommandManager();
+    }
+    public PilotManager() {
+        this.drone = new ARDrone();
+        drone.start();
+        this.cmd = this.drone.getCommandManager();
     }
 
     public void takeOffAndLand() {
@@ -21,12 +31,38 @@ public class PilotManager {
          cmd.landing();
     }
 
-    public void takeOff() {
-        cmd.takeOff().doFor(5000);
+    public void droneCamCapture() {
+        drone.getVideoManager().addImageListener(new ImageListener() {
+            @Override
+            public void imageUpdated(BufferedImage bufferedImage) {
+                PilotManager.this.setImg(bufferedImage);
+            }
+        });
     }
+
+    public void setImg(BufferedImage bufferedImage){
+        this.img = bufferedImage;
+    }
+
+    public  BufferedImage getImg(){
+        return this.img;
+    }
+
+    public void takeOff() {
+        cmd.takeOff().doFor(2000);
+    }
+
+    public void takeOff(long ms) {
+        cmd.takeOff().doFor(ms);
+    }
+
 
     public void land() {
         cmd.landing();
+    }
+
+    public void move3D (int speedX, int speedY, int speedZ, int speedSpin, long ms) {
+        cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
     }
 
     public void spinRight (long ms){
@@ -62,4 +98,7 @@ public class PilotManager {
     public void hover(long ms) {
         cmd.hover().doFor(ms);
     }
+
+
+  //  public void spin360(long ms) { cmd.move()}
 }
