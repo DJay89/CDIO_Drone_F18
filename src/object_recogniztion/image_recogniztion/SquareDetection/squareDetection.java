@@ -2,10 +2,13 @@ package object_recogniztion.image_recogniztion.SquareDetection;
 
 import org.opencv.core.Mat;
 import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import java.util.List;
 import java.util.ArrayList;
 import org.opencv.core.Point;
+
+import static org.opencv.imgproc.Imgproc.drawContours;
 
 
 public class squareDetection {
@@ -16,11 +19,11 @@ public class squareDetection {
 
         Mat gray0 = new Mat(blurred.size(), CvType.CV_8U), gray = new Mat();
 
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
-        List<Mat> blurredChannel = new ArrayList<Mat>();
+        ArrayList<Mat> blurredChannel = new ArrayList<Mat>();
         blurredChannel.add(blurred);
-        List<Mat> gray0Channel = new ArrayList<Mat>();
+        ArrayList<Mat> gray0Channel = new ArrayList<Mat>();
         gray0Channel.add(gray0);
 
         MatOfPoint2f approxCurve;
@@ -77,9 +80,11 @@ public class squareDetection {
         }
 
         if (maxId >= 0) {
-            Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0,
-                    .8), 8);
-
+                drawContours(src, contours, maxId, new Scalar(255, 0, 0), 8);
+                System.out.print("RECT DETECTED\n");
+                System.out.print("NUMBERS OF CONTOURS FOUND = " + contours.size());
+                
+           
         }
     }
 
