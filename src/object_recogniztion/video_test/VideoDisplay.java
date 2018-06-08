@@ -1,7 +1,6 @@
-package Video;
+package object_recogniztion.video_test;
 import managers.PilotManager;
 import org.opencv.core.Core;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -23,7 +22,7 @@ public class VideoDisplay {
         try
         {
             // load the FXML resource
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("videoDisplay.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("object_recogniztion/video_test/videoDisplay.fxml"));
             // store the root element so that the controllers can use it
             BorderPane rootElement = (BorderPane) loader.load();
             // create and style a scene

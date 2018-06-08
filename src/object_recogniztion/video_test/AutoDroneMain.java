@@ -1,9 +1,8 @@
-package Video;
+package object_recogniztion.video_test;
 
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import managers.PilotManager;
 import managers.QRsearch;

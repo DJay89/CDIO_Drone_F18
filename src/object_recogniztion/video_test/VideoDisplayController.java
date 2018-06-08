@@ -1,4 +1,4 @@
-package Video;
+package object_recogniztion.video_test;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.concurrent.Executors;
