@@ -1,9 +1,8 @@
 package object_recogniztion.image_recogniztion;
 
 import controller.Drone;
-import managers.PilotManager;
 import object_recogniztion.misc.ImageConverter;
-import object_recogniztion.misc.RedRingFinder;
+import object_recogniztion.RingFinder.RedRingFinder;
 import object_recogniztion.qr_scanner.QRscanner;
 import org.opencv.core.Mat;
 
@@ -11,11 +10,7 @@ import java.awt.image.BufferedImage;
 
 public class ImageRecognition implements IImageRecognition, Runnable {
 
-    /*
-    TESTING
-     */
     private Drone controller;
-    //
 
     private ImageManipulation imageManipulation;
 

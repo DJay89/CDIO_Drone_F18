@@ -1,19 +1,17 @@
 package object_recogniztion.video_test;
 
+import controller.Drone;
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import managers.PilotManager;
 import managers.QRsearch;
 import object_recogniztion.image_recogniztion.ImageRecognition;
-
-import java.awt.image.BufferedImage;
 
 public class AutoDroneMain extends Application {
 
     private VideoDisplay vd;
-    private PilotManager pm;
+    private Drone droneController;
     private IARDrone drone;
     private ImageRecognition IR;
     private Thread imgThread, searchTread;
@@ -30,23 +28,23 @@ public class AutoDroneMain extends Application {
         if(devMode)
         {
             drone = new ARDrone();
-            pm = new PilotManager(drone);
-            pm.droneCamCapture(); // start drone image listener
-            vd = new VideoDisplay(pm);
+            droneController = new Drone(drone);
+            droneController.droneCamCapture(); // start drone image listener
+            vd = new VideoDisplay(droneController);
             vd.start(s); //starts video controller
-            IR = new ImageRecognition(pm);
+            IR = new ImageRecognition(droneController);
             imgThread = new Thread(IR);
             imgThread.start();
         }
         else
         {
             drone = new ARDrone();
-            pm = new PilotManager(drone);
-            pm.droneCamCapture(); // start drone image listener
-            vd = new VideoDisplay(pm);
+            droneController = new Drone(drone);
+            droneController.droneCamCapture(); // start drone image listener
+            vd = new VideoDisplay(droneController);
             vd.start(s); //starts video controller
-            IR = new ImageRecognition(pm);
-            qr = new QRsearch(IR, pm);
+            IR = new ImageRecognition(droneController);
+            qr = new QRsearch(IR, droneController);
             imgThread = new Thread(IR);
             imgThread.start();
 
@@ -54,8 +52,8 @@ public class AutoDroneMain extends Application {
             if( testRun )
             {
                 System.out.println("test start");
-                pm.takeOff();
-                pm.hover(2000);
+                droneController.takeOff();
+                droneController.hover(2000);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {

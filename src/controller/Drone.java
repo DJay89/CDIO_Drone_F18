@@ -3,7 +3,6 @@ package controller;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.video.ImageListener;
-import managers.PilotManager;
 
 import java.awt.image.BufferedImage;
 

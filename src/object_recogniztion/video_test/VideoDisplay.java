@@ -1,5 +1,5 @@
 package object_recogniztion.video_test;
-import managers.PilotManager;
+import controller.Drone;
 import org.opencv.core.Core;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -9,12 +9,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
 public class VideoDisplay {
-    private PilotManager pm;
+    private Drone drone;
 
-    public VideoDisplay(PilotManager pm){
+    public VideoDisplay(Drone drone){
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        this.pm = pm;
+        this.drone = drone;
     }
 
     public void start(Stage primaryStage)
@@ -37,7 +37,7 @@ public class VideoDisplay {
 
             // set the proper behavior on closing the application
             VideoDisplayController controller = loader.getController();
-            controller.setPM(this.pm);
+            controller.setPM(this.drone);
 
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)

@@ -1,4 +1,4 @@
-package object_recogniztion.misc;
+package object_recogniztion.RingFinder;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;

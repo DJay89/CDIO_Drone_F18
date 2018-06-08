@@ -5,8 +5,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import controller.Drone;
 import javafx.scene.control.RadioButton;
-import managers.PilotManager;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -44,13 +44,13 @@ public class VideoDisplayController {
 
     private static int cameraId = 0;
 
-    private PilotManager pm;
+    private Drone drone;
     private Runnable frameGrabber;
     private Boolean devMode = false;
     private Boolean filter = false;
 
-    public void setPM(PilotManager pm){
-        this.pm = pm;
+    public void setPM(Drone drone){
+        this.drone = drone;
     }
 
     /**
@@ -71,7 +71,7 @@ public class VideoDisplayController {
         {
             if (!this.cameraActive)
             {
-                if(pm != null){
+                if(drone != null){
                     this.cameraActive = true;
                     //TIR = new Thread((ImageRecognition) IR);
                     //TIR.start();
@@ -88,7 +88,7 @@ public class VideoDisplayController {
                             }
                             else
                             {
-                               frame = bufferedImageToMat(pm.getImg());
+                               frame = bufferedImageToMat(drone.getImg());
                             }
                             // convert and show the frame
                             Image imageToShow = Utils.mat2Image(frame);
@@ -222,8 +222,8 @@ public class VideoDisplayController {
             }
         }
         else
-            if(pm != null){
-            BufferedImage BI = pm.getImg();
+            if(drone != null){
+            BufferedImage BI = drone.getImg();
             frame = bufferedImageToMat(BI);
             if (!frame.empty())
                 {
