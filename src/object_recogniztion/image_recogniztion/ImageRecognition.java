@@ -21,7 +21,6 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
     private ImageConverter imageConverter;
     private RedRingFinder ring;
-    private PilotManager pm;
     private QRscanner qr;
 
     private Mat frame;
@@ -55,13 +54,13 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     public void run() {
 
         while(!Thread.interrupted()) {
+
             try {
-                BufferedImage BI = pm.getImg();
-                Mat tempFrame = convertImage2Mat(BI);
+                Mat tempFrame = convertImage2Mat(controller.getImg());
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");
-                //e.printStackTrace();
+                e.printStackTrace();
 
                 try {
                     Thread.sleep(500);
@@ -70,9 +69,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 }
             }
             if (!frame.empty()) {
-                //System.out.println("Scaning..");
-                if(qr.decodeQR(getFrame()))
-                {
+                if(qr.decodeQR(getFrame())){
                     System.out.println(qr.get_qr_txt());
                 }
 
