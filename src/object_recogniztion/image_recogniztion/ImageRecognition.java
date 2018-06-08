@@ -20,7 +20,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private RedRingFinder ring;
     private QRscanner qr;
     private Boolean devMode;
-    private VideoDisplayController VDC = new VideoDisplayController();
+    private VideoDisplayController VDC;
     private Mat frame;
 
     public ImageRecognition(Drone droneController) {
@@ -31,14 +31,14 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
     }
-    public ImageRecognition(Drone droneController, boolean devMode) {
+    public ImageRecognition(Drone droneController, VideoDisplayController VDC) {
         this.controller = droneController;
         this.imageManipulation = new ImageManipulation(droneController);
         this.frame = new Mat();
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
-        this.devMode = devMode;
+        this.VDC = VDC;
     }
 
 
@@ -65,14 +65,12 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
             try {
                 Mat tempFrame;
-                if(devMode){
+                if(VDC.devMode){
                     tempFrame = VDC.grabFrame();
-                    System.out.println(tempFrame+ " 22");
                 }
                 else{
                     tempFrame = convertImage2Mat(controller.getImg());
                 }
-
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");

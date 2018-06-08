@@ -32,7 +32,7 @@ public class AutoDroneMain extends Application {
             //droneController.droneCamCapture(); // start drone image listener
             vd = new VideoDisplay();
             vd.start(s); //starts video controller
-            IR = new ImageRecognition(droneController, devMode);
+            IR = new ImageRecognition(droneController, vd.controller);
             imgThread = new Thread(IR);
             imgThread.start();
         }

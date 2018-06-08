@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 public class VideoDisplay {
     private Drone drone;
     private Boolean withWebcam;
+    public VideoDisplayController controller;
 
     public VideoDisplay(Drone drone){
 
@@ -42,7 +43,7 @@ public class VideoDisplay {
             primaryStage.show();
 
             // set the proper behavior on closing the application
-            VideoDisplayController controller = loader.getController();
+            this.controller = loader.getController();
             if(withWebcam) controller.setWebcamRB(true);
                 else controller.setPM(this.drone);
 
