@@ -1,10 +1,11 @@
 package object_recogniztion.image_recogniztion;
 
 import controller.Drone;
-import object_recogniztion.image_recogniztion.SquareDetection.squareDetection;
 import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.RingFinder.RedRingFinder;
 import object_recogniztion.qr_scanner.QRscanner;
+import object_recogniztion.video_test.VideoDisplay;
+import object_recogniztion.video_test.VideoDisplayController;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
@@ -18,9 +19,8 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private ImageConverter imageConverter;
     private RedRingFinder ring;
     private QRscanner qr;
-    private squareDetection sd;
-
-
+    private Boolean devMode;
+    private VideoDisplayController VDC;
     private Mat frame;
 
     public ImageRecognition(Drone droneController) {
@@ -30,9 +30,17 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.ring = new RedRingFinder();
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
-        this.sd = new squareDetection();
-
     }
+    public ImageRecognition(Drone droneController, VideoDisplayController VDC) {
+        this.controller = droneController;
+        this.imageManipulation = new ImageManipulation(droneController);
+        this.frame = new Mat();
+        this.ring = new RedRingFinder();
+        this.imageConverter = new ImageConverter();
+        this.qr = new QRscanner();
+        this.VDC = VDC;
+    }
+
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
         return imageConverter.convertMat2BufferedImage(frame);
@@ -56,7 +64,13 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         while(!Thread.interrupted()) {
 
             try {
-                Mat tempFrame = convertImage2Mat(controller.getImg());
+                Mat tempFrame;
+                if(VDC.devMode){
+                    tempFrame = VDC.grabFrame();
+                }
+                else{
+                    tempFrame = convertImage2Mat(controller.getImg());
+                }
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");
@@ -69,13 +83,6 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 }
             }
             if (!frame.empty()) {
-
-                try {
-                    sd.findRectangle(getFrame());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
                 if(qr.decodeQR(getFrame())){
                     System.out.println(qr.get_qr_txt());
                 }

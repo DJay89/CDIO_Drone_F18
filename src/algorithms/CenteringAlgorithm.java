@@ -1,6 +1,8 @@
 package algorithms;
 
 import controller.Drone;
+import de.yadrone.apps.paperchase.QRCodeScanner;
+import object_recogniztion.qr_scanner.QRscanner;
 
 public class CenteringAlgorithm {
 
@@ -14,6 +16,7 @@ public class CenteringAlgorithm {
     private boolean findCircle;
     private boolean findQr;
 
+    private QRscanner qrScanner;
     private int tagX;
     private int tagY;
 
@@ -60,11 +63,11 @@ public class CenteringAlgorithm {
     }
 
     private boolean isDroneCentered() {
-
+        qrScanner = new QRscanner();
         // get coords from drone
         if (findQr) {
-            tagX = 123;
-            tagY = 654;
+            tagX = qrScanner.getX();
+            tagY = qrScanner.getY();
         }
         if (findCircle) {
             tagX = 321;

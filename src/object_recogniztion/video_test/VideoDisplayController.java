@@ -46,11 +46,14 @@ public class VideoDisplayController {
 
     private Drone drone;
     private Runnable frameGrabber;
-    private Boolean devMode = false;
+    public Boolean devMode = false;
     private Boolean filter = false;
 
     public void setPM(Drone drone){
         this.drone = drone;
+    }
+    public  void setWebcamRB(Boolean toggle){
+        devMode = toggle;
     }
 
     /**
@@ -193,7 +196,7 @@ public class VideoDisplayController {
      *
      * @return the {@link Mat} to show
      */
-    private Mat grabFrame()
+    public Mat grabFrame()
     {
         // init everything
         Mat frame = new Mat();
@@ -202,6 +205,7 @@ public class VideoDisplayController {
             // check if the capture is open
             if (this.capture.isOpened())
             {
+                System.out.println("mmm");
                 try
                 {
                     // read the current frame

@@ -10,11 +10,18 @@ import javafx.fxml.FXMLLoader;
 
 public class VideoDisplay {
     private Drone drone;
+    private Boolean withWebcam;
+    public VideoDisplayController controller;
 
     public VideoDisplay(Drone drone){
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        withWebcam = false;
         this.drone = drone;
+    }
+    public VideoDisplay(){
+        withWebcam = true;
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     public void start(Stage primaryStage)
@@ -22,7 +29,7 @@ public class VideoDisplay {
         try
         {
             // load the FXML resource
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("object_recogniztion/video_test/videoDisplay.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("videoDisplay.fxml"));
             // store the root element so that the controllers can use it
             BorderPane rootElement = (BorderPane) loader.load();
             // create and style a scene
@@ -36,8 +43,9 @@ public class VideoDisplay {
             primaryStage.show();
 
             // set the proper behavior on closing the application
-            VideoDisplayController controller = loader.getController();
-            controller.setPM(this.drone);
+            this.controller = loader.getController();
+            if(withWebcam) controller.setWebcamRB(true);
+                else controller.setPM(this.drone);
 
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)

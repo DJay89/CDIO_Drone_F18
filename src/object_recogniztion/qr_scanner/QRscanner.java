@@ -38,6 +38,7 @@ public class QRscanner {
 
     public boolean decodeQR(Mat mat)
     {
+
         Image image = Mat2BufferedImage(mat);
         LuminanceSource bufferedImageLuminanceSource = new BufferedImageLuminanceSource((BufferedImage)image);
         BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(bufferedImageLuminanceSource));
