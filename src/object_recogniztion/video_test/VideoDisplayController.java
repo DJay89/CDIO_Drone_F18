@@ -52,6 +52,9 @@ public class VideoDisplayController {
     public void setPM(Drone drone){
         this.drone = drone;
     }
+    public  void setWebcamRB(Boolean toggle){
+        devMode = toggle;
+    }
 
     /**
      * The action triggered by pushing the button on the GUI
@@ -193,7 +196,7 @@ public class VideoDisplayController {
      *
      * @return the {@link Mat} to show
      */
-    private Mat grabFrame()
+    public Mat grabFrame()
     {
         // init everything
         Mat frame = new Mat();

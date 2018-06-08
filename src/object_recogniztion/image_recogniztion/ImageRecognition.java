@@ -4,6 +4,8 @@ import controller.Drone;
 import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.RingFinder.RedRingFinder;
 import object_recogniztion.qr_scanner.QRscanner;
+import object_recogniztion.video_test.VideoDisplay;
+import object_recogniztion.video_test.VideoDisplayController;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
@@ -17,7 +19,8 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private ImageConverter imageConverter;
     private RedRingFinder ring;
     private QRscanner qr;
-
+    private Boolean devMode;
+    private VideoDisplayController VDC = new VideoDisplayController();
     private Mat frame;
 
     public ImageRecognition(Drone droneController) {
@@ -28,6 +31,16 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
     }
+    public ImageRecognition(Drone droneController, boolean devMode) {
+        this.controller = droneController;
+        this.imageManipulation = new ImageManipulation(droneController);
+        this.frame = new Mat();
+        this.ring = new RedRingFinder();
+        this.imageConverter = new ImageConverter();
+        this.qr = new QRscanner();
+        this.devMode = devMode;
+    }
+
 
     public BufferedImage convertMat2BufferedImage(Mat frame) {
         return imageConverter.convertMat2BufferedImage(frame);
@@ -51,7 +64,15 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         while(!Thread.interrupted()) {
 
             try {
-                Mat tempFrame = convertImage2Mat(controller.getImg());
+                Mat tempFrame;
+                if(devMode){
+                    tempFrame = VDC.grabFrame();
+                    System.out.println(tempFrame+ " 22");
+                }
+                else{
+                    tempFrame = convertImage2Mat(controller.getImg());
+                }
+
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");
