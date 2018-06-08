@@ -55,13 +55,13 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     public void run() {
 
         while(!Thread.interrupted()) {
-
             try {
-                Mat tempFrame = convertImage2Mat(pm.getImg());
+                BufferedImage BI = pm.getImg();
+                Mat tempFrame = convertImage2Mat(BI);
                 setFrame(tempFrame);
             } catch (NullPointerException e) {
                 System.err.println("No picture received. Will try again in 50ms");
-                e.printStackTrace();
+                //e.printStackTrace();
 
                 try {
                     Thread.sleep(500);
@@ -70,18 +70,23 @@ public class ImageRecognition implements IImageRecognition, Runnable {
                 }
             }
             if (!frame.empty()) {
-                if(qr.decodeQR(getFrame())){
+                //System.out.println("Scaning..");
+                if(qr.decodeQR(getFrame()))
+                {
                     System.out.println(qr.get_qr_txt());
-                    System.out.println("x: "+ qr.getX() + " y: "+qr.getY());
                 }
 
                 //qr.decodeQrWithFilters(getFrame());
 
-            //    ring.findRedRing(getFrame());
+                //ring.findRedRing(getFrame());
             }
 
         }
         System.err.println("Image recogniztion stopped.");
+    }
+
+    public QRscanner getqr() {
+        return qr;
     }
 }
 

@@ -7,13 +7,13 @@ import de.yadrone.base.video.ImageListener;
 
 import java.awt.image.BufferedImage;
 
+
 public class PilotManager {
 
     private IARDrone drone;
     private CommandManager cmd;
     private BufferedImage img;
     private final int SPEED = 25;
-
 
     public PilotManager(IARDrone drone) {
          this.drone = drone;
@@ -23,8 +23,6 @@ public class PilotManager {
         this.drone = new ARDrone();
         drone.start();
         this.cmd = this.drone.getCommandManager();
-        droneCamCapture();
-
     }
 
     public void takeOffAndLand() {
@@ -51,11 +49,20 @@ public class PilotManager {
     }
 
     public void takeOff() {
-        cmd.takeOff().doFor(5000);
+        cmd.takeOff().doFor(2000);
     }
+
+    public void takeOff(long ms) {
+        cmd.takeOff().doFor(ms);
+    }
+
 
     public void land() {
         cmd.landing();
+    }
+
+    public void move3D (int speedX, int speedY, int speedZ, int speedSpin, long ms) {
+        cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
     }
 
     public void spinRight (long ms){
@@ -91,4 +98,7 @@ public class PilotManager {
     public void hover(long ms) {
         cmd.hover().doFor(ms);
     }
+
+
+  //  public void spin360(long ms) { cmd.move()}
 }
