@@ -5,11 +5,17 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class RedRingFinder {
 
+    Stack<Integer> stackX = new Stack<Integer>();
+    Stack<Integer> stackY = new Stack<Integer>();
+
     public Mat findRedRing(Mat frame) {
 
+
+        System.out.println("Ring");
         Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
         Mat mask = new Mat();
@@ -28,6 +34,18 @@ public class RedRingFinder {
 
         frame = drawRing(mask, frame);
 
+        double rows;
+        double cols;
+
+        Size size = frame.size();
+        rows = size.height;
+        cols = size.width;
+        Point screencenter = new Point(cols/2, rows/2);
+
+        //System.out.println(rows);
+        //System.out.println(cols);
+        //System.out.println(screencenter);
+
         return frame;
     }
 
@@ -41,15 +59,30 @@ public class RedRingFinder {
         // find contours
         Imgproc.findContours(maskedImage, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        Imgproc.medianBlur(maskedImage, maskedImage, 5);
+        Imgproc.medianBlur(maskedImage, maskedImage, 3);
 
         Imgproc.HoughCircles(maskedImage, circles, Imgproc.HOUGH_GRADIENT, 1.0,
                 (double) maskedImage.rows() / 20, // change this value to detect circles with different distances to each other
                 100.0, 30.0, searchSpectrumMIN(), searchSpectrumMAX());
 
-        for (int x = 0; x < circles.cols(); x++) {
-            double[] c = circles.get(0, x);
+        for (int i = 0; i < circles.cols(); i++) {
+            double[] c = circles.get(0, i);
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+            int x = (int) Math.round(c[0]);
+            int y = (int) Math.round(c[1]);
+            if (stackX.size() == 2){
+                stackX.push(x);
+                stackX.remove(stackX.firstElement());
+                stackY.push(y);
+                stackY.remove(stackY.firstElement());
+
+            } else {
+                stackX.push(x);
+                stackY.push(y);
+            }
+
+            //Prints center coordinates
+            System.out.println(center);
             // circle center
             Imgproc.circle(frame, center, 1, new Scalar(0, 100, 100), 3, 8, 0);
             // circle outline
@@ -59,15 +92,40 @@ public class RedRingFinder {
 
         System.out.println("DrawRing Object text");
 
+        getCenterAvg();
+
         return frame;
     }
 
+    private void getCenterAvg(){
+        int sumX = 0;
+        int sumY = 0;
+        int sumXavg = 0;
+        int sumYavg = 0;
+
+        for (Integer item: stackX){
+            sumX = sumX + item;
+            sumXavg = sumX/stackX.size();
+        }
+
+        System.out.println("sumX: "+sumX);
+        System.out.println("avgX: "+sumXavg);
+
+        for (Integer item: stackY){
+            sumY = sumY + item;
+            sumYavg = sumY/stackY.size();
+        }
+
+        System.out.println("sumY: "+sumY);
+        System.out.println("avgy: "+sumYavg);
+    }
+
     private int searchSpectrumMIN () {
-        return 100;
+        return 120;
     }
 
     private int searchSpectrumMAX () {
-        return 100;
+        return 160;
     }
 
 }

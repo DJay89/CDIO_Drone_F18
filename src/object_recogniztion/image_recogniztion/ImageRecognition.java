@@ -1,10 +1,9 @@
 package object_recogniztion.image_recogniztion;
 
 import controller.Drone;
-import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.RingFinder.RedRingFinder;
+import object_recogniztion.misc.ImageConverter;
 import object_recogniztion.qr_scanner.QRscanner;
-import object_recogniztion.video_test.VideoDisplay;
 import object_recogniztion.video_test.VideoDisplayController;
 import org.opencv.core.Mat;
 
@@ -89,7 +88,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
                 //qr.decodeQrWithFilters(getFrame());
 
-                //ring.findRedRing(getFrame());
+                ring.findRedRing(getFrame());
             }
 
         }
