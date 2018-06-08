@@ -2,7 +2,7 @@ package managers;
 
 import object_recogniztion.image_recogniztion.ImageRecognition;
 
-public class QRsearch {
+public class QRsearch implements Runnable{
 
     private PilotManager pm;
     private ImageRecognition IR;
@@ -15,29 +15,33 @@ public class QRsearch {
         this.IR = IR;
         this.pm = pm;
     }
-/*
-    public void run(){
-        try {
-            //searchLvlZero();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-*/
-    public int searchLvlZero() throws InterruptedException {
-        long spinTime = System.currentTimeMillis() + 20000;
-            while ( System.currentTimeMillis() - spinTime <= 0 || IR.getqr().get_qr_txt() == null)
-            {
-                pm.move3D(2, -1, 0 , 20, 500);
-                pm.hover(500);
 
-            }
-            if (IR.getqr().get_qr_txt() != null){
+    public void run(){
+        searchLvlZero();
+    }
+
+    public int searchLvlZero() {
+        long spinTime = System.currentTimeMillis() + 20000;
+        String temp = IR.getqr().get_qr_txt();
+        while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals(""))
+            {
                 System.out.println("Worked");
+                pm.move3D(2, -1, 0 , 20, 500);
+                pm.hover(5);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                temp = IR.getqr().get_qr_txt();
+            }
+            if (!temp.isEmpty()){
+                System.out.println("Worked, temp: "+temp);
+
                 pm.land();
-                Thread.sleep(2000);
                 return 1;
             }
+        pm.land();
         return 0;
 
 

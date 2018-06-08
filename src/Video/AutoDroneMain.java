@@ -41,8 +41,6 @@ public class AutoDroneMain extends Application {
         }
         else
         {
-
-            System.out.println("HEJ");
             drone = new ARDrone();
             pm = new PilotManager(drone);
             pm.droneCamCapture(); // start drone image listener
@@ -52,7 +50,6 @@ public class AutoDroneMain extends Application {
             qr = new QRsearch(IR, pm);
             imgThread = new Thread(IR);
             imgThread.start();
-
 
 
             if( testRun )
@@ -67,14 +64,6 @@ public class AutoDroneMain extends Application {
                 }
                     searchTread = new Thread(qr);
                     searchTread.start();
-
-                try {
-                    wait();
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
 
                 //pm.takeOffAndLand();
                // pm.move3D(0, 0, 0, 2, 2000);
