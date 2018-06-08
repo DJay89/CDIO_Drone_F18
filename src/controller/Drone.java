@@ -2,12 +2,23 @@ package controller;
 
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
+import de.yadrone.base.video.ImageListener;
+import managers.PilotManager;
+
+import java.awt.image.BufferedImage;
 
 public class Drone implements IDrone {
 
     private IARDrone drone;
     private CommandManager cmd;
+    private BufferedImage img;
+
+    public int getSPEED() {
+        return SPEED;
+    }
+
     private final int SPEED = 25;
+
 
 
     public Drone(IARDrone drone) {
@@ -24,7 +35,12 @@ public class Drone implements IDrone {
 
     @Override
     public void takeOff() {
-        cmd.takeOff().doFor(5000);
+        cmd.takeOff().doFor(2000);
+    }
+
+    @Override
+    public void takeOff(long ms) {
+        cmd.takeOff().doFor(ms);
     }
 
     @Override
@@ -75,5 +91,35 @@ public class Drone implements IDrone {
     @Override
     public void hover(long ms) {
         cmd.hover().doFor(ms);
+    }
+
+    @Override
+    public void spin360(long ms) {
+        //TODO: some method
+    }
+
+    @Override
+    public void move3D(int speedX, int speedY, int speedZ, int speedSpin, long ms) {
+        cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
+    }
+
+    @Override
+    public void droneCamCapture() {
+        drone.getVideoManager().addImageListener(new ImageListener() {
+            @Override
+            public void imageUpdated(BufferedImage bufferedImage) {
+                Drone.this.setImg(bufferedImage);
+            }
+        });
+    }
+
+    @Override
+    public void setImg(BufferedImage bufferedImage) {
+        this.img = bufferedImage;
+    }
+
+    @Override
+    public BufferedImage getImg() {
+        return this.img;
     }
 }

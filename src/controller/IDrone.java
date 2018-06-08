@@ -1,10 +1,16 @@
 package controller;
 
+import java.awt.image.BufferedImage;
+
 public interface IDrone {
+
+    public int getSPEED();
 
     public void takeOffAndLand();
 
     public void takeOff();
+
+    public void takeOff(long ms);
 
     public void land();
 
@@ -25,5 +31,15 @@ public interface IDrone {
     public void backward(long ms);
 
     public void hover(long ms);
+
+    public void spin360(long ms);
+
+    public void move3D (int speedX, int speedY, int speedZ, int speedSpin, long ms);
+
+    public void droneCamCapture();
+
+    public void setImg(BufferedImage bufferedImage);
+
+    public  BufferedImage getImg();
 }
 
