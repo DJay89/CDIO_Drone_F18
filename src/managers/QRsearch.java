@@ -16,6 +16,10 @@ public class QRsearch implements Runnable{
         this.pm = pm;
 
     }
+    public QRsearch( PilotManager pm) {
+        this.pm = pm;
+        this.IR = new ImageRecognition(pm);
+    }
 
     public void run(){
         searchLvlZero();
