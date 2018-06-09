@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.opencv.core.Point;
 
 import static org.opencv.imgproc.Imgproc.drawContours;
+import static org.opencv.imgproc.Imgproc.threshold;
 
 
 public class squareDetection {
@@ -17,13 +18,13 @@ public class squareDetection {
         Mat blurred = src.clone();
         Imgproc.medianBlur(src, blurred, 9);
 
-        Mat gray0 = new Mat(blurred.size(), CvType.CV_8U), gray = new Mat();
+        Mat gray0 = new Mat(blurred.size(), CvType.CV_8U),  gray = new Mat();
 
-        ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        ArrayList<MatOfPoint> contours = new ArrayList<>();
 
-        ArrayList<Mat> blurredChannel = new ArrayList<Mat>();
+        ArrayList<Mat> blurredChannel = new ArrayList<>();
         blurredChannel.add(blurred);
-        ArrayList<Mat> gray0Channel = new ArrayList<Mat>();
+        ArrayList<Mat> gray0Channel = new ArrayList<>();
         gray0Channel.add(gray0);
 
         MatOfPoint2f approxCurve;
@@ -31,7 +32,8 @@ public class squareDetection {
         double maxArea = 0;
         int maxId = -1;
 
-        for (int c = 0; c < 3; c++) {
+
+        for (int c = 0; c < src.channels(); c++) {
             int ch[] = { c, 0 };
             Core.mixChannels(blurredChannel, gray0Channel, new MatOfInt(ch));
 
@@ -49,7 +51,7 @@ public class squareDetection {
                 }
 
                 Imgproc.findContours(gray, contours, new Mat(),
-                        Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+                        Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
                 for (MatOfPoint contour : contours) {
                     MatOfPoint2f temp = new MatOfPoint2f(contour.toArray());
@@ -58,10 +60,9 @@ public class squareDetection {
                     approxCurve = new MatOfPoint2f();
                     Imgproc.approxPolyDP(temp, approxCurve,
                             Imgproc.arcLength(temp, true) * 0.02, true);
-
                     if (approxCurve.total() == 4 && area >= maxArea) {
                         double maxCosine = 0;
-
+                        System.out.print("CONTOUR LENGTH = " + Imgproc.arcLength(temp, true));
                         List<Point> curves = approxCurve.toList();
                         for (int j = 2; j < 5; j++) {
 
@@ -80,10 +81,14 @@ public class squareDetection {
         }
 
         if (maxId >= 0) {
-                drawContours(src, contours, maxId, new Scalar(255, 0, 0), 8);
+                drawContours(src, contours, maxId, new Scalar(0, 255, 0), 4);
                 System.out.print("RECT DETECTED\n");
                 System.out.print("NUMBERS OF CONTOURS FOUND = " + contours.size());
-                
+
+                for ( int i = 0; i < contours.size(); i++ )
+                System.out.print("CONTOUR " + i +  " coordinate" + contours.get(i));
+
+
            
         }
     }
