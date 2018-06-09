@@ -205,7 +205,6 @@ public class VideoDisplayController {
             // check if the capture is open
             if (this.capture.isOpened())
             {
-                System.out.println("mmm");
                 try
                 {
                     // read the current frame
