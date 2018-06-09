@@ -210,6 +210,8 @@ public class Controller
                         Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2Lab);
                         System.out.println("lab");
                     }
+                    else
+                        Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
                     // get thresholding values from the UI
