@@ -52,6 +52,9 @@ public class VideoDisplayController {
     public void setPM(Drone drone){
         this.drone = drone;
     }
+
+
+
     public  void setWebcamRB(Boolean toggle){
         devMode = toggle;
     }
