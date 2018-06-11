@@ -19,8 +19,8 @@ public class VideoDisplay {
         withWebcam = false;
         this.drone = drone;
     }
-    public VideoDisplay(){
-        withWebcam = true;
+    public VideoDisplay(Boolean state){
+        withWebcam = state;
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 

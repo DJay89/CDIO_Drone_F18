@@ -3,6 +3,7 @@ package controller;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.video.ImageListener;
+import object_recogniztion.video_test.VideoDisplay;
 
 import java.awt.image.BufferedImage;
 
@@ -11,6 +12,7 @@ public class Drone implements IDrone {
     private IARDrone drone;
     private CommandManager cmd;
     private BufferedImage img;
+    private VideoDisplay VD;
 
     public int getSPEED() {
         return SPEED;
@@ -18,11 +20,10 @@ public class Drone implements IDrone {
 
     private final int SPEED = 25;
 
-
-
-    public Drone(IARDrone drone) {
-         this.drone = drone;
-         this.cmd = this.drone.getCommandManager();
+    public Drone(IARDrone drone, VideoDisplay VD) {
+        this.drone = drone;
+        this.cmd = this.drone.getCommandManager();
+        this.VD = VD;
     }
 
     @Override
