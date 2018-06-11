@@ -13,14 +13,9 @@ public class VideoDisplay {
     private Boolean withWebcam;
     public VideoDisplayController controller;
 
-    public VideoDisplay(Drone drone){
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        withWebcam = false;
-        this.drone = drone;
-    }
-    public VideoDisplay(Boolean state){
+    public VideoDisplay(Drone drone, Boolean state){
         withWebcam = state;
+        this.drone = drone;
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
@@ -44,8 +39,8 @@ public class VideoDisplay {
 
             // set the proper behavior on closing the application
             this.controller = loader.getController();
-            if(withWebcam) controller.setWebcamRB(true);
-                else controller.setPM(this.drone);
+            controller.setWebcamRB(withWebcam);
+            controller.setDrone(drone);
 
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)

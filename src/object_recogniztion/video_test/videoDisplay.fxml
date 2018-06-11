@@ -14,7 +14,7 @@
                 <Insets bottom="25" left="25" right="25" top="25" />
             </padding>
             <children>
-                <Button fx:id="button" alignment="center" onAction="#startCamera" text="Start Camera" />
+                <Button fx:id="toggleCam" alignment="center" onAction="#startCamera" text="Start Camera" />
             </children>
         </HBox>
     </bottom>
@@ -22,11 +22,6 @@
         <ImageView fx:id="currentFrame" />
     </center>
    <top>
-      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" BorderPane.alignment="CENTER">
-         <children>
-            <RadioButton fx:id="webcamRB" mnemonicParsing="false" onAction="#setDevMode" text="Webcam" />
-            <RadioButton fx:id="filterRB" mnemonicParsing="false" onAction="#setFilter" text="Filter" />
-         </children>
-      </HBox>
+      <Button fx:id="changeDroneCam" mnemonicParsing="false" onAction="#changeCam" text="DroneCam" BorderPane.alignment="CENTER" />
    </top>
 </BorderPane>

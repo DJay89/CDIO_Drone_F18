@@ -6,7 +6,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import controller.Drone;
-import javafx.scene.control.RadioButton;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -20,175 +19,88 @@ import javafx.scene.image.ImageView;
 import utils.Utils;
 
 public class VideoDisplayController {
-    // the FXML button
+    // the FXML toggleCam
     @FXML
-    private Button button;
+    private Button toggleCam;
+
     // the FXML image view
     @FXML
     private ImageView currentFrame;
-    @FXML
-    private RadioButton webcamRB;
-
-    @FXML
-    private RadioButton filterRB;
-
 
     // a timer for acquiring the video stream
     private ScheduledExecutorService timer;
     // the OpenCV object that realizes the video capture
-    private VideoCapture capture = new VideoCapture();
-    // a flag to change the button behavior
+    private VideoCapture capture;
+    // a flag to change the toggleCam behavior
     private boolean cameraActive = true;
-    // the id of the camera to be used
-    private Thread TIR;
-
-    private static int cameraId = 0;
 
     private Drone drone;
     private Runnable frameGrabber;
-    public Boolean devMode = false;
-    private Boolean filter = false;
+    public Boolean debug = false;
+    protected Boolean changeDroneCam = false;
 
-    public void setPM(Drone drone){
+    public void setDrone(Drone drone){
         this.drone = drone;
     }
     public  void setWebcamRB(Boolean toggle){
-        devMode = toggle;
+        debug = toggle;
     }
 
     /**
-     * The action triggered by pushing the button on the GUI
+     * The action triggered by pushing the toggleCam on the GUI
      *
      * @param event
-     *            the push button event
+     *            the push toggleCam event
      */
     @FXML
     protected void startCamera(ActionEvent event)
     {
+        capture = drone.capture;
         camera();
+    }
+    @FXML
+    protected void changeCam(ActionEvent event)
+    {
+        drone.toggleCamera();
     }
 
     private void camera()
     {
-        if(!devMode) // drone cam
+        if (!this.cameraActive)
         {
-            if (!this.cameraActive)
-            {
-                if(drone != null){
-                    this.cameraActive = true;
-                    //TIR = new Thread((ImageRecognition) IR);
-                    //TIR.start();
+            if(drone != null){
+                this.cameraActive = true;
 
-                    // grab a frame every 33 ms (30 frames/sec)
-                    frameGrabber = new Runnable() {
-                        @Override
-                        public void run()
-                        {
-                            // effectively grab and process a single frame
-                            Mat frame = new Mat();
-                            if(filter == true){
-                                grabFrame();
-                            }
-                            else
-                            {
-                               frame = bufferedImageToMat(drone.getImg());
-                            }
-                            // convert and show the frame
-                            Image imageToShow = Utils.mat2Image(frame);
-                            updateImageView(currentFrame, imageToShow);
-                        }
-                    };
+                // grab a frame every 33 ms (30 frames/sec)
+                frameGrabber = new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        Mat frame  = Utils.bufferedImageToMat(drone.getImg());
+                        // convert and show the frame
+                        Image imageToShow = Utils.mat2Image(frame);
+                        updateImageView(currentFrame, imageToShow);
+                    }
+                };
 
-                    this.timer = Executors.newSingleThreadScheduledExecutor();
-                    this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+                this.timer = Executors.newSingleThreadScheduledExecutor();
+                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
 
-                    // update the button content
-                    this.button.setText("Stop Camera");
-                }
+                // update the toggleCam content
+                this.toggleCam.setText("Stop Camera");
             }
-            else
-            {
-                // the camera is not active at this point
-                this.cameraActive = false;
-                // update again the button content
-                this.button.setText("Start Camera");
-                // stop the timer
-                this.stopAcquisition();
-            }
-        }
-        else // start devMode
-        {
-            if (!this.cameraActive)
-            {
-                // start the video capture
-                this.capture.open(cameraId);
-
-                // is the video stream available?
-                if (this.capture.isOpened())
-                {
-                    this.cameraActive = true;
-
-                    // grab a frame every 33 ms (30 frames/sec)
-                    Runnable frameGrabber = new Runnable() {
-
-                        @Override
-                        public void run()
-                        {
-                            // effectively grab and process a single frame
-                            Mat frame = grabFrame();
-                            // convert and show the frame
-                            Image imageToShow = Utils.mat2Image(frame);
-                            updateImageView(currentFrame, imageToShow);
-                        }
-                    };
-
-                    this.timer = Executors.newSingleThreadScheduledExecutor();
-                    this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-
-                    // update the button content
-                    this.button.setText("Stop Camera");
-                }
-                else
-                {
-                    // log the error
-                    System.err.println("Impossible to open the camera connection...");
-                }
-            }
-		else
-            {
-                // the camera is not active at this point
-                this.cameraActive = false;
-                // update again the button content
-                this.button.setText("Start Camera");
-
-                // stop the timer
-                this.stopAcquisition();
-            }
-        }
-    }
-
-    @FXML
-    protected void setDevMode(ActionEvent event)
-    {
-        this.stopAcquisition();
-        if( webcamRB.isSelected() )
-        {
-            devMode = true;
-        }
-        else{
-            devMode = false;
-        }
-        cameraActive = false;
-        camera();
-    }
-
-    @FXML
-    protected void setFilter(ActionEvent event){
-        if(filterRB.isSelected()){
-            filter = true;
         }
         else
-            filter = false;
+        {
+            // the camera is not active at this point
+            this.cameraActive = false;
+            // update again the toggleCam content
+            this.toggleCam.setText("Start Camera");
+            // stop the timer
+            this.stopAcquisition();
+        }
+
+
     }
 
     /**
@@ -196,54 +108,6 @@ public class VideoDisplayController {
      *
      * @return the {@link Mat} to show
      */
-    public Mat grabFrame()
-    {
-        // init everything
-        Mat frame = new Mat();
-
-        if(devMode){
-            // check if the capture is open
-            if (this.capture.isOpened())
-            {
-                System.out.println("mmm");
-                try
-                {
-                    // read the current frame
-                    this.capture.read(frame);
-
-                    // if the frame is not empty, process it
-                    if (!frame.empty() && filter == true)
-                    {
-                        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    // log the error
-                    System.err.println("Exception during the image elaboration: " + e);
-                }
-            }
-        }
-        else
-            if(drone != null){
-            BufferedImage BI = drone.getImg();
-            frame = bufferedImageToMat(BI);
-            if (!frame.empty())
-                {
-                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
-                }
-            }
-        return frame;
-    }
-
-    private Mat bufferedImageToMat(BufferedImage bi)
-    {
-        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
-        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-        mat.put(0, 0, data);
-        return mat;
-    }
 
     /**
      * Stop the acquisition from the camera and release all the resources
