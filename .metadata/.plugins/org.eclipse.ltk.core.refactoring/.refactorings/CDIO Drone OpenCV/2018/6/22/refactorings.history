@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy source folder &apos;src&apos; to &apos;src&apos;&#x0A;- Original project: &apos;CDIO Drone OpenCV&apos;&#x0A;- Destination element: &apos;src&apos;&#x0A;- Original element: &apos;CDIO Drone OpenCV/src&apos;" description="Copy source folder" element1="/src" flags="6" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyRoots" roots="1" stamp="1527839663096" target="/src" version="1.0"/>
+</session>

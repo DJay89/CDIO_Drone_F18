@@ -14,11 +14,12 @@ public class Drone implements IDrone {
     private BufferedImage img;
     private VideoDisplay VD;
 
+    private final int SPEED = 25;
+
     public int getSPEED() {
         return SPEED;
     }
 
-    private final int SPEED = 25;
 
     public Drone(IARDrone drone, VideoDisplay VD) {
         this.drone = drone;

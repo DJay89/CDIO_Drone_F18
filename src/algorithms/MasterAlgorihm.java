@@ -12,6 +12,8 @@ public class MasterAlgorihm implements Runnable{
         this.drone = drone;
         this.CA = new CenteringAlgorithm(drone);
         this.SA = new SearchAlgorithm(drone);
+        this.caThread = new Thread(CA);
+        this.caThread = new Thread(SA);
     }
 
     public void run(){

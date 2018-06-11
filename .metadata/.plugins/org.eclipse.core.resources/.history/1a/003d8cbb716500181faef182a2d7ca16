@@ -1,0 +1,57 @@
+package src.drone_controller;
+
+import image_recogniztion.ImageConverter;
+import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+
+public class ImageRecogniztion implements IImageRecogniztion, Runnable {
+
+    private ImageConverter imageConverter;
+
+    private Mat frame;
+
+    public ImageRecogniztion (IDroneController droneController) {
+        //ToDo Implement methods for finding the rings and QRs
+    }
+
+    @Override
+    public BufferedImage convertMat2BufferedImage(Mat frame) {
+        return imageConverter.convertMat2BufferedImage(frame);
+    }
+
+    @Override
+    public Mat convertImage2Mat(BufferedImage bufferedImage) {
+        return imageConverter.convertImage2Mat(bufferedImage);
+    }
+
+    @Override
+    public Mat getFrame() {
+        return frame;
+    }
+
+    @Override
+    public void run() {
+
+        Mat matImage;
+        BufferedImage temp = null;
+
+        temp = IDroneController.getBufferedImage(); //De her klasser findes ikke, skal erstates når de bliver lavet.
+
+        matImage = this.convertImage2Mat(temp);
+
+        frame = matImage;
+
+        //ToDo Implement method to see where the drone is, possibly compared to previously.
+        DroneLocator();
+
+        if(objectRedCircle) {
+            //ToDo Implement boolean method for seeing a red circle.
+        }
+
+        if(objecctQR) {
+            //ToDo Implement boolean method for seeing a QR code.
+        }
+
+    }
+}

@@ -1,0 +1,41 @@
+package testPackage;
+
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.IARDrone;
+import de.yadrone.base.command.LEDAnimation;
+import de.yadrone.base.exception.ARDroneException;
+import de.yadrone.base.exception.IExceptionListener;
+
+public class Main {
+
+    public static void main(String[] args) {
+        System.out.println("YaDrone is now a jar package");
+        IARDrone drone = null;
+        
+        
+	      
+	    try
+	    {
+	        drone = new ARDrone();
+			drone.addExceptionListener(new IExceptionListener() {
+				public void exeptionOccurred(ARDroneException exc)
+				{
+					exc.printStackTrace();
+				}
+			});
+	        
+			System.out.println("Initializing jframe and keylistener");
+
+	    }
+	    catch (Exception exc)
+		{
+			exc.printStackTrace();
+		}
+		finally
+		{  
+			drone.start();
+			drone.getCommandManager().setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);
+			
+		}
+    }
+}
