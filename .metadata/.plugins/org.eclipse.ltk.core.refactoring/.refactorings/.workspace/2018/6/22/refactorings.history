@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;CDIO Drone OpenCV&apos;" deleteContents="false" description="Delete resource &apos;CDIO Drone OpenCV&apos;" element1="/CDIO Drone OpenCV" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1527846088033"/>
-</session>
