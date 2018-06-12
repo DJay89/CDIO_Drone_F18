@@ -1,104 +1,55 @@
 package object_recogniztion.image_recogniztion;
 
-import controller.Drone;
-import object_recogniztion.misc.ImageConverter;
-import object_recogniztion.RingFinder.RedRingFinder;
+import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;
-import object_recogniztion.video_test.VideoDisplay;
-import object_recogniztion.video_test.VideoDisplayController;
-import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
 
-public class ImageRecognition implements IImageRecognition, Runnable {
+public class ImageRecognition {
+    /**
+     * All returns Her should be a imageReturn Type
+     * To make a standardized way of checking data
+     * Look at qrScan() as example
+     */
 
-    private Drone controller;
+    //Class Variables
+    private BufferedImage frame;
 
-    private ImageManipulation imageManipulation;
-
-    private ImageConverter imageConverter;
-    private RedRingFinder ring;
+    //Object class we have made
     private QRscanner qr;
-    private Boolean devMode;
-    private VideoDisplayController VDC;
-    private Mat frame;
 
-    public ImageRecognition(Drone droneController) {
-        this.controller = droneController;
-        this.imageManipulation = new ImageManipulation(droneController);
-        this.frame = new Mat();
-        this.ring = new RedRingFinder();
-        this.imageConverter = new ImageConverter();
+    //init
+    public ImageRecognition() {
         this.qr = new QRscanner();
     }
-    public ImageRecognition(Drone droneController, VideoDisplayController VDC) {
-        this.controller = droneController;
-        this.imageManipulation = new ImageManipulation(droneController);
-        this.frame = new Mat();
-        this.ring = new RedRingFinder();
-        this.imageConverter = new ImageConverter();
-        this.qr = new QRscanner();
-        this.VDC = VDC;
-    }
 
-
-    public BufferedImage convertMat2BufferedImage(Mat frame) {
-        return imageConverter.convertMat2BufferedImage(frame);
-    }
-
-    public synchronized Mat convertImage2Mat(BufferedImage bufferedImage) {
-        return imageConverter.bufferedImageToMat(bufferedImage);
-    }
-
-    public Mat getFrame() {
+    //Class Needed functions
+    public BufferedImage getFrame() {
         return frame;
     }
-
-    public void setFrame(Mat frame) {
+    public void setFrame(BufferedImage frame) {
         this.frame = frame;
     }
 
-    @Override
-    public void run() {
-
-        while(!Thread.interrupted()) {
-
-            try {
-                Mat tempFrame;
-                if(VDC.devMode){
-                    tempFrame = VDC.grabFrame();
-                }
-                else{
-                    tempFrame = convertImage2Mat(controller.getImg());
-                }
-                setFrame(tempFrame);
-            } catch (NullPointerException e) {
-                System.err.println("No picture received. Will try again in 50ms");
-                e.printStackTrace();
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e1) {
-                    return;
-                }
-            }
-            if (!frame.empty()) {
-                if(qr.decodeQR(getFrame())){
-                    System.out.println(qr.get_qr_txt());
-                }
-
-                //qr.decodeQrWithFilters(getFrame());
-
-                //ring.findRedRing(getFrame());
-            }
-
+    //function to execute qr scanning
+    public imageReturn qrScan()
+    {
+        imageReturn ret = new imageReturn();
+        ret.name = "QR";
+        ret.found = false;
+        Boolean tmp = qr.decodeQR( getFrame() );
+        if(tmp) {
+            ret.found = true;
+            ret.x = qr.getX();
+            ret.y = qr.getY();
+            ret.resutalt = qr.get_qr_txt();
         }
-        System.err.println("Image recogniztion stopped.");
+        return ret;
     }
 
-    public QRscanner getqr() {
-        return qr;
-    }
+    //add more after here
+
+
 }
 
 

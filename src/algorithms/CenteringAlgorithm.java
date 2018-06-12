@@ -4,7 +4,7 @@ import controller.Drone;
 import de.yadrone.apps.paperchase.QRCodeScanner;
 import object_recogniztion.qr_scanner.QRscanner;
 
-public class CenteringAlgorithm {
+public class CenteringAlgorithm implements Runnable{
 
     // Video size
     private static final int imgWidth = 1280;
@@ -106,6 +106,11 @@ public class CenteringAlgorithm {
         if (this.tagY > imgHeight + marginOfCenter) { return 1; }
         if (this.tagY < imgHeight - marginOfCenter) { return -1; }
         return 0;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("centering starter bby!!");
     }
 
 
