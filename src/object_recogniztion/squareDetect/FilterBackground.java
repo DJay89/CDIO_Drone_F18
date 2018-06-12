@@ -10,7 +10,7 @@ public class FilterBackground {
     private Scalar minValues;
     private Scalar maxValues;
 
-    public Mat changeTreshold(Mat img, int type){
+    public Mat filterBackGround(Mat img, int type){
         Mat blurred = new Mat();
         Mat ret = new Mat();
         Mat mask = new Mat();
@@ -38,6 +38,8 @@ public class FilterBackground {
 
         // threshold
         Core.inRange(ret, minValues, maxValues, mask);
+
+
 
         /*
         // morphological operators

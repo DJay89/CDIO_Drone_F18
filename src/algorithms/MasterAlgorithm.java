@@ -10,7 +10,7 @@ public class MasterAlgorithm implements Runnable
     private SearchAlgorithm SA;
     public Thread caThread, saThread;
 
-    public AMasterAlgorithm(Drone drone){
+    public MasterAlgorithm(Drone drone){
         this.drone = drone;
         this.CA = new CenteringAlgorithm(drone);
         this.SA = new SearchAlgorithm(drone);

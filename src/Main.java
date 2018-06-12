@@ -4,6 +4,7 @@ import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import object_recogniztion.squareDetect.SquareDetect;
 import videoController.VideoDisplay;
 import org.opencv.core.Core;
 
