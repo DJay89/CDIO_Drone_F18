@@ -3,14 +3,13 @@ package algorithms;
 
 import controller.Drone;
 import object_recogniztion.image_recogniztion.ImageRecognition;
+import utils.imageReturn;
 
 import java.awt.image.BufferedImage;
 
 public class SearchAlgorithm implements Runnable{
     private Drone drone;
     private ImageRecognition IR;
-    private Thread irThread;
-    private BufferedImage BI;
 
     public SearchAlgorithm(Drone drone){
         this.drone = drone;
@@ -22,23 +21,30 @@ public class SearchAlgorithm implements Runnable{
         while (!Thread.interrupted()){
             try{
                 IR.setFrame(drone.getImg());
+
+                // pass info to drone
+                imageReturn ir = IR.qrScan();
+                drone.setRetValues(ir);
+                if( ir.found){
+                    System.out.println(ir.resutalt);
+                }
+
             } catch (NullPointerException ex){
-                System.out.println("No pic. \t");
+                System.out.println("No pic.");
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     return;
                 }
             }
-            drone.retValues = IR.qrScan();
-            System.out.print(drone.retValues.resutalt);
+
         }
     }
 
     public int searchLvlZero(long searchTime) {
 
         long spinTime = System.currentTimeMillis() + searchTime;
-        String temp = drone.retValues.resutalt;
+        String temp = drone.getRetValues().resutalt;
         while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 
             System.out.println("Search Level 0: Searching for QR and Red Rings");
@@ -50,7 +56,7 @@ public class SearchAlgorithm implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            temp = drone.retValues.resutalt;
+            temp = drone.getRetValues().resutalt;
         }
 
         if (!temp.equals("")) {
@@ -71,7 +77,7 @@ public class SearchAlgorithm implements Runnable{
     public int searchLvlOne(long searchTime) {
 
         long spinTime = System.currentTimeMillis() + searchTime;
-        String temp = drone.retValues.resutalt;
+        String temp = drone.getRetValues().resutalt;
         while (System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 
             System.out.println("Search Level 1: Searching for QR and Red Rings");
@@ -83,7 +89,7 @@ public class SearchAlgorithm implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            temp = drone.retValues.resutalt;
+            temp = drone.getRetValues().resutalt;
         }
 
         if (!temp.equals("")) {

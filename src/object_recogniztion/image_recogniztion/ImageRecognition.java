@@ -1,20 +1,37 @@
 package object_recogniztion.image_recogniztion;
 
-import object_recogniztion.imageReturn;
+import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;
 
 import java.awt.image.BufferedImage;
 
 public class ImageRecognition {
+    /**
+     * All returns Her should be a imageReturn Type
+     * To make a standardized way of checking data
+     * Look at qrScan() as example
+     */
 
-    private QRscanner qr;
+    //Class Variables
     private BufferedImage frame;
-    public imageReturn info;
 
+    //Object class we have made
+    private QRscanner qr;
+
+    //init
     public ImageRecognition() {
         this.qr = new QRscanner();
     }
 
+    //Class Needed functions
+    public BufferedImage getFrame() {
+        return frame;
+    }
+    public void setFrame(BufferedImage frame) {
+        this.frame = frame;
+    }
+
+    //function to execute qr scanning
     public imageReturn qrScan()
     {
         imageReturn ret = new imageReturn();
@@ -27,17 +44,12 @@ public class ImageRecognition {
             ret.y = qr.getY();
             ret.resutalt = qr.get_qr_txt();
         }
-        info = ret;
         return ret;
     }
 
+    //add more after here
 
-    public BufferedImage getFrame() {
-        return frame;
-    }
-    public void setFrame(BufferedImage frame) {
-        this.frame = frame;
-    }
+
 }
 
 

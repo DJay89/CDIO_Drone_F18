@@ -54,4 +54,12 @@ File > Project Structure > Library > Add > locate $library$ and Click on it >
 Add Native path > locate $sources$ and Click on it > Apply & Ok.
 
 
-The remaining libraries can be added from the libs folder insite the project.
+The remaining libraries can be added from the libs folder inside the project.
+
+How add/change stuff in project!
+Any and all conversion functions belong in Utils.
+Drone.java and VideoDisplay.java are not to be touched, unless told to!
+
+Returns for Image Recognition are expected to be of a imageReturn Type and should be passed to drone for further use
+SearchAlgorithm and CenteringAlgorithm are Threads that both will be working with Drone.retValues, 
+and this will be how we pass info between Threads

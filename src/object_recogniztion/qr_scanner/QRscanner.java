@@ -83,7 +83,7 @@ public class QRscanner {
                 Imgproc.threshold(temp, temp, filterAmount, 255, Imgproc.THRESH_BINARY);
             }
 
-            Image image = Utils.Mat2BufferedImage(temp);
+            Image image = Utils.mat2BufferedImage(temp);
             LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
             HybridBinarizer hb = new HybridBinarizer(ls);
             BinaryBitmap bm = new BinaryBitmap(hb);

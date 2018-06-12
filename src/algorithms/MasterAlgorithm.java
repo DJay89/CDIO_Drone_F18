@@ -1,17 +1,16 @@
 package algorithms;
 
 import controller.Drone;
-
 import java.awt.image.BufferedImage;
 
-public class MasterAlgorihm implements Runnable{
+public class MasterAlgorithm implements Runnable
+{
     private Drone drone;
     private CenteringAlgorithm CA;
     private SearchAlgorithm SA;
     public Thread caThread, saThread;
-    private Boolean ifStart = false;
 
-    public MasterAlgorihm(Drone drone){
+    public MasterAlgorithm(Drone drone){
         this.drone = drone;
         this.CA = new CenteringAlgorithm(drone);
         this.SA = new SearchAlgorithm(drone);
@@ -24,8 +23,11 @@ public class MasterAlgorihm implements Runnable{
         while (!Thread.interrupted())
         {
             BufferedImage bi = drone.getImg();
-            if(bi == null) {
-                System.out.println(" suck mig");
+            if(bi != null) {
+                if(saThread.getState().equals(Thread.State.NEW)){
+                    System.out.println("starting thread");
+                    saThread.start();
+                }
             }
         }
     }

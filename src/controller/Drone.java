@@ -4,36 +4,37 @@ import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.video.ImageListener;
-import javafx.scene.image.Image;
-import object_recogniztion.imageReturn;
-import object_recogniztion.video_test.VideoDisplay;
+import utils.imageReturn;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import utils.Utils;
-
-import javax.swing.text.DefaultEditorKit;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Drone implements IDrone, Runnable {
 
+    //Drone Movement Variables
     private IARDrone drone;
     private CommandManager cmd;
     private final int SPEED = 25;
-    public imageReturn retValues;
-    private Runnable frameGrabber;
 
-    //cam
+    //Return values for Image Recognition
+    private imageReturn retValues;
+
+    //Camera Settings
     public VideoCapture capture = new VideoCapture();
     private static int cameraId = 0;
-    private Boolean debug = false;
     private BufferedImage img;
-    private ScheduledExecutorService timer;
+    private Boolean debug;
 
     public int getSPEED() {
         return SPEED;
+    }
+
+    public synchronized imageReturn getRetValues(){
+        return this.retValues;
+    }
+    public synchronized void setRetValues(imageReturn ir){
+        this.retValues = ir;
     }
 
     public Drone(IARDrone drone, Boolean debug) {
@@ -46,12 +47,13 @@ public class Drone implements IDrone, Runnable {
             initWebcam();
         }
         else{
-            System.out.println("Starting drone camerae");
+            System.out.println("Starting drone camera");
             this.cmd = this.drone.getCommandManager();
             droneCamCapture();
         }
-    }
+        System.out.println("Done constructing the drone");
 
+    }
 
     public void toggleCamera() {
         if (this.cmd != null) {
@@ -63,6 +65,7 @@ public class Drone implements IDrone, Runnable {
         System.out.println("start cam");
     }
 
+    //used for webcam stream
     @Override
     public void run(){
         while(!Thread.interrupted()){
@@ -70,7 +73,7 @@ public class Drone implements IDrone, Runnable {
             if(capture.isOpened()){
                 Drone.this.capture.read(frame);
                 if(!frame.empty()){
-                    Drone.this.setImg(Utils.Mat2BufferedImage(frame));
+                    Drone.this.setImg(Utils.mat2BufferedImage(frame));
                 }
             }
             else capture.open(cameraId);
@@ -155,6 +158,7 @@ public class Drone implements IDrone, Runnable {
         cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
     }
 
+    //use for drone camera stream
     @Override
     public void droneCamCapture() {
         drone.getVideoManager().addImageListener(new ImageListener() {

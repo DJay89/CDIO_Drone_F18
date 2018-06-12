@@ -36,7 +36,7 @@ public final class Utils {
      */
     public static Image mat2Image(Mat frame) {
         try {
-            return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
+            return SwingFXUtils.toFXImage(mat2BufferedImage(frame), null);
         } catch (Exception e) {
             System.err.println("Cannot convert the Mat obejct: " + e);
             return null;
@@ -44,46 +44,12 @@ public final class Utils {
     }
 
     /**
-     * Generic method for putting element running on a non-JavaFX thread on the
-     * JavaFX thread, to properly update the UI
-     *
-     * @param property a {@link ObjectProperty}
-     * @param value the value to set for the given {@link ObjectProperty}
-     */
-    public static <T> void onFXThread(final ObjectProperty<T> property, final T value) {
-        Platform.runLater(() -> {
-            property.set(value);
-        });
-    }
-
-    /**
      * Support for the {@link /mat2image()} method
      *
-     * @param original the {@link Mat} object in BGR or grayscale
+     * @param m the {@link Mat} object in BGR or grayscale
      * @return the corresponding {@link BufferedImage}
      */
-    public static BufferedImage matToBufferedImage(Mat original) {
-        // init
-        BufferedImage image = null;
-        int width = original.width(),
-                height = original.height(),
-                channels = original.channels();
-        byte[] sourcePixels = new byte[width * height * channels];
-        original.get(0, 0, sourcePixels);
-
-        if (original.channels() > 1) {
-            image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-        } else {
-            image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-        }
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
-
-        return image;
-    }
-
-    public static BufferedImage Mat2BufferedImage(Mat m)
-    {
+    public static BufferedImage mat2BufferedImage(Mat m) {
         //source: http://answers.opencv.org/question/10344/opencv-java-load-image-to-gui/
         //Fastest code
         //The output can be assigned either to a BufferedImage or to an Image
@@ -101,38 +67,43 @@ public final class Utils {
         return image;
     }
 
-    public static Mat convertImage2Mat(BufferedImage img){
+    /**
+     * Image to Mat
+     *
+     * @param img the {@link BufferedImage}
+     * @return the corresponding {@link Mat}
+     */
+    public static Mat image2Mat(BufferedImage img){
         byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         Mat mat = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC3);
         mat.put(0,0,data);
         return mat;
     }
-    public static Mat bufferedImageToMat(BufferedImage bi)
-    {
+
+    /**
+     * Image to Mat
+     *
+     * @param bi the {@link BufferedImage}
+     * @return the corresponding {@link Mat}
+     */
+    public static Mat bufferedImageToMat(BufferedImage bi) {
         Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
         byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
         mat.put(0, 0, data);
         return mat;
     }
 
-    public static BufferedImage convertMat2BufferedImage(Mat frame){
-
-        BufferedImage Bi;
-        int type;
-
-        byte[] data = new byte[frame.width() * frame.height() * (int)frame.elemSize()];
-        frame.get(0, 0, data);
-
-        if(frame.channels() == 1)
-            type = BufferedImage.TYPE_BYTE_GRAY;
-        else
-            type = BufferedImage.TYPE_3BYTE_BGR;
-
-        Bi = new BufferedImage(frame.width(), frame.height(), type);
-        Bi.getRaster().setDataElements(0, 0, frame.width(), frame.height(), data);
-
-        return Bi;
+    /**
+     * Generic method for putting element running on a non-JavaFX thread on the
+     * JavaFX thread, to properly update the UI
+     *
+     * @param property a {@link ObjectProperty}
+     * @param value the value to set for the given {@link ObjectProperty}
+     */
+    public static <T> void onFXThread(final ObjectProperty<T> property, final T value) {
+        Platform.runLater(() -> {
+            property.set(value);
+        });
     }
-
 
 }

@@ -15,8 +15,8 @@ public class OpenCVCompareImg {
 
     public void compareImages (BufferedImage img1, BufferedImage img2) {
 
-        Mat mat_img1 = utils.convertImage2Mat(img1);
-        Mat mat_img2 = utils.convertImage2Mat(img2);
+        Mat mat_img1 = utils.image2Mat(img1);
+        Mat mat_img2 = utils.image2Mat(img2);
 
         Mat hist_1 = new Mat();
         Mat hist_2 = new Mat();

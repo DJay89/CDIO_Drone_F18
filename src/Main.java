@@ -1,17 +1,16 @@
-import algorithms.MasterAlgorihm;
+import algorithms.MasterAlgorithm;
 import controller.Drone;
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import object_recogniztion.video_test.VideoDisplay;
+import videoController.VideoDisplay;
 import org.opencv.core.Core;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.awt.image.BufferedImage;
 
 public class Main extends Application {
-    private static final Boolean debug = true;
+    private static final Boolean debug = false;
     private static final Boolean flymode = false;
     private static Thread masterThread;
 
@@ -22,30 +21,36 @@ public class Main extends Application {
     }
 
     public void start (Stage stage) {
-        ExecutorService executorService = Executors.newFixedThreadPool(30);
+        System.out.println("Constructing the classes, Debug is : " + debug);
         IARDrone iarDrone = new ARDrone();
         Drone drone = new Drone(iarDrone, debug);
-        MasterAlgorihm MA = new MasterAlgorihm(drone);
         VideoDisplay VD = new VideoDisplay(drone, debug);
+        System.out.println("Done constructing the classes");
         VD.start(stage);
+        if(debug){
+            //if webcam, start framegrabber
+            Thread dT = new Thread(drone);
+            dT.start();
+        }
+        System.out.print("Connecting Videostreaming");
+        BufferedImage bi = drone.getImg();
+        while(bi == null) {
+            bi = drone.getImg();
+            System.out.print(".");
+        }
 
         //Do takeoff and drone stuff
-        if(debug){
-            executorService.execute(drone);
-        }
-        else if(!debug && flymode){
+
+        if(!debug && flymode){
             drone.takeOff();
             drone.hover(2000);
         }
-        //executorService.execute(MA);
+
+        System.out.print("Starting Master Algorithm");
+        MasterAlgorithm MA = new MasterAlgorithm(drone);
+
         masterThread = new Thread(MA);
         masterThread.start();
-        MA.saThread.start();
-        try {
-            masterThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         //drone.land();
     }
 }

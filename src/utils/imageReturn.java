@@ -1,4 +1,4 @@
-package object_recogniztion;
+package utils;
 
 public class imageReturn {
     public String name = "";
