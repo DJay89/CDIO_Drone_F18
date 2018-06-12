@@ -21,12 +21,14 @@ public class ImageRecognition implements IImageRecognition, Runnable {
     private Boolean devMode;
     private VideoDisplayController VDC;
     private Mat frame;
+    private int ringAvgY;
+    private int ringAvgX;
 
     public ImageRecognition(Drone droneController) {
         this.controller = droneController;
         this.imageManipulation = new ImageManipulation(droneController);
         this.frame = new Mat();
-        this.ring = new RedRingFinder();
+        this.ring = new RedRingFinder(this);
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
     }
@@ -34,7 +36,7 @@ public class ImageRecognition implements IImageRecognition, Runnable {
         this.controller = droneController;
         this.imageManipulation = new ImageManipulation(droneController);
         this.frame = new Mat();
-        this.ring = new RedRingFinder();
+        this.ring = new RedRingFinder(this);
         this.imageConverter = new ImageConverter();
         this.qr = new QRscanner();
         this.VDC = VDC;
@@ -51,6 +53,22 @@ public class ImageRecognition implements IImageRecognition, Runnable {
 
     public Mat getFrame() {
         return frame;
+    }
+
+    @Override
+    public void setRingAvg(int ringAvgX, int ringAvgY) {
+        this.ringAvgX = ringAvgX;
+        this.ringAvgY = ringAvgY;
+    }
+
+    @Override
+    public int getRingAvgX() {
+        return ringAvgX;
+    }
+
+    @Override
+    public int getRingAvgY() {
+        return ringAvgY;
     }
 
     public void setFrame(Mat frame) {

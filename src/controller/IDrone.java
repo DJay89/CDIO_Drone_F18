@@ -41,5 +41,7 @@ public interface IDrone {
     public void setImg(BufferedImage bufferedImage);
 
     public  BufferedImage getImg();
+
+
 }
 

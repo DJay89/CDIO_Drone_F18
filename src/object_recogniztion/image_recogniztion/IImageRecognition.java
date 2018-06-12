@@ -10,4 +10,10 @@ public interface IImageRecognition {
     Mat convertImage2Mat(BufferedImage Bi);
 
     Mat getFrame();
+
+    public void setRingAvg(int ringAvgX, int ringAvgY);
+
+    public int getRingAvgX();
+
+    public int getRingAvgY();
 }
