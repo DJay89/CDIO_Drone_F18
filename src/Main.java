@@ -34,10 +34,12 @@ public class Main extends Application {
         }
         System.out.print("Connecting Videostreaming");
         BufferedImage bi = drone.getImg();
+        /*
         while(bi == null) {
             bi = drone.getImg();
             System.out.print(".");
         }
+        */
 
         //Do takeoff and drone stuff
 
