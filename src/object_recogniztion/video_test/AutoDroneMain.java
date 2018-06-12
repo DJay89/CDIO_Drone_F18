@@ -32,17 +32,17 @@ public class AutoDroneMain extends Application {
         {
             drone = new ARDrone();
             droneController = new Drone(drone);
-            droneController.droneCamCapture(); // start drone image listener
-            vd = new VideoDisplay(droneController);
+            //droneController.droneCamCapture(); // start drone image listener
+            vd = new VideoDisplay();
             vd.start(s); //starts video controller
-            IR = new ImageRecognition(droneController);
+            IR = new ImageRecognition(droneController, vd.controller);
             imgThread = new Thread(IR);
             imgThread.start();
 
         }
         else
         {
-            /*
+
             drone = new ARDrone();
             droneController = new Drone(drone);
             droneController.droneCamCapture(); // start drone image listener
@@ -52,7 +52,7 @@ public class AutoDroneMain extends Application {
             qr = new QRsearch(IR, droneController);
             imgThread = new Thread(IR);
             imgThread.start();
-*/
+
 
             if( testRun )
             {

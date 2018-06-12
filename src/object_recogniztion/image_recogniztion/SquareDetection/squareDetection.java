@@ -81,7 +81,7 @@ public class squareDetection {
         }
 
         if (maxId >= 0) {
-                drawContours(src, contours, maxId, new Scalar(0, 255, 0), 4);
+                drawContours(src, contours, maxId, new Scalar(0, 255, 0), 8);
                 System.out.print("RECT DETECTED\n");
                 System.out.print("NUMBERS OF CONTOURS FOUND = " + contours.size());
 

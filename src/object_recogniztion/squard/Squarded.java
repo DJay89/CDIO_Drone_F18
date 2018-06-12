@@ -16,31 +16,30 @@ public class Squarded {
         Mat mask = new Mat();
         Mat morphOutput = new Mat();
 
-        Imgproc.blur(img, blurred, new Size(7,7));
+        Imgproc.blur(img, blurred, new Size(10,10));
 
         if(type == HVS){
             Imgproc.cvtColor(blurred, ret, Imgproc.COLOR_BGR2HSV);
-            minValues = new Scalar(80,9,188);
-            maxValues = new Scalar(101,125,255);
+            minValues = new Scalar(0,0,153);
+            maxValues = new Scalar(165,255,255);
         }
 
         if(type == LAB){
             Imgproc.cvtColor(blurred, ret, Imgproc.COLOR_BGR2Lab);
             minValues = new Scalar(80,9,188);
             maxValues = new Scalar(101,125,255);
-            Core.bitwise_not(ret,ret);
         }
 
         if(type == YCrCb){
             Imgproc.cvtColor(blurred, ret, Imgproc.COLOR_BGR2YCrCb);
             minValues = new Scalar(0,107,113);
             maxValues = new Scalar(180,168,159);
-            Core.bitwise_not(ret,ret);
-        }
+            }
 
         // threshold
         Core.inRange(ret, minValues, maxValues, mask);
 
+        /*
         // morphological operators
         // dilate with large element, erode with small ones
         Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
@@ -51,7 +50,7 @@ public class Squarded {
 
         Imgproc.dilate(morphOutput, morphOutput, dilateElement);
         Imgproc.dilate(morphOutput, morphOutput, dilateElement);
-
-        return morphOutput;
+*/
+        return mask;
     }
 }

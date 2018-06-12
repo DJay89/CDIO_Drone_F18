@@ -25,7 +25,7 @@ public class VideoDisplayController {
     private Button button;
     // the FXML image view
     @FXML
-    private ImageView currentFrame;
+    public ImageView currentFrame;
     @FXML
     private RadioButton webcamRB;
 
@@ -138,7 +138,7 @@ public class VideoDisplayController {
                             Mat frame = grabFrame();
                             // convert and show the frame
                             Image imageToShow = Utils.mat2Image(frame);
-                            updateImageView(currentFrame, imageToShow);
+                            //updateImageView(currentFrame, imageToShow);
                         }
                     };
 
@@ -279,7 +279,7 @@ public class VideoDisplayController {
      * @param image
      *            the {@link Image} to show
      */
-    private void updateImageView(ImageView view, Image image)
+    public void updateImageView(ImageView view, Image image)
     {
         Utils.onFXThread(view.imageProperty(), image);
     }

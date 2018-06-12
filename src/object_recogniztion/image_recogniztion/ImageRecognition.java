@@ -95,8 +95,9 @@ public class ImageRecognition implements IImageRecognition, Runnable {
             if (!frame.empty()) {
 
                 try {
-                    Mat filteredFrame = bw.changeTreshold(frame, 2);
-                    sd.findRectangle(filteredFrame);
+                    System.out.print("HEJ MED DI");
+                    Mat filteredFrame = bw.changeTreshold(frame, 1);
+                    //sd.findRectangle(filteredFrame);
                     Image newFrame = Utils.mat2Image(filteredFrame);
                     VDC.updateImageView(VDC.currentFrame, newFrame);
 
