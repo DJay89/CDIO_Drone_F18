@@ -1,4 +1,4 @@
-package object_recogniztion.video_test;
+package videoController;
 import controller.Drone;
 import org.opencv.core.Core;
 import javafx.event.EventHandler;
@@ -13,19 +13,15 @@ public class VideoDisplay {
     private Boolean withWebcam;
     public VideoDisplayController controller;
 
-    public VideoDisplay(Drone drone){
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        withWebcam = false;
+    public VideoDisplay(Drone drone, Boolean state){
+        withWebcam = state;
         this.drone = drone;
-    }
-    public VideoDisplay(){
-        withWebcam = true;
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     public void start(Stage primaryStage)
     {
+        System.out.println("Setting up the stage");
         try
         {
             // load the FXML resource
@@ -44,8 +40,13 @@ public class VideoDisplay {
 
             // set the proper behavior on closing the application
             this.controller = loader.getController();
-            if(withWebcam) controller.setWebcamRB(true);
-                else controller.setPM(this.drone);
+
+            //pass if webcam is needed
+            controller.setWebcamRB(withWebcam);
+
+            //pass the drone so we know where to get the picture
+            controller.setDrone(drone);
+            controller.setCapture(drone.capture);
 
             primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we)
@@ -58,5 +59,6 @@ public class VideoDisplay {
         {
             e.printStackTrace();
         }
+        System.out.println("Done setting up the stage");
     }
 }

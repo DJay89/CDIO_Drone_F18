@@ -13,6 +13,7 @@ package object_recogniztion.qr_scanner;
         import de.yadrone.apps.paperchase.QRCodeScanner;
         import org.opencv.core.Mat;
         import org.opencv.imgproc.Imgproc;
+        import utils.Utils;
 
 /**
  *
@@ -36,11 +37,9 @@ public class QRscanner {
         return this.y;
     }
 
-    public boolean decodeQR(Mat mat)
+    public boolean decodeQR(BufferedImage BI)
     {
-
-        Image image = Mat2BufferedImage(mat);
-        LuminanceSource bufferedImageLuminanceSource = new BufferedImageLuminanceSource((BufferedImage)image);
+        LuminanceSource bufferedImageLuminanceSource = new BufferedImageLuminanceSource(BI);
         BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(bufferedImageLuminanceSource));
         QRCodeReader qrCodeReader = new QRCodeReader();
 
@@ -84,7 +83,7 @@ public class QRscanner {
                 Imgproc.threshold(temp, temp, filterAmount, 255, Imgproc.THRESH_BINARY);
             }
 
-            Image image = Mat2BufferedImage(temp);
+            Image image = Utils.mat2BufferedImage(temp);
             LuminanceSource ls = new BufferedImageLuminanceSource((BufferedImage)image);
             HybridBinarizer hb = new HybridBinarizer(ls);
             BinaryBitmap bm = new BinaryBitmap(hb);
@@ -106,24 +105,5 @@ public class QRscanner {
                 Logger.getLogger(QRscanner.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while(done);
-    }
-
-    private BufferedImage Mat2BufferedImage(Mat m)
-    {
-        //source: http://answers.opencv.org/question/10344/opencv-java-load-image-to-gui/
-        //Fastest code
-        //The output can be assigned either to a BufferedImage or to an Image
-
-        int type = BufferedImage.TYPE_BYTE_GRAY;
-        if (m.channels() > 1) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-        int bufferSize = m.channels() * m.cols() * m.rows();
-        byte[] b = new byte[bufferSize];
-        m.get(0, 0, b); // get all the pixels
-        BufferedImage image = new BufferedImage(m.cols(), m.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(b, 0, targetPixels, 0, b.length);
-        return image;
     }
 }
