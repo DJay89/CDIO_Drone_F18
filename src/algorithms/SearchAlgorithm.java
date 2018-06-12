@@ -23,7 +23,8 @@ public class SearchAlgorithm implements Runnable{
                 IR.setFrame(drone.getImg());
 
                 // pass info to drone
-                imageReturn ir = IR.qrScan();
+                //imageReturn ir = IR.qrScan();
+                imageReturn ir = IR.rrScan();
                 drone.setRetValues(ir);
                 if( ir.found){
                     System.out.println(ir.resutalt);

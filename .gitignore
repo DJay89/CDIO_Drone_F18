@@ -31,6 +31,7 @@ cmake-build-release/
 *.iws
 
 # IntelliJ
+.idea/modules.xml
 out/
 
 # mpeltonen/sbt-idea plugin
@@ -52,3 +53,7 @@ fabric.properties
 .idea/httpRequests
 /CDIO_DRONE_F18.iml
 /CDIO_Drone_F18.iml
+
+# project setup
+*.iml
+.idea/modules.xml

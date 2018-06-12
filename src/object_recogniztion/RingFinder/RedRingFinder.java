@@ -2,14 +2,51 @@ package object_recogniztion.RingFinder;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import utils.Utils;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class RedRingFinder {
 
-    public Mat findRedRing(Mat frame) {
+    /*
+    TODO
+    Fine tune the spectrum analysis
+    Figure out how to implement found function
+    Set the function up with the algorithms NOTE this should not be implemented here!
+     */
 
+    Stack<Integer> stackX = new Stack<Integer>();
+    Stack<Integer> stackY = new Stack<Integer>();
+
+    private int x = 0;
+    private int y = 0;
+    private boolean found = false;
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public boolean getFound() {
+        return this.found;
+    }
+
+    public void emptyStack() {
+        this.stackX.empty();
+        this.stackY.empty();
+    }
+
+    public Mat findRedRing(BufferedImage img) {
+
+
+        System.out.println("Ring");
+        Mat frame = Utils.bufferedImageToMat(img);
         Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
         Mat mask = new Mat();
@@ -28,6 +65,18 @@ public class RedRingFinder {
 
         frame = drawRing(mask, frame);
 
+        double rows;
+        double cols;
+
+        Size size = frame.size();
+        rows = size.height;
+        cols = size.width;
+        Point screencenter = new Point(cols/2, rows/2);
+
+        //System.out.println(rows);
+        //System.out.println(cols);
+        //System.out.println(screencenter);
+
         return frame;
     }
 
@@ -41,15 +90,30 @@ public class RedRingFinder {
         // find contours
         Imgproc.findContours(maskedImage, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        Imgproc.medianBlur(maskedImage, maskedImage, 5);
+        Imgproc.medianBlur(maskedImage, maskedImage, 3);
 
         Imgproc.HoughCircles(maskedImage, circles, Imgproc.HOUGH_GRADIENT, 1.0,
                 (double) maskedImage.rows() / 20, // change this value to detect circles with different distances to each other
                 100.0, 30.0, searchSpectrumMIN(), searchSpectrumMAX());
 
-        for (int x = 0; x < circles.cols(); x++) {
-            double[] c = circles.get(0, x);
+        for (int i = 0; i < circles.cols(); i++) {
+            double[] c = circles.get(0, i);
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+            int x = (int) Math.round(c[0]);
+            int y = (int) Math.round(c[1]);
+            if (stackX.size() == 2){
+                stackX.push(x);
+                stackX.remove(stackX.firstElement());
+                stackY.push(y);
+                stackY.remove(stackY.firstElement());
+
+            } else {
+                stackX.push(x);
+                stackY.push(y);
+            }
+
+            //Prints center coordinates
+            System.out.println(center);
             // circle center
             Imgproc.circle(frame, center, 1, new Scalar(0, 100, 100), 3, 8, 0);
             // circle outline
@@ -57,17 +121,49 @@ public class RedRingFinder {
             Imgproc.circle(frame, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
         }
 
-        System.out.println("DrawRing Object text");
+
+        getCenterAvg();
 
         return frame;
     }
 
+    private void getCenterAvg(){
+        int sumX = 0;
+        int sumY = 0;
+        int sumXavg = 0;
+        int sumYavg = 0;
+
+        for (Integer item: stackX){
+            sumX = sumX + item;
+            sumXavg = sumX/stackX.size();
+        }
+
+
+        for (Integer item: stackY){
+            sumY = sumY + item;
+            sumYavg = sumY/stackY.size();
+        }
+        this.x = sumXavg;
+        this.y = sumYavg;
+    }
+
+
+    private void foundRing() {
+        // figure out when we are certain a ring has been found
+        if(true /* find sucess condition*/)
+        {
+            this.found = true;
+        }
+        this.found = false;
+
+    }
+
     private int searchSpectrumMIN () {
-        return 100;
+        return 120;
     }
 
     private int searchSpectrumMAX () {
-        return 100;
+        return 160;
     }
 
 }
