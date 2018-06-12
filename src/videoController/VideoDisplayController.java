@@ -63,7 +63,7 @@ public class VideoDisplayController {
                         // convert and show the frame
                         Image imageToShow = Utils.mat2Image(frame);
                         //display
-                        //updateImageView(currentFrame, imageToShow);
+                        updateImageView(currentFrame, imageToShow);
                     }
                 };
                 // frame rate setup
