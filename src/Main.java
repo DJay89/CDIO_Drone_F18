@@ -10,6 +10,7 @@ import org.opencv.core.Core;
 import java.awt.image.BufferedImage;
 
 public class Main extends Application {
+    //debug is working
     private static final Boolean debug = true;
     private static final Boolean flymode = false;
     private static Thread masterThread;
@@ -40,7 +41,6 @@ public class Main extends Application {
         }
 
         //Do takeoff and drone stuff
-
         if(!debug && flymode){
             drone.takeOff();
             drone.hover(2000);

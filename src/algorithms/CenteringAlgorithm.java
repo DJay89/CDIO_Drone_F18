@@ -3,6 +3,7 @@ package algorithms;
 import controller.Drone;
 import de.yadrone.apps.paperchase.QRCodeScanner;
 import object_recogniztion.qr_scanner.QRscanner;
+import utils.imageReturn;
 
 public class CenteringAlgorithm implements Runnable{
 
@@ -20,18 +21,13 @@ public class CenteringAlgorithm implements Runnable{
     private int tagX;
     private int tagY;
 
+    @Override
+    public void run() {
+        System.out.println("centering starter bby!!");
+    }
+
     public CenteringAlgorithm(Drone drone) {
         this.drone = drone;
-    }
-
-    public boolean centerDroneOnCircle() {
-        this.findCircle = true;
-        return tagIsCentered();
-    }
-
-    public boolean centerDroneOnQR() {
-        this.findQr = true;
-        return tagIsCentered();
     }
 
     private boolean tagIsCentered() {
@@ -63,24 +59,19 @@ public class CenteringAlgorithm implements Runnable{
     }
 
     private boolean isDroneCentered() {
-        qrScanner = new QRscanner();
         // get coords from drone
-        if (findQr) {
-            tagX = qrScanner.getX();
-            tagY = qrScanner.getY();
+        imageReturn ir = drone.getRetValues();
+        if(ir.found){
+            this.tagX = ir.x;
+            this.tagY = ir.y;
+            if (!isTagInCenter(tagX, tagY)) {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
-        if (findCircle) {
-            tagX = 321;
-            tagY = 456;
-        }
-
-        if (!isTagInCenter(tagX, tagY)) {
-            return false;
-        }
-
-        findCircle = false;
-        findQr = false;
-        return true;
+        return false;
     }
 
     private boolean isTagInCenter(int x, int y) {
@@ -107,12 +98,6 @@ public class CenteringAlgorithm implements Runnable{
         if (this.tagY < imgHeight - marginOfCenter) { return -1; }
         return 0;
     }
-
-    @Override
-    public void run() {
-        System.out.println("centering starter bby!!");
-    }
-
 
     //Placing the drone in front of the circle
 //    private boolean angleAdjusted() {
