@@ -25,6 +25,8 @@ public class Drone implements IDrone {
          this.cmd = this.drone.getCommandManager();
     }
 
+
+
     @Override
     public void takeOffAndLand() {
          cmd.takeOff();
@@ -121,4 +123,6 @@ public class Drone implements IDrone {
     public BufferedImage getImg() {
         return this.img;
     }
+
+
 }

@@ -1,5 +1,7 @@
 package object_recogniztion.RingFinder;
 
+import object_recogniztion.image_recogniztion.IImageRecognition;
+import object_recogniztion.image_recogniztion.ImageRecognition;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -8,6 +10,9 @@ import java.util.List;
 import java.util.Stack;
 
 public class RedRingFinder {
+
+    private ImageRecognition imgR;
+    private IImageRecognition img = imgR;
 
     Stack<Integer> stackX = new Stack<Integer>();
     Stack<Integer> stackY = new Stack<Integer>();
@@ -118,6 +123,16 @@ public class RedRingFinder {
 
         System.out.println("sumY: "+sumY);
         System.out.println("avgy: "+sumYavg);
+
+        img.setRingAvg(sumXavg, sumYavg);
+
+
+
+    }
+
+    public void emptyRingPoint(){
+        stackX.empty();
+        stackY.empty();
     }
 
     private int searchSpectrumMIN () {
