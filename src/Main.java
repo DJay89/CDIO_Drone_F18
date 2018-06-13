@@ -16,7 +16,7 @@ public class Main extends Application {
      * true = webcam
      * false = dronecam
      */
-    private static final Boolean debug = true;
+    private static final Boolean debug = false;
 
     /**
      * flymode is made to make sure the drone dont fly random

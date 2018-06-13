@@ -43,7 +43,6 @@ public class RedRingFinder {
     }
 
     public Mat findRedRing(BufferedImage img) {
-        //System.out.println("Ring");
         Mat frame = Utils.bufferedImageToMat(img);
         Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
@@ -56,10 +55,11 @@ public class RedRingFinder {
         Setting the values to search for our colour red.
         Our Scalar ranges from 0-180, 0-255, 0-255.
          */
-        Scalar minValues = new Scalar(0, 144, 124);
-        Scalar maxValues = new Scalar(18, 255, 255);
+        Scalar minValues = new Scalar(0, 100, 100);
+        Scalar maxValues = new Scalar(10, 255, 255);
 
-        Core.inRange(hsvImage, minValues, maxValues, mask); //Doesn't recognise this method.
+        Core.inRange(hsvImage, minValues, maxValues, mask);
+        Core.inRange(hsvImage, new Scalar(160, 100, 100), new Scalar(179,255,255), mask);
 
         frame = drawRing(mask, frame);
 
@@ -92,7 +92,7 @@ public class RedRingFinder {
 
         Imgproc.HoughCircles(maskedImage, circles, Imgproc.HOUGH_GRADIENT, 1.0,
                 (double) maskedImage.rows() / 20, // change this value to detect circles with different distances to each other
-                100.0, 30.0, searchSpectrumMIN(), searchSpectrumMAX());
+                200.0, 20.0, 80, 400);
 
         for (int i = 0; i < circles.cols(); i++) {
             double[] c = circles.get(0, i);
@@ -111,12 +111,12 @@ public class RedRingFinder {
             }
 
             //Prints center coordinates
-            System.out.println(center);
+            //System.out.println(center);
             // circle center
-            Imgproc.circle(frame, center, 1, new Scalar(0, 100, 100), 3, 8, 0);
+            //Imgproc.circle(frame, center, 1, new Scalar(0, 100, 100), 3, 8, 0);
             // circle outline
-            int radius = (int) Math.round(c[2]);
-            Imgproc.circle(frame, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
+            //int radius = (int) Math.round(c[2]);
+            //Imgproc.circle(frame, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
         }
 
 
@@ -141,6 +141,10 @@ public class RedRingFinder {
             sumY = sumY + item;
             sumYavg = sumY/stackY.size();
         }
+
+        //System.out.println(sumXavg);
+        //System.out.println(sumYavg);
+
         this.x = sumXavg;
         this.y = sumYavg;
     }
@@ -157,11 +161,11 @@ public class RedRingFinder {
     }
 
     private int searchSpectrumMIN () {
-        return 120;
+        return 0;
     }
 
     private int searchSpectrumMAX () {
-        return 160;
+        return 0;
     }
 
 }
