@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 public class Main extends Application {
     //debug is working
-    private static final Boolean debug = true;
+    private static final Boolean debug = false;
     private static final Boolean flymode = false;
     private static Thread masterThread;
     private static String OS = System.getProperty("os.name").toLowerCase();
