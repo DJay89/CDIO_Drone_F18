@@ -29,11 +29,13 @@ public class SearchAlgorithm implements Runnable{
     public void run() {
         while (!Thread.interrupted()){
             try{
-                IR.setFrame(drone.getImg());
-                //Mat getMatFrame = Utils.bufferedImageToMat(drone.getImg());
-               // Mat filteredFrame = FBG.filterBackGround(getMatFrame, 1);
 
-                //BufferedImage newFrame = Utils.mat2BufferedImage(SD.findRectangle(filteredFrame, getMatFrame));
+                IR.setFrame(drone.getImg());
+                Mat droneMatFrame = Utils.bufferedImageToMat(drone.getImg());
+                Mat maskedImage = FBG.filterBackGround(droneMatFrame, 1);
+
+                SD.findRectangle(maskedImage, droneMatFrame);
+
 
                 //drone.setImg(newFrame);
 
