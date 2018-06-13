@@ -12,37 +12,33 @@ public class SearchAlgorithm implements Runnable{
     //Objects
     private Drone drone;
     private ImageRecognition IR;
+    private Thread irThread;
 
     //Objects init
     public SearchAlgorithm(Drone drone){
         this.drone = drone;
-        this.IR = new ImageRecognition();
+        this.IR = new ImageRecognition(drone);
     }
 
     //Search Algorithm
     @Override
     public void run() {
         while (!Thread.interrupted()){
-            try{
-                IR.setFrame(drone.getImg());
+            //set type for looking for qr
+            IR.setType(IR.QR);
+            //create new thread and start it
+            irThread = new Thread(IR);
+            irThread.start();
+            //check search level
+            searchLvlZero(20000);
+            //interrupt and end thread
+            irThread.interrupt();
 
-                // pass info to drone
-                //imageReturn ir = IR.qrScan();
-                imageReturn ir = IR.rrScan();
-                drone.setRetValues(ir);
-                if( ir.found){
-                    System.out.println(ir.resutalt);
-                }
-
-            } catch (NullPointerException ex){
-                System.out.println("No pic.");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-
+            // find ring
+            IR.setType(IR.RING);
+            irThread = new Thread(IR);
+            irThread.start();
+            searchLvlOne(20000);
         }
     }
 
