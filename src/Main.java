@@ -14,6 +14,7 @@ public class Main extends Application {
     private static final Boolean debug = true;
     private static final Boolean flymode = false;
     private static Thread masterThread;
+    private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static void main(String [] args)
     {
@@ -35,9 +36,12 @@ public class Main extends Application {
         }
         System.out.print("Connecting Videostreaming");
         BufferedImage bi = drone.getImg();
-        while(bi == null) {
-            bi = drone.getImg();
-            System.out.print(".");
+        if(!(OS.indexOf("mac") >= 0))
+        {
+            while(bi == null) {
+                bi = drone.getImg();
+                System.out.print(".");
+            }
         }
 
         //Do takeoff and drone stuff

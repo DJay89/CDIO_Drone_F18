@@ -112,47 +112,7 @@ public class VideoDisplayController {
         debug = toggle;
     }
 
-    //init Imageviewer
-    private void camera()
-    {
-        if (!this.cameraActive)
-        {
-            if(drone != null){
-                this.cameraActive = true;
 
-                // grab a frame every 33 ms (30 frames/sec)
-                frameGrabber = new Runnable() {
-                    @Override
-                    public void run()
-                    {
-                        //get videostream from drone
-                        Mat frame  = Utils.bufferedImageToMat(drone.getImg());
-                        // convert and show the frame
-                        Image imageToShow = Utils.mat2Image(frame);
-                        //display
-                        updateImageView(currentFrame, imageToShow);
-                    }
-                };
-                // frame rate setup
-                this.timer = Executors.newSingleThreadScheduledExecutor();
-                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-
-                // update the toggleCam content
-                this.toggleCam.setText("Stop Camera");
-            }
-        }
-        else
-        {
-            // the camera is not active at this point
-            this.cameraActive = false;
-            // update again the toggleCam content
-            this.toggleCam.setText("Start Camera");
-            // stop the timer
-            this.stopAcquisition();
-        }
-
-
-    }
 
     /**
      * Get a frame from the opened video stream (if any)
