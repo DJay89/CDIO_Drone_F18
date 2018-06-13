@@ -54,9 +54,8 @@ public class ImageRecognition {
     {
         imageReturn ret = new imageReturn();
         ret.name = "RR";
-        ret.found = false;
+        ret.found = rr.foundRing();
         rr.findRedRing( getFrame() );
-        ret.found = rr.getFound();
         if(ret.found){
             ret.x = rr.getX();
             ret.y = rr.getY();
@@ -66,6 +65,10 @@ public class ImageRecognition {
     }
 
     //add more after here
+
+    public void emptyCenterCordStack () {
+        rr.emptyStack();
+    }
 
 
 }

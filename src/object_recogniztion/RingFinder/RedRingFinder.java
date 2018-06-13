@@ -23,7 +23,7 @@ public class RedRingFinder {
 
     private int x = 0;
     private int y = 0;
-    private boolean found = false;
+    private int stackSize = 30;
 
     public int getX() {
         return this.x;
@@ -31,10 +31,6 @@ public class RedRingFinder {
 
     public int getY() {
         return this.y;
-    }
-
-    public boolean getFound() {
-        return this.found;
     }
 
     public void emptyStack() {
@@ -55,11 +51,8 @@ public class RedRingFinder {
         Setting the values to search for our colour red.
         Our Scalar ranges from 0-180, 0-255, 0-255.
          */
-        Scalar minValues = new Scalar(0, 100, 100);
-        Scalar maxValues = new Scalar(10, 255, 255);
-
-        Core.inRange(hsvImage, minValues, maxValues, mask);
-        Core.inRange(hsvImage, new Scalar(160, 100, 100), new Scalar(179,255,255), mask);
+        Core.inRange(hsvImage, new Scalar(0,100,100), new Scalar(10, 255,255), mask);
+        Core.inRange(hsvImage, new Scalar(160,100,100), new Scalar(179,255,255), mask);
 
         frame = drawRing(mask, frame);
 
@@ -99,7 +92,7 @@ public class RedRingFinder {
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
             int x = (int) Math.round(c[0]);
             int y = (int) Math.round(c[1]);
-            if (stackX.size() == 2){
+            if (stackX.size() == stackSize){
                 stackX.push(x);
                 stackX.remove(stackX.firstElement());
                 stackY.push(y);
@@ -108,6 +101,7 @@ public class RedRingFinder {
             } else {
                 stackX.push(x);
                 stackY.push(y);
+                System.out.println(stackX.size());
             }
 
             //Prints center coordinates
@@ -150,22 +144,14 @@ public class RedRingFinder {
     }
 
 
-    private void foundRing() {
+    public boolean foundRing() {
         // figure out when we are certain a ring has been found
-        if(true /* find sucess condition*/)
+        if(stackX.size() == stackSize && stackY.size() == stackSize)
         {
-            this.found = true;
+            return true;
         }
-        this.found = false;
+        return false;
 
-    }
-
-    private int searchSpectrumMIN () {
-        return 0;
-    }
-
-    private int searchSpectrumMAX () {
-        return 0;
     }
 
 }
