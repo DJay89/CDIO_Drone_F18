@@ -112,14 +112,6 @@ public class VideoDisplayController {
         debug = toggle;
     }
 
-
-
-    /**
-     * Get a frame from the opened video stream (if any)
-     *
-     * @return the {@link Mat} to show
-     */
-
     /**
      * Stop the acquisition from the camera and release all the resources
      */
