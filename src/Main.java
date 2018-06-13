@@ -28,7 +28,7 @@ public class Main extends Application {
     /**
      * Thread running the master Thread. This will spawn other Threads
      */
-    private static Thread masterThread, droneThread;
+    private static Thread masterThread, webcamThread;
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -51,15 +51,14 @@ public class Main extends Application {
         VD.start(stage);
         if(debug){
             //if webcam mode, start a Thread to get images from Webcam
-            droneThread = new Thread(drone);
+            webcamThread = new Thread(drone);
             // start that Thread
-            droneThread.start();
+            webcamThread.start();
         }
 
-        //This can't be runned on mac, but works on Linux and Windows so far
+        //System checks before flying
         System.out.print("Connecting Videostreaming");
         if(OS.contains("mac")){
-            
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -72,12 +71,15 @@ public class Main extends Application {
             BufferedImage bi = drone.getImg();
             while(bi == null) {
                 bi = drone.getImg();
-                if(droneThread.getState().equals(Thread.State.TERMINATED))
-                    System.exit(-1);
             }
+
+        }
+        if(debug){
+            //Do takeoff and drone stuff
+            if(webcamThread.getState().equals(Thread.State.TERMINATED))
+                System.exit(-1);
         }
 
-        //Do takeoff and drone stuff
         if(!debug && flymode){
             drone.takeOff();
             drone.hover(2000);
