@@ -43,7 +43,7 @@ public class RedRingFinder {
     }
 
     public Mat findRedRing(BufferedImage img) {
-        System.out.println("Ring");
+        //System.out.println("Ring");
         Mat frame = Utils.bufferedImageToMat(img);
         Mat blurredImage = new Mat();
         Mat hsvImage = new Mat();
