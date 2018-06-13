@@ -23,7 +23,7 @@ public class RedRingFinder {
 
     private int x = 0;
     private int y = 0;
-    private int stacSize = 30;
+    private int stackSize = 30;
 
     public int getX() {
         return this.x;
@@ -92,7 +92,7 @@ public class RedRingFinder {
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
             int x = (int) Math.round(c[0]);
             int y = (int) Math.round(c[1]);
-            if (stackX.size() == stacSize){
+            if (stackX.size() == stackSize){
                 stackX.push(x);
                 stackX.remove(stackX.firstElement());
                 stackY.push(y);
@@ -146,7 +146,7 @@ public class RedRingFinder {
 
     public boolean foundRing() {
         // figure out when we are certain a ring has been found
-        if(stackX.size() == stacSize && stackY.size() == stacSize)
+        if(stackX.size() == stackSize && stackY.size() == stackSize)
         {
             return true;
         }
