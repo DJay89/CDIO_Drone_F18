@@ -8,14 +8,18 @@ import utils.imageReturn;
 import java.awt.image.BufferedImage;
 
 public class SearchAlgorithm implements Runnable{
+
+    //Objects
     private Drone drone;
     private ImageRecognition IR;
 
+    //Objects init
     public SearchAlgorithm(Drone drone){
         this.drone = drone;
         this.IR = new ImageRecognition();
     }
 
+    //Search Algorithm
     @Override
     public void run() {
         while (!Thread.interrupted()){

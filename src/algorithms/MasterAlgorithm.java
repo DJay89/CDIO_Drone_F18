@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 
 public class MasterAlgorithm implements Runnable
 {
+    //objects
     private Drone drone;
     private CenteringAlgorithm CA;
     private SearchAlgorithm SA;
     public Thread caThread, saThread;
 
+    //objects init
     public MasterAlgorithm(Drone drone){
         this.drone = drone;
         this.CA = new CenteringAlgorithm(drone);
@@ -19,6 +21,7 @@ public class MasterAlgorithm implements Runnable
 
     }
 
+    //Master thread
     public void run(){
         while (!Thread.interrupted())
         {
@@ -28,6 +31,23 @@ public class MasterAlgorithm implements Runnable
                     System.out.println("starting thread");
                     saThread.start();
                 }
+                /* Might be useful
+                try {
+                    saThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(caThread.getState().equals(Thread.State.NEW)){
+                    System.out.println("starting thread");
+                    caThread.start();
+                }
+                try {
+                    caThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                */
+
             }
         }
     }
