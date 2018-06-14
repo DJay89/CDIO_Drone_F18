@@ -23,6 +23,7 @@ public class ImageRecognition {
     public ImageRecognition() {
         this.qr = new QRscanner();
         this.rr = new RedRingFinder();
+
     }
 
     //Class Needed functions
@@ -63,7 +64,7 @@ public class ImageRecognition {
         }
         return ret;
     }
-
+    
     //add more after here
 
     public void emptyCenterCordStack () {
