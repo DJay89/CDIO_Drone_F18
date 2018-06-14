@@ -17,7 +17,7 @@ public class MasterAlgorithm implements Runnable {
     //objects init
     public MasterAlgorithm(Drone drone) {
         this.drone = drone;
-        this.IR = IR;
+        this.IR = new ImageRecognition();
         this.CA = new CenteringAlgorithm(drone, IR);
         this.SA = new SearchAlgorithm(drone, IR);
 
@@ -55,8 +55,8 @@ public class MasterAlgorithm implements Runnable {
         // Run the algorithm while condition
      //   while(true) {
 
-
-          //  System.out.println( IR.squareDetect() );
+            IR.setFrame(drone.getImg());
+            System.out.println( IR.squareDetect() );
             // Start search level
          //   while ( SA.searchLvlZero(20000) == QR_CODE_FOUND ) {
 

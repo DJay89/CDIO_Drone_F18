@@ -2,6 +2,7 @@ package object_recogniztion.image_recogniztion;
 
 import com.xuggle.xuggler.Utils;
 import object_recogniztion.RingFinder.RedRingFinder;
+import object_recogniztion.image_recogniztion.squareDetect.FilterBackground;
 import object_recogniztion.image_recogniztion.squareDetect.SquareDetect;
 import org.opencv.core.Mat;
 import utils.imageReturn;
@@ -22,12 +23,14 @@ public class ImageRecognition {
     private QRscanner qr;
     private RedRingFinder rr;
     private SquareDetect sd;
+    private FilterBackground fb;
 
     //init
     public ImageRecognition() {
         this.qr = new QRscanner();
         this.rr = new RedRingFinder();
         this.sd = new SquareDetect();
+        this.fb = new FilterBackground();
 
     }
 
@@ -74,7 +77,10 @@ public class ImageRecognition {
 
         imageReturn ret = new imageReturn();
         Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
+        newFrame = fb.filterBackGround( newFrame, 1 );
+        //ret.found = sd.findQrCenter( newFrame );
         ret.found = sd.findQrCenter( newFrame );
+
         if ( ret.found ){
             ret.x = sd.getCenterOfRectX();
             ret.y = sd.getCenterOfRectY();
