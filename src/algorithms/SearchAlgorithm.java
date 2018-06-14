@@ -7,7 +7,7 @@ import utils.imageReturn;
 
 import java.awt.image.BufferedImage;
 
-public class SearchAlgorithm implements Runnable{
+public class SearchAlgorithm {
 
     //Objects
     private Drone drone;
@@ -20,7 +20,7 @@ public class SearchAlgorithm implements Runnable{
     }
 
     //Search Algorithm
-    @Override
+    /*@Override
     public void run() {
         while (!Thread.interrupted()){
             try{
@@ -44,7 +44,7 @@ public class SearchAlgorithm implements Runnable{
             }
 
         }
-    }
+    }*/
 
     public int searchLvlZero(long searchTime) {
 

@@ -5,7 +5,7 @@ import de.yadrone.apps.paperchase.QRCodeScanner;
 import object_recogniztion.qr_scanner.QRscanner;
 import utils.imageReturn;
 
-public class CenteringAlgorithm implements Runnable{
+public class CenteringAlgorithm {
 
     // Video size
     private static final int imgWidth = 1280;
@@ -21,15 +21,21 @@ public class CenteringAlgorithm implements Runnable{
     private int tagX;
     private int tagY;
 
-    @Override
-    public void run() {
-        System.out.println("centering starter bby!!");
-    }
-
     public CenteringAlgorithm(Drone drone) {
         this.drone = drone;
     }
 
+
+    public boolean centerDroneOnQr() {
+        //findQr = true;
+        return tagIsCentered();
+    }
+/*
+    public boolean centerDroneOnRing() {
+        findCircle = true;
+        return tagIsCentered();
+    }
+  */
     private boolean tagIsCentered() {
         while (!isDroneCentered()) { // and circle or qr found (otherwise endless loop)
 

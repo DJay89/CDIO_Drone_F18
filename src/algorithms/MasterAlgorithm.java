@@ -1,36 +1,33 @@
 package algorithms;
 
 import controller.Drone;
+
 import java.awt.image.BufferedImage;
 
-public class MasterAlgorithm implements Runnable
-{
+public class MasterAlgorithm implements Runnable {
     //objects
     private Drone drone;
     private CenteringAlgorithm CA;
     private SearchAlgorithm SA;
-    public Thread caThread, saThread;
+
+    private final int QR_CODE_FOUND = 1;
 
     //objects init
-    public MasterAlgorithm(Drone drone){
+    public MasterAlgorithm(Drone drone) {
         this.drone = drone;
         this.CA = new CenteringAlgorithm(drone);
         this.SA = new SearchAlgorithm(drone);
-        this.caThread = new Thread(CA);
-        this.saThread = new Thread(SA);
 
     }
 
     //Master thread
-    public void run(){
-        while (!Thread.interrupted())
-        {
+    public void run() {
+        while (!Thread.interrupted()) {
             BufferedImage bi = drone.getImg();
-            if(bi != null) {
-                if(saThread.getState().equals(Thread.State.NEW)){
-                    System.out.println("starting thread");
-                    saThread.start();
-                }
+            if (bi != null) {
+                System.out.println("Starting Master Algorithm");
+                algorithm();
+            }
                 /* Might be useful
                 try {
                     saThread.join();
@@ -48,8 +45,14 @@ public class MasterAlgorithm implements Runnable
                 }
                 */
 
-            }
         }
+    }
+
+    private void algorithm() {
+        if (SA.searchLvlZero(20000) == QR_CODE_FOUND) {
+            CA.centerDroneOnQr();
+        };
+
     }
 
 }
