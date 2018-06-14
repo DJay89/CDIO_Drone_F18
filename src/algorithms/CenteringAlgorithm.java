@@ -27,6 +27,7 @@ public class CenteringAlgorithm {
 
 
     public boolean centerDroneOnQr() {
+        System.out.println("Centering Algorithm Starting");
         //findQr = true;
         return tagIsCentered();
     }
@@ -59,6 +60,12 @@ public class CenteringAlgorithm {
                 case 1:
                     drone.down(50);
                     break;
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         return true;

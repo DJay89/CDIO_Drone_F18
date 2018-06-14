@@ -53,7 +53,7 @@ public class SearchAlgorithm {
         while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 
             System.out.println("Search Level 0: Searching for QR and Red Rings");
-            drone.move3D(2, -1, 0 , 20, 500);
+            //drone.move3D(2, -1, 0 , 20, 500);
             drone.hover(5);
 
             try {
@@ -61,13 +61,29 @@ public class SearchAlgorithm {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            temp = drone.getRetValues().resutalt;
-        }
 
-        if (!temp.equals("")) {
-            System.out.println("QR Found\n" + "Result: " + temp);
-            drone.land();
-            return 1;
+            try{
+                IR.setFrame(drone.getImg());
+
+                // pass info to drone
+                imageReturn ir = IR.qrScan();
+                //imageReturn ir = IR.rrScan();
+                drone.setRetValues(ir);
+                if( ir.found){
+                    System.out.println(ir.resutalt);
+                    System.out.println("Point: " + ir.x + " , " + ir.y);
+                    drone.land();
+                    return 1;
+                }
+
+            } catch (NullPointerException ex){
+                System.out.println("No pic.");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    return -1;
+                }
+            }
         }
 
         System.out.println("Nothing found initiating Search Level 1");

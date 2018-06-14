@@ -49,10 +49,15 @@ public class MasterAlgorithm implements Runnable {
     }
 
     private void algorithm() {
-        if (SA.searchLvlZero(20000) == QR_CODE_FOUND) {
-            CA.centerDroneOnQr();
-        };
+        // Run the algorithm while condition
+        while(true) {
+            // Start search level
+            if (SA.searchLvlZero(20000) == QR_CODE_FOUND) {
+                // Center on tag
+                //CA.centerDroneOnQr();
+            }
 
+        }
     }
 
 }
