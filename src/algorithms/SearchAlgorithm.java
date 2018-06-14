@@ -11,64 +11,34 @@ import utils.imageReturn;
 
 import java.awt.image.BufferedImage;
 
-public class SearchAlgorithm implements Runnable{
+public class SearchAlgorithm {
     private Drone drone;
     private ImageRecognition IR;
     private SquareDetect SD;
     private FilterBackground FBG;
 
 
-    public SearchAlgorithm(Drone drone){
+    public SearchAlgorithm(Drone drone) {
         this.drone = drone;
         this.IR = new ImageRecognition();
         this.SD = new SquareDetect();
         this.FBG = new FilterBackground();
-            }
 
-    @Override
-    public void run() {
-        while (!Thread.interrupted()){
-            try{
-
-                IR.setFrame(drone.getImg());
-                Mat droneMatFrame = Utils.bufferedImageToMat(drone.getImg());
-                Mat maskedImage = FBG.filterBackGround(droneMatFrame, 1);
-
-                SD.findRectangle(maskedImage, droneMatFrame);
-
-
-                //drone.setImg(newFrame);
-
-                // pass info to drone
-                //imageReturn ir = IR.qrScan();
-                /*
-                imageReturn ir = IR.rrScan();
-                drone.setRetValues(ir);
-                if( ir.found){
-                    System.out.println(ir.resutalt);
-                }
-
-            } catch (NullPointerException ex){
-                System.out.println("No pic.");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    return;
-                }
-                */
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
-    public int searchLvlZero(long searchTime) {
+
+
+    public int searchLvlZero(long searchTime) throws Exception {
 
         long spinTime = System.currentTimeMillis() + searchTime;
         String temp = drone.getRetValues().resutalt;
         while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 
+
+            IR.setFrame(drone.getImg());
+            Mat droneMatFrame = Utils.bufferedImageToMat(drone.getImg());
+            Mat maskedImage = FBG.filterBackGround(droneMatFrame, 1);
+            //SD.findRectangle(maskedImage, )
             System.out.println("Search Level 0: Searching for QR and Red Rings");
             drone.move3D(2, -1, 0 , 20, 500);
             drone.hover(5);

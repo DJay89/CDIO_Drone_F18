@@ -20,8 +20,8 @@ public class FilterBackground {
 
         if(type == HVS){
             Imgproc.cvtColor(blurred, ret, Imgproc.COLOR_BGR2HSV);
-            minValues = new Scalar(0,0,153);
-            maxValues = new Scalar(165,255,255);
+            Scalar minValues = new Scalar(0, 0, 0);
+            Scalar maxValues = new Scalar(180, 255, 140);
         }
 
         if(type == LAB){

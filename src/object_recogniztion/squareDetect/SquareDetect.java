@@ -11,11 +11,15 @@ import static org.opencv.imgproc.Imgproc.drawContours;
 
 public class SquareDetect {
 
-    public Mat findRectangle(Mat maskedImage, Mat src) throws Exception {
+    public Mat dst;
+    private final int QRDETECTED = 1;
+    private final int SEARCHINGQR = 0;
+
+    public int findRectangle(Mat maskedImage) throws Exception {
         Mat blurred = maskedImage.clone();
         Imgproc.medianBlur(maskedImage, blurred, 9);
 
-        Mat gray0 = new Mat(blurred.size(), CvType.CV_8U),  gray = new Mat();
+        Mat gray0 = new Mat(blurred.size(), CvType.CV_8U), gray = new Mat();
 
         ArrayList<MatOfPoint> contours = new ArrayList<>();
 
@@ -26,12 +30,14 @@ public class SquareDetect {
 
         MatOfPoint2f approxCurve;
 
+        ArrayList<MatOfPoint> neededContours = new ArrayList<>();
+
         double maxArea = 0;
         int maxId = -1;
 
 
         for (int c = 0; c < maskedImage.channels(); c++) {
-            int ch[] = { c, 0 };
+            int ch[] = {c, 0};
             Core.mixChannels(blurredChannel, gray0Channel, new MatOfInt(ch));
 
             int thresholdLevel = 1;
@@ -48,6 +54,8 @@ public class SquareDetect {
                             (maskedImage.width() + maskedImage.height()) / 200, t);
                 }
 
+                dst = gray;
+
                 Imgproc.findContours(gray, contours, new Mat(),
                         Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
@@ -58,6 +66,8 @@ public class SquareDetect {
                     approxCurve = new MatOfPoint2f();
                     Imgproc.approxPolyDP(temp, approxCurve,
                             Imgproc.arcLength(temp, true) * 0.02, true);
+
+                    // JAJAJA //
                     if (approxCurve.total() == 4 && area >= maxArea) {
                         double maxCosine = 0;
                         //System.out.print("CONTOUR LENGTH = " + Imgproc.arcLength(temp, true));
@@ -72,45 +82,62 @@ public class SquareDetect {
                         if (maxCosine < 0.3) {
                             maxArea = area;
                             maxId = contours.indexOf(contour);
+                            // neededContours.add(contours.get(contours.indexOf(contour)));
                         }
                     }
                 }
             }
-        }
 
 
-        if (maxId >= 0) {
+            if (maxId >= 0) {
 
 
-            double aspectRatioMin = 1.25;
-            double aspectRatioMax = 1.35;
+                double aspectRatioMin = 1.2;
+                double aspectRatioMax = 1.4;
+                Mat frameCut;
+                Point centerOfRect = new Point();
+                Imgproc.circle(src, new Point(620, 140), 20, new Scalar(255, 0, 0), 8);
+                Imgproc.rectangle(src, new Point(620, 500), new Point(700, 300), new Scalar(0, 0, 255), 8);
 
-            for (int i = 0; i < contours.size(); i ++ ) {
+                // for (int i = 0; i < neededContours.size(); i++) {
+                Rect rect = Imgproc.boundingRect(contours.get(maxId));
+                //System.out.println("Aspect Ratio = " + (double) rect.height / (double) rect.width);
+                //System.out.println("rect height = " + rect.height + "rect width" + rect.width);
 
-                if (Imgproc.contourArea(contours.get(i)) > 100 ) {
-                    Rect rect = Imgproc.boundingRect(contours.get(i));
-                    //  if ((rect.height > 35 && rect.height < 60) && (rect.width > 35 && rect.width < 60))
-                    // System.out.println("rect height = " + rect.height + "rect width" + rect.width);
-                    //System.out.println("Aspect Ratio = " + (double) rect.height / (double) rect.width);
 
-                    if ( (( (double) rect.height / (double) rect.width ) > aspectRatioMin ) && ( (double) rect.height / (double) rect.width ) < aspectRatioMax )
+                if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && ((double) rect.height / (double) rect.width) < aspectRatioMax)
 
-                    {
-                        //Imgproc.rectangle(src, new Point(rect.x,rect.y), new Point(rect.x+rect.width,rect.y+rect.height),new Scalar(0,0,255));
-                        drawContours(src, contours,  maxId, new Scalar(0, 255, 0), 8);
-                    }
-                    //  System.out.print("RECT DETECTED\n");
-                    //System.out.print("NUMBERS OF CONTOURS FOUND = " + contours.size());
+                {
 
-                    //  for ( int i = 0; i < contours.size(); i++ )
+                    //          if ((rect.height > 100) && (rect.width > 50)) {
+                    //System.out.println("INSIDE PARAMETERS" + "rect height = " + rect.height + "rect width" + rect.width);
+                    //System.out.println("Aspect Ratio INSIDE PARAMETERS = " + (double) rect.height / (double) rect.width);
+                    centerOfRect.x = rect.x + rect.width / 2;
+                    centerOfRect.y = rect.y + rect.height / 2;
+                            /*
+                           for ( int j = 0; j < neededContours.get(i).toList().size(); j++ )
+                           {
+                              System.out.println("CONT COORDINATE = " + neededContours.get(i).toList().get(j));
+                              Imgproc.circle(src, neededContours.get(i).toList().get(j), 20, new Scalar(0, 255, 0), 8) ;
+                           }
+*/
+                    //   System.out.print("NUMBERS OF CONTOURS FOUND = " + neededContours.size());
 
-                    //  System.out.print("CONTOUR " + i +  " coordinate" + contours.get(i));
+                    //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
+                    //Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 8);
+                    //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
+                    //Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0,
+                            .8), 8);
+
+                    return QRDETECTED;
+                }
+                else {
+                    return SEARCHINGQR;
                 }
             }
         }
-        return src;
+        return SEARCHINGQR;
     }
-
 
     private double angle(Point p1, Point p2, Point p0) {
         double dx1 = p1.x - p0.x;
