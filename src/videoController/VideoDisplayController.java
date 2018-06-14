@@ -64,9 +64,8 @@ public class VideoDisplayController {
                     {
                         //get videostream from drone
                         Mat frame  = Utils.bufferedImageToMat(drone.getImg());
+                        //Mat newFrame =
                         // convert and show the frame
-
-                        frame = sd.findRectangle( frame, frame );
                         Image imageToShow = Utils.mat2Image(frame);
                         //display
                         updateImageView(currentFrame, imageToShow);
