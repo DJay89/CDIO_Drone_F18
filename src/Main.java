@@ -23,7 +23,7 @@ public class Main extends Application {
      * true = It will perform takeoff
      * false = It won't
      */
-    private static final Boolean flymode = false;
+    private static final Boolean flymode = true;
 
     /**
      * Thread running the master Thread. This will spawn other Threads

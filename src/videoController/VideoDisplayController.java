@@ -158,5 +158,6 @@ public class VideoDisplayController {
     protected void setClosed()
     {
         this.stopAcquisition();
+        this.drone.land();
     }
 }
