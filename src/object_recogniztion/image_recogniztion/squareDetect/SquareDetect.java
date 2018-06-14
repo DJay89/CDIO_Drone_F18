@@ -141,7 +141,7 @@ public class SquareDetect {
                     return QR_FOUND;
                 }
                 else {
-                        System.out.println("NOP QR FOUND");
+                        System.out.println("NO QR FOUND");
                        return NO_QR_FOUND;
                 }
             }

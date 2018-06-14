@@ -1,6 +1,7 @@
 package algorithms;
 
 import controller.Drone;
+import object_recogniztion.image_recogniztion.ImageRecognition;
 
 import java.awt.image.BufferedImage;
 
@@ -9,14 +10,16 @@ public class MasterAlgorithm implements Runnable {
     private Drone drone;
     private CenteringAlgorithm CA;
     private SearchAlgorithm SA;
+    private ImageRecognition IR;
 
     private final int QR_CODE_FOUND = 1;
 
     //objects init
     public MasterAlgorithm(Drone drone) {
         this.drone = drone;
-        this.CA = new CenteringAlgorithm(drone);
-        this.SA = new SearchAlgorithm(drone);
+        this.IR = IR;
+        this.CA = new CenteringAlgorithm(drone, IR);
+        this.SA = new SearchAlgorithm(drone, IR);
 
     }
 
@@ -25,7 +28,7 @@ public class MasterAlgorithm implements Runnable {
         while (!Thread.interrupted()) {
             BufferedImage bi = drone.getImg();
             if (bi != null) {
-                System.out.println("Starting Master Algorithm");
+                //System.out.println("Starting Master Algorithm");
                 algorithm();
             }
                 /* Might be useful
@@ -50,18 +53,20 @@ public class MasterAlgorithm implements Runnable {
 
     private void algorithm() {
         // Run the algorithm while condition
-        while(true) {
+     //   while(true) {
 
+
+          //  System.out.println( IR.squareDetect() );
             // Start search level
-            while ( SA.searchLvlZero(20000) == QR_CODE_FOUND ) {
+         //   while ( SA.searchLvlZero(20000) == QR_CODE_FOUND ) {
 
 
-                CA.centerDroneOnQr();
+           //     CA.centerDroneOnQr();
                 // Center on tag
                 //CA.centerDroneOnQr();
-            }
+         //   }
 
-        }
+      //  }
     }
 
 }

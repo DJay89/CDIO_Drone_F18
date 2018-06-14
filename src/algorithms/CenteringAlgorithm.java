@@ -2,8 +2,12 @@ package algorithms;
 
 import controller.Drone;
 import de.yadrone.apps.paperchase.QRCodeScanner;
+import object_recogniztion.image_recogniztion.ImageRecognition;
 import object_recogniztion.qr_scanner.QRscanner;
 import utils.imageReturn;
+
+import java.awt.*;
+
 
 public class CenteringAlgorithm {
 
@@ -13,6 +17,7 @@ public class CenteringAlgorithm {
     private static final int marginOfCenter = 10;
 
     private Drone drone = null;
+    private ImageRecognition IR;
 
     private boolean findCircle;
     private boolean findQr;
@@ -21,8 +26,9 @@ public class CenteringAlgorithm {
     private int tagX;
     private int tagY;
 
-    public CenteringAlgorithm(Drone drone) {
+    public CenteringAlgorithm(Drone drone, ImageRecognition IR) {
         this.drone = drone;
+        this.IR = IR;
     }
 
 
@@ -72,8 +78,16 @@ public class CenteringAlgorithm {
     }
 
     private boolean isDroneCentered() {
+        IR.setFrame(drone.getImg());
+
+        // pass info to drone
+        imageReturn ir = IR.qrScan();
+        //imageReturn ir = IR.rrScan();
+        drone.setRetValues(ir);
+
         // get coords from drone
-        imageReturn ir = drone.getRetValues();
+        ir = drone.getRetValues();
+
         if(ir.found){
             this.tagX = ir.x;
             this.tagY = ir.y;

@@ -14,9 +14,9 @@ public class SearchAlgorithm {
     private ImageRecognition IR;
 
     //Objects init
-    public SearchAlgorithm(Drone drone){
+    public SearchAlgorithm(Drone drone, ImageRecognition IR){
         this.drone = drone;
-        this.IR = new ImageRecognition();
+        this.IR = IR;
     }
 
     //Search Algorithm
@@ -72,7 +72,7 @@ public class SearchAlgorithm {
                 if( ir.found){
                     System.out.println(ir.resutalt);
                     System.out.println("Point: " + ir.x + " , " + ir.y);
-                    drone.land();
+                    //drone.land();
                     return 1;
                 }
 
