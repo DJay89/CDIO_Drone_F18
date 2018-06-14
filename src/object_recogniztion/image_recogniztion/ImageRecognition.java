@@ -1,6 +1,9 @@
 package object_recogniztion.image_recogniztion;
 
+import com.xuggle.xuggler.Utils;
 import object_recogniztion.RingFinder.RedRingFinder;
+import object_recogniztion.image_recogniztion.squareDetect.SquareDetect;
+import org.opencv.core.Mat;
 import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;
 import java.awt.image.BufferedImage;
@@ -18,11 +21,13 @@ public class ImageRecognition {
     //Object class we have made
     private QRscanner qr;
     private RedRingFinder rr;
+    private SquareDetect sd;
 
     //init
     public ImageRecognition() {
         this.qr = new QRscanner();
         this.rr = new RedRingFinder();
+        this.sd = new SquareDetect();
 
     }
 
@@ -64,7 +69,21 @@ public class ImageRecognition {
         }
         return ret;
     }
-    
+
+    public imageReturn squareDetect() {
+
+        imageReturn ret = new imageReturn();
+        Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
+        ret.found = sd.findQrCenter( newFrame );
+        if ( ret.found ){
+            ret.x = sd.getCenterOfRectX();
+            ret.y = sd.getCenterOfRectY();
+            ret.resutalt = "QR Code Found";
+        }
+        return ret;
+
+    }
+
     //add more after here
 
     public void emptyCenterCordStack () {
