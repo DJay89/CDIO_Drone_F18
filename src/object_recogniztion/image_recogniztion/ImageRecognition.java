@@ -63,8 +63,8 @@ public class ImageRecognition {
     {
         imageReturn ret = new imageReturn();
         ret.name = "RR";
-        ret.found = rr.foundRing();
         rr.findRedRing( getFrame() );
+        ret.found = rr.foundRing();
         if(ret.found){
             ret.x = rr.getX();
             ret.y = rr.getY();

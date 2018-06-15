@@ -58,11 +58,10 @@ public class MasterAlgorithm implements Runnable {
             if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
                 // Center on tag
                 if (CA.centerDroneOnQr()) {
-                    drone.up(500);
-                    //CA.centerDroneOnRing(); // Not working yet - can't find ring
+                    drone.up(750);
+                    CA.centerDroneOnRing();
                 }
             }
-
         }
     }
 
