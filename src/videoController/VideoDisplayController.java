@@ -42,6 +42,7 @@ public class VideoDisplayController {
     private SquareDetectTst sd;
 
 
+
     /**
      * The action triggered by pushing the toggleCam on the GUI
      *
@@ -66,6 +67,7 @@ public class VideoDisplayController {
                         Mat frame  = Utils.bufferedImageToMat(drone.getImg());
                         //Mat newFrame =
                         // convert and show the frame
+                        frame = sd.findRectangle(frame , frame);
                         Image imageToShow = Utils.mat2Image(frame);
                         //display
                         updateImageView(currentFrame, imageToShow);

@@ -45,7 +45,7 @@ public class SquareDetect {
         int maxId = -1;
 
 
-        for (int c = 0; c < maskedImage.channels(); c++) {
+        for (int c = 0; c < 3; c++) {
             int ch[] = {c, 0};
             Core.mixChannels(blurredChannel, gray0Channel, new MatOfInt(ch));
 
@@ -66,7 +66,7 @@ public class SquareDetect {
                 dst = gray;
 
                 Imgproc.findContours(gray, contours, new Mat(),
-                        Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+                        Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
                 for (MatOfPoint contour : contours) {
                     MatOfPoint2f temp = new MatOfPoint2f(contour.toArray());
@@ -180,6 +180,24 @@ public class SquareDetect {
         this.centerOfRect.y = centerOfRect.y;
     }
 
+    private double distanceToQr( double knownWidth, double focalLength, double perceivedWidth ){
+        return ( knownWidth * focalLength ) / perceivedWidth;
+    }
+
+    private double focalLength(double marker, double knownDistance, double knownQrWidth ) {
+        String filename = "";
+        Mat imageWithMarker = Imgcodecs.imread(filename);
+        //double marker = findMarker( imageWithMarker );
+
+        return ( marker * knownDistance ) / knownQrWidth;
+    }
+
+    public double findMarker( Mat image ) {
+        ///// find bredden af qr koden på en afstand af 2 meter vha. tests derefter fastsættes værdien ///
+        findQrCenter( image );
+
+        return 0.0;
+    }
 
 }
 

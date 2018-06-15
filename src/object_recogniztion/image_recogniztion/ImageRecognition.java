@@ -77,7 +77,7 @@ public class ImageRecognition {
 
         imageReturn ret = new imageReturn();
         Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
-        newFrame = fb.filterBackGround( newFrame, 1 );
+        //newFrame = fb.filterBackGround( newFrame, 1 );
         //ret.found = sd.findQrCenter( newFrame );
         ret.found = sd.findQrCenter( newFrame );
 

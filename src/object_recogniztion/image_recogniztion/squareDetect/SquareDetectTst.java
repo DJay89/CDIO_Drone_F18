@@ -129,6 +129,7 @@ public class SquareDetectTst {
                             .8), 8);
 
                     //return "QR detected";
+                    return src;
                 }
                 else {
                     //   return "Scanning for QR";
