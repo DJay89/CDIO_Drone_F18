@@ -106,7 +106,8 @@ public class CenteringAlgorithm {
             imageReturn ir = null;
             // Scan image for object
             if(findQR) { ir = IR.qrScan(); }
-            if(findRing) { System.out.println("scan ring"); ir = IR.rrScan(); }
+            if(findRing) { ir = IR.rrScan();
+            System.out.println("scanning for rings"); }
 
             // Exit if picture havn't been scanned
             if (ir == null) {
@@ -117,7 +118,9 @@ public class CenteringAlgorithm {
             // Save values
             drone.setRetValues(ir);
             ir = drone.getRetValues();
-            System.out.println(ir.name + ": " + ir.x + ", " + ir.y + ", " + ir.found);
+
+            System.out.println(ir.resutalt);
+
             if (ir.found) {
                 System.out.println("Image found on point: " + ir.x + ", " + ir.y);
                 return true;
