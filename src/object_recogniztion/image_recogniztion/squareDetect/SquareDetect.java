@@ -21,12 +21,14 @@ public class SquareDetect {
     public final boolean QR_FOUND = true;
     public final boolean NO_QR_FOUND = false;
     Point centerOfRect = new Point();
+    private int x = 0;
+    private int y = 0;
 
 
 
     public boolean findQrCenter(Mat maskedImage) {
         Mat blurred = maskedImage.clone();
-        Imgproc.medianBlur(maskedImage, blurred, 9);
+        Imgproc.medianBlur(maskedImage, blurred, 5);
 
         Mat gray0 = new Mat(blurred.size(), CvType.CV_8U), gray = new Mat();
 
@@ -135,9 +137,9 @@ public class SquareDetect {
                     //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
                    // Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0, .8), 8);
 
-                    System.out.println("QR DETECTED");
-                    setCenterOfRectX(rect.x + rect.width / 2);
-                    setCenterOfRectY(rect.y + rect.height / 2);
+
+                    this.x = (rect.x + rect.width / 2);
+                    this.y = (rect.y + rect.height / 2);
                     return QR_FOUND;
                 }
                 else {
@@ -160,24 +162,14 @@ public class SquareDetect {
                 + 1e-10);
     }
 
-    public int getCenterOfRectX(){
+    public int getX(){
 
-        return (int) centerOfRect.x;
+        return this.x;
     }
 
-    public int getCenterOfRectY(){
+    public int getY(){
 
-        return (int) centerOfRect.y;
-    }
-
-    public void setCenterOfRectX(double centerOfRectX){
-
-        this.centerOfRect.x = centerOfRect.x;
-    }
-
-    public void setCenterOfRectY(double centerOfRectY){
-
-        this.centerOfRect.y = centerOfRect.y;
+        return this.y;
     }
 
     private double distanceToQr( double knownWidth, double focalLength, double perceivedWidth ){

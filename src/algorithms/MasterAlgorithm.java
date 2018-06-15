@@ -2,6 +2,7 @@ package algorithms;
 
 import controller.Drone;
 import object_recogniztion.image_recogniztion.ImageRecognition;
+import utils.imageReturn;
 
 import java.awt.image.BufferedImage;
 
@@ -54,11 +55,13 @@ public class MasterAlgorithm implements Runnable {
     private void algorithm() {
         // Run the algorithm while condition
      //   while(true) {
-
+/*
             IR.setFrame(drone.getImg());
-            System.out.println( IR.squareDetect() );
-            // Start search level
-         //   while ( SA.searchLvlZero(20000) == QR_CODE_FOUND ) {
+            imageReturn ret = IR.squareDetect();
+            if (ret.found) {
+            }*/
+        // Start search level
+     //   while ( SA.searchLvlZero(20000) == QR_CODE_FOUND ) {
 
 
            //     CA.centerDroneOnQr();

@@ -82,9 +82,11 @@ public class ImageRecognition {
         ret.found = sd.findQrCenter( newFrame );
 
         if ( ret.found ){
-            ret.x = sd.getCenterOfRectX();
-            ret.y = sd.getCenterOfRectY();
-            ret.resutalt = "QR Code Found";
+
+            ret.x = sd.getX();
+            ret.y = sd.getY();
+            System.out.println("IR x : " + ret.x + "y : " + ret.y);
+            ret.resutalt = "Found square";
         }
         return ret;
 

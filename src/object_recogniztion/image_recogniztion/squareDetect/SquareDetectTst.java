@@ -16,7 +16,7 @@ public class SquareDetectTst {
 
     public Mat findRectangle(Mat maskedImage, Mat src)  {
         Mat blurred = maskedImage.clone();
-        Imgproc.medianBlur(maskedImage, blurred, 9);
+        Imgproc.medianBlur(maskedImage, blurred, 5);
 
         Mat gray0 = new Mat(blurred.size(), CvType.CV_8U), gray = new Mat();
 
@@ -35,7 +35,7 @@ public class SquareDetectTst {
         int maxId = -1;
 
 
-        for (int c = 0; c < maskedImage.channels(); c++) {
+        for (int c = 0; c < 3; c++) {
             int ch[] = {c, 0};
             Core.mixChannels(blurredChannel, gray0Channel, new MatOfInt(ch));
 
@@ -104,7 +104,9 @@ public class SquareDetectTst {
                 //System.out.println("rect height = " + rect.height + "rect width" + rect.width);
 
 
-                if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && ((double) rect.height / (double) rect.width) < aspectRatioMax)
+                Imgproc.drawContours(src, contours, maxId, new Scalar(0, 255, 0, .8), 8);
+
+                if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && (((double) rect.height / (double) rect.width) < aspectRatioMax))
 
                 {
 
@@ -125,16 +127,17 @@ public class SquareDetectTst {
                     Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
                     //Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 8);
                     //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
-                    Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0,
-                            .8), 8);
+                    //Imgproc.drawContours(src, contours, maxId, new Scalar(0, 255, 0, .8), 8);
 
                     //return "QR detected";
                     return src;
                 }
                 else {
                     //   return "Scanning for QR";
+                    return src;
                 }
             }
+            return src;
         }
         return src;
         // return "Scanning for QR";
