@@ -1,30 +1,20 @@
-package object_recogniztion.image_recogniztion.squareDetect;
+package object_recogniztion.squareDetect;
 
-
-import org.opencv.core.Mat;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.*;
+import org.opencv.imgproc.Imgproc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.opencv.core.Point;
+public class SquareDetectTst {
 
-import static org.opencv.imgproc.Imgproc.boundingRect;
-import static org.opencv.imgproc.Imgproc.contourArea;
-import static org.opencv.imgproc.Imgproc.drawContours;
+    public SquareDetectTst() {
 
-
-public class SquareDetect {
+    }
 
     public Mat dst;
-    public final boolean QR_FOUND = true;
-    public final boolean NO_QR_FOUND = false;
-    Point centerOfRect = new Point();
 
-
-
-    public boolean findQrCenter(Mat maskedImage) {
+    public Mat findRectangle(Mat maskedImage, Mat src)  {
         Mat blurred = maskedImage.clone();
         Imgproc.medianBlur(maskedImage, blurred, 9);
 
@@ -45,7 +35,7 @@ public class SquareDetect {
         int maxId = -1;
 
 
-        for (int c = 0; c < 3; c++) {
+        for (int c = 0; c < maskedImage.channels(); c++) {
             int ch[] = {c, 0};
             Core.mixChannels(blurredChannel, gray0Channel, new MatOfInt(ch));
 
@@ -66,7 +56,7 @@ public class SquareDetect {
                 dst = gray;
 
                 Imgproc.findContours(gray, contours, new Mat(),
-                        Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+                        Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
                 for (MatOfPoint contour : contours) {
                     MatOfPoint2f temp = new MatOfPoint2f(contour.toArray());
@@ -104,8 +94,9 @@ public class SquareDetect {
                 double aspectRatioMin = 1.2;
                 double aspectRatioMax = 1.4;
                 Mat frameCut;
-                //Imgproc.circle(src, new Point(620, 140), 20, new Scalar(255, 0, 0), 8);
-                //Imgproc.rectangle(src, new Point(620, 500), new Point(700, 300), new Scalar(0, 0, 255), 8);
+                Point centerOfRect = new Point();
+                Imgproc.circle(src, new Point(620, 140), 20, new Scalar(255, 0, 0), 8);
+                Imgproc.rectangle(src, new Point(620, 500), new Point(700, 300), new Scalar(0, 0, 255), 8);
 
                 // for (int i = 0; i < neededContours.size(); i++) {
                 Rect rect = Imgproc.boundingRect(contours.get(maxId));
@@ -120,7 +111,8 @@ public class SquareDetect {
                     //          if ((rect.height > 100) && (rect.width > 50)) {
                     //System.out.println("INSIDE PARAMETERS" + "rect height = " + rect.height + "rect width" + rect.width);
                     //System.out.println("Aspect Ratio INSIDE PARAMETERS = " + (double) rect.height / (double) rect.width);
-
+                    centerOfRect.x = rect.x + rect.width / 2;
+                    centerOfRect.y = rect.y + rect.height / 2;
                             /*
                            for ( int j = 0; j < neededContours.get(i).toList().size(); j++ )
                            {
@@ -130,24 +122,22 @@ public class SquareDetect {
 */
                     //   System.out.print("NUMBERS OF CONTOURS FOUND = " + neededContours.size());
 
-                    //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
+                    Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
                     //Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 8);
                     //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
-                   // Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0, .8), 8);
+                    Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0,
+                            .8), 8);
 
-                    System.out.println("QR DETECTED");
-                    setCenterOfRectX(rect.x + rect.width / 2);
-                    setCenterOfRectY(rect.y + rect.height / 2);
-                    return QR_FOUND;
+                    //return "QR detected";
+                    return src;
                 }
                 else {
-                        //System.out.println("NO QR FOUND");
-                       return NO_QR_FOUND;
+                    //   return "Scanning for QR";
                 }
             }
         }
-        System.out.println("NO QR FOUND");
-        return NO_QR_FOUND;
+        return src;
+        // return "Scanning for QR";
     }
 
     private double angle(Point p1, Point p2, Point p0) {
@@ -160,44 +150,4 @@ public class SquareDetect {
                 + 1e-10);
     }
 
-    public int getCenterOfRectX(){
-
-        return (int) centerOfRect.x;
-    }
-
-    public int getCenterOfRectY(){
-
-        return (int) centerOfRect.y;
-    }
-
-    public void setCenterOfRectX(double centerOfRectX){
-
-        this.centerOfRect.x = centerOfRect.x;
-    }
-
-    public void setCenterOfRectY(double centerOfRectY){
-
-        this.centerOfRect.y = centerOfRect.y;
-    }
-
-    private double distanceToQr( double knownWidth, double focalLength, double perceivedWidth ){
-        return ( knownWidth * focalLength ) / perceivedWidth;
-    }
-
-    private double focalLength(double marker, double knownDistance, double knownQrWidth ) {
-        String filename = "";
-        Mat imageWithMarker = Imgcodecs.imread(filename);
-        //double marker = findMarker( imageWithMarker );
-
-        return ( marker * knownDistance ) / knownQrWidth;
-    }
-
-    public double findMarker( Mat image ) {
-        ///// find bredden af qr koden på en afstand af 2 meter vha. tests derefter fastsættes værdien ///
-        findQrCenter( image );
-
-        return 0.0;
-    }
-
 }
-

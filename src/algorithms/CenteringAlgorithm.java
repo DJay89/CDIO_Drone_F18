@@ -57,7 +57,7 @@ public class CenteringAlgorithm {
                     break;
             }
 
-            switch (flightDirectionY()) {
+            switch (flightDirectionY())  {
                 case -1:
                     drone.up(time);
                     System.out.println("moving up");

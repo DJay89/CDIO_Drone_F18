@@ -1,4 +1,4 @@
-package object_recogniztion.image_recogniztion.squareDetect;
+package object_recogniztion.squareDetect;
 
 
 import org.opencv.core.*;

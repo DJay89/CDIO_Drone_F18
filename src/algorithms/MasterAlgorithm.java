@@ -58,7 +58,16 @@ public class MasterAlgorithm implements Runnable {
             if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
                 // Center on tag
                 if (CA.centerDroneOnQr()) {
-                    drone.up(500);
+                    centerOnRing();
+                    flyThroughRing();
+                    //CA.centerDroneOnRing(); // Not working yet - can't find ring
+                }
+            }
+            else if(SA.searchLvlOne(60000) == QR_CODE_FOUND)
+            {
+                if (CA.centerDroneOnQr()) {
+                    centerOnRing();
+                    flyThroughRing();
                     //CA.centerDroneOnRing(); // Not working yet - can't find ring
                 }
             }
@@ -66,4 +75,21 @@ public class MasterAlgorithm implements Runnable {
         }
     }
 
+    private void centerOnRing()
+    {
+
+        boolean center;
+        drone.up(500);
+        center = CA.centerDroneOnRing();
+        while(!center)
+        {
+            drone.forward(200);
+            center = CA.centerDroneOnRing();
+        }
+    }
+
+
+    private void flyThroughRing() {
+        drone.forward(800);
+    }
 }

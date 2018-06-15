@@ -87,7 +87,6 @@ public class SearchAlgorithm {
         }
 
         System.out.println("Nothing found initiating Search Level 1");
-        drone.land();
         return 0;
         // return searchLvlOne();
 
