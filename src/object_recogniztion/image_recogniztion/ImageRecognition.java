@@ -1,9 +1,8 @@
 package object_recogniztion.image_recogniztion;
 
-import com.xuggle.xuggler.Utils;
 import object_recogniztion.RingFinder.RedRingFinder;
-import object_recogniztion.image_recogniztion.squareDetect.FilterBackground;
-import object_recogniztion.image_recogniztion.squareDetect.SquareDetect;
+import object_recogniztion.squareDetect.FilterBackground;
+import object_recogniztion.squareDetect.SquareDetect;
 import org.opencv.core.Mat;
 import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;

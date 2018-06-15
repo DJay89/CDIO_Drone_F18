@@ -4,8 +4,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import controller.Drone;
-import object_recogniztion.image_recogniztion.squareDetect.SquareDetect;
-import object_recogniztion.image_recogniztion.squareDetect.SquareDetectTst;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
@@ -39,7 +37,6 @@ public class VideoDisplayController {
     private Drone drone;
     public Boolean debug = false;
     protected Boolean changeDroneCam = false;
-    private SquareDetectTst sd;
 
 
 
@@ -52,7 +49,6 @@ public class VideoDisplayController {
     @FXML
     protected void startCamera(ActionEvent event)
     {
-        this.sd = new SquareDetectTst();
         if (!this.cameraActive)
         {
             if(drone != null){
@@ -67,7 +63,6 @@ public class VideoDisplayController {
                         Mat frame  = Utils.bufferedImageToMat(drone.getImg());
                         //Mat newFrame =
                         // convert and show the frame
-                        frame = sd.findRectangle(frame , frame);
                         Image imageToShow = Utils.mat2Image(frame);
                         //display
                         updateImageView(currentFrame, imageToShow);
