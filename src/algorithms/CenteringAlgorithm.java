@@ -12,19 +12,15 @@ import java.awt.*;
 public class CenteringAlgorithm {
 
     // Video size
-    private static final int imgWidth = 1280;
-    private static final int imgHeight = 720;
+    private static final int imgWidth = 640;
+    private static final int imgHeight = 360;
     private static final int marginOfCenter = 10;
 
-    private Drone drone = null;
+    private Drone drone;
     private ImageRecognition IR;
 
-    private boolean findCircle;
-    private boolean findQr;
+    private int time = 10;
 
-    private QRscanner qrScanner;
-    private int tagX;
-    private int tagY;
 
     public CenteringAlgorithm(Drone drone, ImageRecognition IR) {
         this.drone = drone;
@@ -46,38 +42,33 @@ public class CenteringAlgorithm {
       */
     private boolean tagIsCentered() {
         while (tagIsFound() && !droneIsCentered()) {
-
+            System.out.println("centering on point: " + drone.getRetValues().x + ", " + drone.getRetValues().y);
             switch (flightDirectionX()) {
                 case -1:
-                    drone.tiltRight(10);
+                    drone.tiltRight(time);
                     System.out.println("moving right");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.tiltLeft(10);
+                    drone.tiltLeft(time);
                     System.out.println("moving left");
                     break;
             }
 
             switch (flightDirectionY()) {
                 case -1:
-                    drone.up(10);
+                    drone.up(time);
                     System.out.println("moving up");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.down(10);
+                    drone.down(time);
                     System.out.println("moving down");
                     break;
             }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            drone.hover(time);
         }
         System.out.println("Drone is centered");
         return true;
@@ -115,12 +106,12 @@ public class CenteringAlgorithm {
                 System.out.println("Image found");
                 return true;
             }
-/*
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
             i++;
         }
 
@@ -142,20 +133,24 @@ public class CenteringAlgorithm {
     }
 
     private int flightDirectionX() {
-        if (this.tagX < imgWidth / 2 - marginOfCenter) {
+        imageReturn ir = drone.getRetValues();
+
+        if (ir.x < (imgWidth / 2 - marginOfCenter)) {
             return 1;
         }
-        if (this.tagX > imgWidth / 2 + marginOfCenter) {
+        if (ir.x > (imgWidth / 2 + marginOfCenter)) {
             return -1;
         }
         return 0;
     }
 
     private int flightDirectionY() {
-        if (this.tagY > imgHeight / 2 + marginOfCenter) {
+        imageReturn ir = drone.getRetValues();
+
+        if (ir.y > (imgHeight / 2 + marginOfCenter)) {
             return 1;
         }
-        if (this.tagY < imgHeight / 2 - marginOfCenter) {
+        if (ir.y < (imgHeight / 2 - marginOfCenter)) {
             return -1;
         }
         return 0;

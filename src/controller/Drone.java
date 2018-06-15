@@ -163,10 +163,7 @@ public class Drone implements IDrone, Runnable {
     public void droneCamCapture() {
         drone.getVideoManager().addImageListener(new ImageListener() {
                 @Override
-                public void imageUpdated(BufferedImage bufferedImage)
-                {
-                    Drone.this.setImg(bufferedImage);
-                }
+                public void imageUpdated(BufferedImage bufferedImage) { Drone.this.setImg(bufferedImage); }
             });
     }
 
