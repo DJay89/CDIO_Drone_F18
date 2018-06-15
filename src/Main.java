@@ -85,7 +85,7 @@ public class Main extends Application {
             drone.hover(2000);
         }
 
-        System.out.print("Starting Master Algorithm");
+        System.out.print("Starting thread: Master Algorithm");
         //init master thread and start it
         MasterAlgorithm MA = new MasterAlgorithm(drone);
         masterThread = new Thread(MA);

@@ -14,13 +14,14 @@ public class CenteringAlgorithm {
     // Video size
     private static final int imgWidth = 640;
     private static final int imgHeight = 360;
-    private static final int marginOfCenter = 10;
+    private static final int marginOfCenter = 20;
 
     private Drone drone;
     private ImageRecognition IR;
 
-    private int time = 10;
-
+    private final int time = 10;
+    private boolean findQR;
+    private boolean findRing;
 
     public CenteringAlgorithm(Drone drone, ImageRecognition IR) {
         this.drone = drone;
@@ -29,17 +30,17 @@ public class CenteringAlgorithm {
 
 
     public boolean centerDroneOnQr() {
-        System.out.println("Centering Algorithm Starting");
-        //findQr = true;
+        System.out.println("Centering on QR");
+        findQR = true;
         return tagIsCentered();
     }
 
-    /*
-        public boolean centerDroneOnRing() {
-            findCircle = true;
-            return tagIsCentered();
-        }
-      */
+    public boolean centerDroneOnRing() {
+        System.out.println("Centering on Ring");
+        findRing = true;
+        return tagIsCentered();
+    }
+
     private boolean tagIsCentered() {
         while (tagIsFound() && !droneIsCentered()) {
             System.out.println("centering on point: " + drone.getRetValues().x + ", " + drone.getRetValues().y);
@@ -70,8 +71,16 @@ public class CenteringAlgorithm {
             }
             drone.hover(time);
         }
-        System.out.println("Drone is centered");
-        return true;
+
+        findRing = false;
+        findQR = false;
+        if (droneIsCentered()) {
+            System.out.println("Drone is centered");
+            return true;
+        }else {
+            System.out.println("Object lost");
+            return false;
+        }
     }
 
 
@@ -94,16 +103,23 @@ public class CenteringAlgorithm {
             // Get buffered image
             IR.setFrame(drone.getImg());
 
-            // Scan image
-            imageReturn ir = IR.qrScan();
+            imageReturn ir = null;
+            // Scan image for object
+            if(findQR) { ir = IR.qrScan(); }
+            if(findRing) { System.out.println("scan ring"); ir = IR.rrScan(); }
+
+            // Exit if picture havn't been scanned
+            if (ir == null) {
+                System.out.println("Error! No object are being searched for");
+                return false;
+            }
+
             // Save values
             drone.setRetValues(ir);
             ir = drone.getRetValues();
-
-            System.out.println("Points: " + ir.x + ", " + ir.y);
-
+            System.out.println(ir.name + ": " + ir.x + ", " + ir.y + ", " + ir.found);
             if (ir.found) {
-                System.out.println("Image found");
+                System.out.println("Image found on point: " + ir.x + ", " + ir.y);
                 return true;
             }
 
