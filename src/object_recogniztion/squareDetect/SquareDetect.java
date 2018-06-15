@@ -23,6 +23,16 @@ public class SquareDetect {
 
 
 
+    public double knownQrWidth = 30;
+    // distance in centimeter
+    public double knownDistance = 96;
+    public double markerWidth = 150;
+    public double markerHeight = 210;
+    public double focalLength;
+    public double distanceToQr;
+
+
+
     public boolean findQrCenter(Mat maskedImage) {
         Mat blurred = maskedImage.clone();
         Imgproc.medianBlur(maskedImage, blurred, 9);
@@ -133,8 +143,9 @@ public class SquareDetect {
                     //Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 8);
                     //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
                    // Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0, .8), 8);
-
-                    System.out.println("QR DETECTED");
+                    focalLength = focalLength(markerWidth, knownDistance, knownQrWidth );
+                    distanceToQr = distanceToQr(knownQrWidth, focalLength, rect.width);
+                    System.out.println("QR DETECTED" + distanceToQr);
                     setCenterOfRectX(rect.x + rect.width / 2);
                     setCenterOfRectY(rect.y + rect.height / 2);
                     return QR_FOUND;

@@ -54,6 +54,8 @@ public class MasterAlgorithm implements Runnable {
     private void algorithm() {
         // Run the algorithm while condition
         while(true) {
+            //IR.setFrame(drone.getImg());
+            //IR.squareDetect();
             // Start search level
             if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
                 // Center on tag
