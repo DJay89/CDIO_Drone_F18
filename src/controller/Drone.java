@@ -15,7 +15,7 @@ public class Drone implements IDrone, Runnable {
     //Drone Movement Variables
     private IARDrone drone;
     private CommandManager cmd;
-    private final int SPEED = 25;
+    private final int SPEED = 15;
 
     //Return values for Image Recognition
     private imageReturn retValues;

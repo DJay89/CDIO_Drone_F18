@@ -58,7 +58,7 @@ public class MasterAlgorithm implements Runnable {
             if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
                 // Center on tag
                 CA.centerDroneOnQr();
-                System.out.println("Drone is centered");
+                System.out.println("Centering algorithm done");
             }
 
         }

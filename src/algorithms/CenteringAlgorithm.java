@@ -37,67 +37,94 @@ public class CenteringAlgorithm {
         //findQr = true;
         return tagIsCentered();
     }
-/*
-    public boolean centerDroneOnRing() {
-        findCircle = true;
-        return tagIsCentered();
-    }
-  */
+
+    /*
+        public boolean centerDroneOnRing() {
+            findCircle = true;
+            return tagIsCentered();
+        }
+      */
     private boolean tagIsCentered() {
-        while (!isDroneCentered()) { // and circle or qr found (otherwise endless loop)
+        while (tagIsFound() && !droneIsCentered()) {
 
             switch (flightDirectionX()) {
                 case -1:
-                    drone.tiltRight(50);
+                    drone.tiltRight(10);
+                    System.out.println("moving right");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.tiltLeft(50);
+                    drone.tiltLeft(10);
+                    System.out.println("moving left");
                     break;
             }
 
             switch (flightDirectionY()) {
                 case -1:
-                    drone.up(50);
+                    drone.up(10);
+                    System.out.println("moving up");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.down(50);
+                    drone.down(10);
+                    System.out.println("moving down");
                     break;
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("Drone is centered");
         return true;
     }
 
-    private boolean isDroneCentered() {
-        IR.setFrame(drone.getImg());
 
-        // pass info to drone
-        imageReturn ir = IR.qrScan();
-        //imageReturn ir = IR.rrScan();
-        drone.setRetValues(ir);
+    private boolean droneIsCentered() {
 
-        // get coords from drone
-        ir = drone.getRetValues();
+        // Get the return values from video feed
+        imageReturn ir = drone.getRetValues();
 
-        if(ir.found){
-            this.tagX = ir.x;
-            this.tagY = ir.y;
-            if (!isTagInCenter(tagX, tagY)) {
-                return false;
-            }
-            else {
+        if (!isTagInCenter(ir.x, ir.y)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Checking if a tag is found. if it is, save values
+    private boolean tagIsFound() {
+        int i = 0;
+        while (i < 100) {
+            // Get buffered image
+            IR.setFrame(drone.getImg());
+
+            // Scan image
+            imageReturn ir = IR.qrScan();
+            // Save values
+            drone.setRetValues(ir);
+            ir = drone.getRetValues();
+
+            System.out.println("Points: " + ir.x + ", " + ir.y);
+
+            if (ir.found) {
+                System.out.println("Image found");
                 return true;
             }
+/*
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+            i++;
         }
+
+        System.out.println("Image not found");
         return false;
     }
 
@@ -105,24 +132,32 @@ public class CenteringAlgorithm {
 
         if ((
                 x < imgWidth / 2 + marginOfCenter &&
-                x > imgWidth / 2 - marginOfCenter
-                ) && (
+                        x > imgWidth / 2 - marginOfCenter
+        ) && (
                 y < imgHeight / 2 + marginOfCenter &&
-                y > imgHeight / 2 - marginOfCenter)) {
+                        y > imgHeight / 2 - marginOfCenter)) {
             return true;
         }
         return false;
     }
 
     private int flightDirectionX() {
-        if (this.tagX > imgWidth / 2 + marginOfCenter) { return 1; }
-        if (this.tagX < imgWidth / 2 - marginOfCenter) { return -1; }
+        if (this.tagX < imgWidth / 2 - marginOfCenter) {
+            return 1;
+        }
+        if (this.tagX > imgWidth / 2 + marginOfCenter) {
+            return -1;
+        }
         return 0;
     }
 
     private int flightDirectionY() {
-        if (this.tagY > imgHeight + marginOfCenter) { return 1; }
-        if (this.tagY < imgHeight - marginOfCenter) { return -1; }
+        if (this.tagY > imgHeight / 2 + marginOfCenter) {
+            return 1;
+        }
+        if (this.tagY < imgHeight / 2 - marginOfCenter) {
+            return -1;
+        }
         return 0;
     }
 
