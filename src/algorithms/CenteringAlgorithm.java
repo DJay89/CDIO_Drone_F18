@@ -1,14 +1,8 @@
 package algorithms;
 
 import controller.Drone;
-import de.yadrone.apps.paperchase.QRCodeScanner;
 import object_recogniztion.image_recogniztion.ImageRecognition;
-import object_recogniztion.qr_scanner.QRscanner;
-import utils.distReturn;
 import utils.imageReturn;
-
-import java.awt.*;
-
 
 public class CenteringAlgorithm {
 
@@ -20,7 +14,7 @@ public class CenteringAlgorithm {
     private Drone drone;
     private ImageRecognition IR;
 
-    private final int time = 10;
+    private final int time = 5;
     private boolean findQR;
     private boolean findRing;
 
@@ -43,7 +37,7 @@ public class CenteringAlgorithm {
     }
 
     private boolean tagIsCentered() {
-        while (tagIsFound() && !droneIsCentered() && !targetDistanceApproved()) {
+        while (tagIsFound() && !droneIsCentered()) {
             System.out.println("centering on point: " + drone.getRetValues().x + ", " + drone.getRetValues().y);
             switch (flightDirectionX()) {
                 case -1:
@@ -69,22 +63,6 @@ public class CenteringAlgorithm {
                     drone.down(time);
                     System.out.println("moving down");
                     break;
-            }
-
-            // Distance to QR object
-            if (findQR) {
-                switch (targetDistance()) {
-                    case -1:
-                        drone.forward(time);
-                        System.out.println("moving forward");
-                        break;
-                    case 0:
-                        break;
-                    case 1:
-                        drone.backward(time);
-                        System.out.println("moving backward");
-                        break;
-                }
             }
             drone.hover(time);
         }
@@ -113,15 +91,6 @@ public class CenteringAlgorithm {
         return true;
     }
 
-    private boolean targetDistanceApproved() {
-        distReturn dr = drone.getDistValues();
-        if (dr.distance > 69 && dr.distance < 100) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     // Checking if a tag is found. if it is, save values
     private boolean tagIsFound() {
         int i = 0;
@@ -130,15 +99,13 @@ public class CenteringAlgorithm {
             IR.setFrame(drone.getImg());
 
             imageReturn ir = null;
-            distReturn dr = null;
+
             // Scan image for object
             if (findQR) {
                 ir = IR.qrScan();
-                dr = IR.sdScan();
             }
             if (findRing) {
                 ir = IR.rrScan();
-                System.out.println("scanning for rings");
             }
 
             // Exit if picture havn't been scanned
@@ -149,21 +116,12 @@ public class CenteringAlgorithm {
 
             // Save values
             drone.setRetValues(ir);
-            drone.setDistValues(dr);
 
             System.out.println(ir.resutalt);
 
             if (ir.found) {
                 System.out.println("Image found on point: " + ir.x + ", " + ir.y);
-System.out.println(dr.distance);
-                if (ir.name.equals("QR")) {
-                    if (dr.distFound) {
-                        System.out.println(dr.distance);
-                        return true;
-                    }
-                } else {
-                    return true;
-                }
+                return true;
             }
 
             try {
@@ -215,28 +173,6 @@ System.out.println(dr.distance);
         return 0;
     }
 
-    private int targetDistance() {
-
-        distReturn dr = drone.getDistValues();
-
-        System.out.println("Distance to object: " + dr.distance);
-        // distance too close
-        if (dr.distance < 69) {
-            return 1;
-        }
-        // distance OK
-        if (dr.distance > 69 && dr.distance < 100) {
-            return 0;
-        }
-        // object too far away
-        if (dr.distance > 100) {
-            return -1;
-        }
-
-        return 0;
-    }
-
-
 //Placing the drone in front of the circle
 //    private boolean angleAdjusted() {
 //
@@ -278,4 +214,4 @@ System.out.println(dr.distance);
 //        turnDirection = 'n';
 //        return true;
 //    }
-                }
+}

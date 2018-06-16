@@ -114,49 +114,28 @@ public class SquareDetect {
             if (maxId >= 0) {
 
 
-                double aspectRatioMin = 1.2;
-                double aspectRatioMax = 1.4;
-                Mat frameCut;
-                //Imgproc.circle(src, new Point(620, 140), 20, new Scalar(255, 0, 0), 8);
-                //Imgproc.rectangle(src, new Point(620, 500), new Point(700, 300), new Scalar(0, 0, 255), 8);
-
-                // for (int i = 0; i < neededContours.size(); i++) {
                 Rect rect = Imgproc.boundingRect(contours.get(maxId));
-                //System.out.println("Aspect Ratio = " + (double) rect.height / (double) rect.width);
-                //System.out.println("rect height = " + rect.height + "rect width" + rect.width);
+                Point centerOfRect = new Point();
 
 
-                if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && ((double) rect.height / (double) rect.width) < aspectRatioMax)
-
+                double aspectRatioMin = 1.3;
+                double aspectRatioMax = 1.7;
+                if ((rect.height > 210*0.05 && rect.width > 150 * 0.05) && (rect.height < 210 * 1.2 && rect.width < 150 * 1.2))
                 {
+                   // if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && (((double) rect.height / (double) rect.width) < aspectRatioMax)) {
 
-                    //          if ((rect.height > 100) && (rect.width > 50)) {
-                    //System.out.println("INSIDE PARAMETERS" + "rect height = " + rect.height + "rect width" + rect.width);
-                    //System.out.println("Aspect Ratio INSIDE PARAMETERS = " + (double) rect.height / (double) rect.width);
+                        centerOfRect.x = rect.x + rect.width / 2;
+                        centerOfRect.y = rect.y + rect.height / 2;
+                        //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
+                        //Imgproc.rectangle(src, rect.tl(), rect.br(), new Scalar(0, 255, 0, .8)/*😎*/, 2);
 
-                            /*
-                           for ( int j = 0; j < neededContours.get(i).toList().size(); j++ )
-                           {
-                              System.out.println("CONT COORDINATE = " + neededContours.get(i).toList().get(j));
-                              Imgproc.circle(src, neededContours.get(i).toList().get(j), 20, new Scalar(0, 255, 0), 8) ;
-                           }
-*/
-                    //   System.out.print("NUMBERS OF CONTOURS FOUND = " + neededContours.size());
+                        focalLength = focalLength(markerWidth, knownDistance, knownQrWidth );
+                        distanceToQr = distanceToQr(knownQrWidth, focalLength, rect.width);
+                        System.out.println("distance "+ distanceToQr);
+                        this.distance = (int) distanceToQr;
+                        this.distanceFound = QR_FOUND;
+                        return QR_FOUND;
 
-                    //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
-                    //Imgproc.rectangle(src, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(255, 0, 0), 8);
-                    //Imgproc.circle(src, rect.br(), 20, new Scalar(0, 0, 255), 8);
-                   // Imgproc.drawContours(src, contours, maxId, new Scalar(255, 0, 0, .8), 8);
-                    focalLength = focalLength(markerWidth, knownDistance, knownQrWidth );
-                    distanceToQr = distanceToQr(knownQrWidth, focalLength, rect.width);
-                    System.out.println("QR DETECTED" + distanceToQr);
-                    setCenterOfRectX(rect.x + rect.width / 2);
-                    setCenterOfRectY(rect.y + rect.height / 2);
-
-                    this.distance = (int) distanceToQr;
-                    this.distanceFound = QR_FOUND;
-
-                    return QR_FOUND;
                 }
                 else {
                         //System.out.println("NO QR FOUND");
