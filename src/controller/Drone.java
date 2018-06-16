@@ -4,6 +4,7 @@ import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.video.ImageListener;
+import utils.distReturn;
 import utils.imageReturn;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -15,11 +16,11 @@ public class Drone implements IDrone, Runnable {
     //Drone Movement Variables
     private IARDrone drone;
     private CommandManager cmd;
-    private final int SPEED = 15;
+    private final int SPEED = 25;
 
     //Return values for Image Recognition
     private imageReturn retValues;
-
+    private distReturn distValues;
     //Camera Settings
     public VideoCapture capture = new VideoCapture();
     private static int cameraId = 0;
@@ -41,6 +42,7 @@ public class Drone implements IDrone, Runnable {
         this.drone = drone;
         this.debug = debug;
         retValues = new imageReturn();
+        distValues = new distReturn();
 
         if(debug){
             System.out.println("Starting Web cam");
@@ -175,5 +177,13 @@ public class Drone implements IDrone, Runnable {
     @Override
     public synchronized BufferedImage getImg() {
         return this.img;
+    }
+
+    public void setDistValues(distReturn distValues) {
+        this.distValues = distValues;
+    }
+
+    public distReturn getDistValues() {
+        return this.distValues;
     }
 }

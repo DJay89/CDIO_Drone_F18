@@ -31,7 +31,11 @@ public class SquareDetect {
     public double focalLength;
     public double distanceToQr;
 
+    private int distance;
+    private boolean distanceFound;
 
+    public boolean getFound() {return this.distanceFound;}
+    public int getDistance() {return this.distance;}
 
     public boolean findQrCenter(Mat maskedImage) {
         Mat blurred = maskedImage.clone();
@@ -148,6 +152,10 @@ public class SquareDetect {
                     System.out.println("QR DETECTED" + distanceToQr);
                     setCenterOfRectX(rect.x + rect.width / 2);
                     setCenterOfRectY(rect.y + rect.height / 2);
+
+                    this.distance = (int) distanceToQr;
+                    this.distanceFound = QR_FOUND;
+
                     return QR_FOUND;
                 }
                 else {

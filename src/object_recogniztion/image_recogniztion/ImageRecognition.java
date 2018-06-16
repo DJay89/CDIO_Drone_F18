@@ -4,6 +4,7 @@ import object_recogniztion.RingFinder.RedRingFinder;
 import object_recogniztion.squareDetect.FilterBackground;
 import object_recogniztion.squareDetect.SquareDetect;
 import org.opencv.core.Mat;
+import utils.distReturn;
 import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;
 import java.awt.image.BufferedImage;
@@ -72,18 +73,16 @@ public class ImageRecognition {
         return ret;
     }
 
-    public imageReturn squareDetect() {
+    public distReturn sdScan() {
 
-        imageReturn ret = new imageReturn();
+        distReturn ret = new distReturn();
         Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
         //newFrame = fb.filterBackGround( newFrame, 1 );
         //ret.found = sd.findQrCenter( newFrame );
-        ret.found = sd.findQrCenter( newFrame );
+        ret.distFound = sd.findQrCenter( newFrame );
 
-        if ( ret.found ){
-            ret.x = sd.getCenterOfRectX();
-            ret.y = sd.getCenterOfRectY();
-            ret.resutalt = "QR Code Found";
+        if ( ret.distFound ){
+            ret.distance = sd.getDistance();
         }
         return ret;
 
