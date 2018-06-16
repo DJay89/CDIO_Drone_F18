@@ -61,13 +61,15 @@ public class MasterAlgorithm implements Runnable {
         //    IR.setFrame(drone.getImg());
         //    IR.squareDetect();
             // Start search level
-            if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
-                // Center on tag
+        if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
+        // Center on tag
+            while(true)
+            {
                 if (CA.centerDroneOnQr()) {
-                 if (DA.reduceDist() < 120)
-                 {
-
-
+                    if (DA.reduceDistance() == 0)
+                    {
+                        System.out.println("Algorithm done");
+                    }
                 }
             }
         }

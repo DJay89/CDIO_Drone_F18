@@ -1,13 +1,8 @@
 package algorithms;
 
 import controller.Drone;
-import de.yadrone.apps.paperchase.QRCodeScanner;
 import object_recogniztion.image_recogniztion.ImageRecognition;
-import object_recogniztion.qr_scanner.QRscanner;
 import utils.imageReturn;
-
-import java.awt.*;
-
 
 public class CenteringAlgorithm {
 
@@ -77,7 +72,7 @@ public class CenteringAlgorithm {
         if (droneIsCentered()) {
             System.out.println("Drone is centered");
             return true;
-        }else {
+        } else {
             System.out.println("Object lost");
             return false;
         }
@@ -104,10 +99,14 @@ public class CenteringAlgorithm {
             IR.setFrame(drone.getImg());
 
             imageReturn ir = null;
+
             // Scan image for object
-            if(findQR) { ir = IR.qrScan(); }
-            if(findRing) { ir = IR.rrScan();
-            System.out.println("scanning for rings"); }
+            if (findQR) {
+                ir = IR.qrScan();
+            }
+            if (findRing) {
+                ir = IR.rrScan();
+            }
 
             // Exit if picture havn't been scanned
             if (ir == null) {
@@ -117,7 +116,6 @@ public class CenteringAlgorithm {
 
             // Save values
             drone.setRetValues(ir);
-            ir = drone.getRetValues();
 
             System.out.println(ir.resutalt);
 
@@ -175,7 +173,7 @@ public class CenteringAlgorithm {
         return 0;
     }
 
-    //Placing the drone in front of the circle
+//Placing the drone in front of the circle
 //    private boolean angleAdjusted() {
 //
 //        if (getHoriDiamenter() != getVertiDiamenter()) {

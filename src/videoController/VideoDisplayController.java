@@ -161,5 +161,8 @@ public class VideoDisplayController {
     {
         this.stopAcquisition();
         this.drone.land();
+        this.drone.reset();
+        this.drone.reset();
+
     }
 }
