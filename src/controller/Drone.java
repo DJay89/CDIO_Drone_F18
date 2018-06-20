@@ -51,6 +51,7 @@ public class Drone implements IDrone, Runnable {
         else{
             System.out.println("Starting drone camera");
             this.cmd = this.drone.getCommandManager();
+            //this.cmd.setMaxAltitude(180);
             droneCamCapture();
         }
         System.out.println("Done constructing the drone");
@@ -108,41 +109,56 @@ public class Drone implements IDrone, Runnable {
     @Override
     public void spinRight (long ms){
         cmd.spinRight(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void spinLeft (long ms){
         cmd.spinLeft(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void up (long ms) {
         cmd.up(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
     }
 
     @Override
     public void down (long ms) {
         cmd.down(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void tiltLeft (long ms) {
         cmd.goLeft(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void tiltRight (long ms) {
         cmd.goRight(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void forward(long ms){
         cmd.forward(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void backward(long ms){
         cmd.backward(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
@@ -158,6 +174,8 @@ public class Drone implements IDrone, Runnable {
     @Override
     public void move3D(int speedX, int speedY, int speedZ, int speedSpin, long ms) {
         cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     //use for drone camera stream

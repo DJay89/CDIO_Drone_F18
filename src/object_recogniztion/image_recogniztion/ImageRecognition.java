@@ -74,7 +74,6 @@ public class ImageRecognition {
     }
 
     public distReturn sdScan() {
-
         distReturn ret = new distReturn();
         Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
         //newFrame = fb.filterBackGround( newFrame, 1 );
@@ -85,8 +84,23 @@ public class ImageRecognition {
             ret.distance = sd.getDistance();
         }
         return ret;
-
     }
+
+    public imageReturn sdIRscan() {
+        imageReturn ret = new imageReturn();
+        Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
+        //newFrame = fb.filterBackGround( newFrame, 1 );
+        //ret.found = sd.findQrCenter( newFrame );
+        ret.found = sd.findQrCenter( newFrame );
+
+        if ( ret.found){
+            ret.x = sd.getX();
+            ret.x = sd.gety();
+
+        }
+        return ret;
+    }
+
 
     //add more after here
 

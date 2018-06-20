@@ -31,6 +31,9 @@ public class SquareDetect {
     public double focalLength;
     public double distanceToQr;
 
+    public int x = 0;
+    public int y = 0;
+
     private int distance;
     private boolean distanceFound;
 
@@ -119,23 +122,25 @@ public class SquareDetect {
 
 
                 double aspectRatioMin = 1.3;
-                double aspectRatioMax = 1.7;
-                if ((rect.height > 210*0.05 && rect.width > 150 * 0.05) && (rect.height < 210 * 1.2 && rect.width < 150 * 1.2))
+                double aspectRatioMax = 1.6;
+                 if ((rect.height > 210*0.05 && rect.width > 150 * 0.05) && (rect.height < 210 * 1.2 && rect.width < 150 * 1.2))
                 {
-                   // if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && (((double) rect.height / (double) rect.width) < aspectRatioMax)) {
+                    if ((((double) rect.height / (double) rect.width) > aspectRatioMin) && (((double) rect.height / (double) rect.width) < aspectRatioMax)) {
 
-                        centerOfRect.x = rect.x + rect.width / 2;
-                        centerOfRect.y = rect.y + rect.height / 2;
-                        //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
+                        this.x = rect.x + rect.width / 2;
+                        this.y = rect.y + rect.height / 2;
+
+                                        //Imgproc.circle(src, centerOfRect, 20, new Scalar(255, 0, 0), 8);
+
                         //Imgproc.rectangle(src, rect.tl(), rect.br(), new Scalar(0, 255, 0, .8)/*😎*/, 2);
 
-                        focalLength = focalLength(markerWidth, knownDistance, knownQrWidth );
+                        focalLength = focalLength(markerWidth, knownDistance, knownQrWidth);
                         distanceToQr = distanceToQr(knownQrWidth, focalLength, rect.width);
-                        System.out.println("distance "+ distanceToQr);
+                        System.out.println("distance " + distanceToQr);
                         this.distance = (int) distanceToQr;
                         this.distanceFound = QR_FOUND;
                         return QR_FOUND;
-
+                    }
                 }
                 else {
                         //System.out.println("NO QR FOUND");
@@ -159,23 +164,14 @@ public class SquareDetect {
 
     public int getCenterOfRectX(){
 
-        return (int) centerOfRect.x;
+        return this.x;
     }
 
     public int getCenterOfRectY(){
 
-        return (int) centerOfRect.y;
+        return this.y;
     }
 
-    public void setCenterOfRectX(double centerOfRectX){
-
-        this.centerOfRect.x = centerOfRect.x;
-    }
-
-    public void setCenterOfRectY(double centerOfRectY){
-
-        this.centerOfRect.y = centerOfRect.y;
-    }
 
     private double distanceToQr( double knownWidth, double focalLength, double perceivedWidth ){
         return ( knownWidth * focalLength ) / perceivedWidth;
@@ -196,5 +192,12 @@ public class SquareDetect {
         return 0.0;
     }
 
+    public int getX() {
+        return this.x;
+    }
+
+    public int gety() {
+        return this.y;
+    }
 }
 

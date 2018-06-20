@@ -48,11 +48,12 @@ public class SearchAlgorithm {
 
     public int searchLvlZero(long searchTime) {
 
+        //    System.out.println("Search Level 0: Searching for QR and Red Rings");
         long spinTime = System.currentTimeMillis() + searchTime;
+
         String temp = drone.getRetValues().resutalt;
         while ( System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 
-            System.out.println("Search Level 0: Searching for QR and Red Rings");
             //drone.move3D(2, -1, 0 , 20, 500);
             drone.hover(5);
 
@@ -66,8 +67,9 @@ public class SearchAlgorithm {
                 IR.setFrame(drone.getImg());
 
                 // pass info to drone
-                imageReturn ir = IR.qrScan();
-                //imageReturn ir = IR.rrScan();
+                imageReturn ir = new imageReturn();
+                //imageReturn             System.out.println("Search Level 0: Searching for QR and Red Rings");
+                ir = IR.qrScan();
                 drone.setRetValues(ir);
                 if( ir.found){
                     System.out.println(ir.resutalt);
@@ -87,7 +89,7 @@ public class SearchAlgorithm {
         }
 
         //System.out.println("Nothing found initiating Search Level 1");
-        drone.land();
+        // drone.land();
         return 0;
         // return searchLvlOne();
 
@@ -98,6 +100,7 @@ public class SearchAlgorithm {
     public int searchLvlOne(long searchTime) {
 
         long spinTime = System.currentTimeMillis() + searchTime;
+
         String temp = drone.getRetValues().resutalt;
         while (System.currentTimeMillis() - spinTime <= 0 && temp.equals("")) {
 

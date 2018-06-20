@@ -31,7 +31,6 @@ public class MasterAlgorithm implements Runnable {
         while (!Thread.interrupted()) {
             BufferedImage bi = drone.getImg();
             if (bi != null) {
-                System.out.println("Starting Master Algorithm");
                 algorithm();
             }
                 /* Might be useful
@@ -62,13 +61,33 @@ public class MasterAlgorithm implements Runnable {
         //    IR.squareDetect();
             // Start search level
         if (SA.searchLvlZero(60000) == QR_CODE_FOUND) {
-        // Center on tag
+        System.out.println("################# found QR ################3");
+            // Center on tag
             while(true)
             {
+                System.out.println("################# BEGIN CENTERING ################3");
                 if (CA.centerDroneOnQr()) {
-                    if (DA.reduceDistance() == 0)
+                    System.out.println("################# BEGIN DISTANCE################3");
+                    int dist = DA.getDistance();
+
+                    System.out.println(" dist : " + dist);
+                    if (dist != -1)
                     {
-                        System.out.println("Algorithm done");
+                        System.out.println("################# found value ! ################3");
+                        DA.reduceDistance(dist);
+                    }
+                    else
+                    {
+                        System.out.println("################# PLZ DONT DIE################3");
+                        drone.forward(15);
+                        drone.hover(2);
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 }
             }

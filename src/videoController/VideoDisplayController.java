@@ -97,6 +97,8 @@ public class VideoDisplayController {
     protected void changeCam(ActionEvent event)
     {
         drone.toggleCamera();
+        drone.reset();
+
     }
 
     //passing drone
@@ -161,8 +163,6 @@ public class VideoDisplayController {
     {
         this.stopAcquisition();
         this.drone.land();
-        this.drone.reset();
-        this.drone.reset();
 
     }
 }
