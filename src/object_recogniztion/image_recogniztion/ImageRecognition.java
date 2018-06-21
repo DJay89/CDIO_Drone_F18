@@ -1,8 +1,12 @@
 package object_recogniztion.image_recogniztion;
 
+import object_recogniztion.RingFinder.RedRingFinder;
+import object_recogniztion.squareDetect.FilterBackground;
+import object_recogniztion.squareDetect.SquareDetect;
+import org.opencv.core.Mat;
+import utils.distReturn;
 import utils.imageReturn;
 import object_recogniztion.qr_scanner.QRscanner;
-
 import java.awt.image.BufferedImage;
 
 public class ImageRecognition {
@@ -17,10 +21,17 @@ public class ImageRecognition {
 
     //Object class we have made
     private QRscanner qr;
+    private RedRingFinder rr;
+    private SquareDetect sd;
+    private FilterBackground fb;
 
     //init
     public ImageRecognition() {
         this.qr = new QRscanner();
+        this.rr = new RedRingFinder();
+        this.sd = new SquareDetect();
+        this.fb = new FilterBackground();
+
     }
 
     //Class Needed functions
@@ -38,7 +49,7 @@ public class ImageRecognition {
         ret.name = "QR";
         ret.found = false;
         Boolean tmp = qr.decodeQR( getFrame() );
-        if(tmp) {
+        if(tmp){
             ret.found = true;
             ret.x = qr.getX();
             ret.y = qr.getY();
@@ -47,7 +58,55 @@ public class ImageRecognition {
         return ret;
     }
 
+    //function to execute qr scanning
+    public imageReturn rrScan()
+    {
+        imageReturn ret = new imageReturn();
+        ret.name = "RR";
+        rr.findRedRing( getFrame() );
+        ret.found = rr.foundRing();
+        if(ret.found){
+            ret.x = rr.getX();
+            ret.y = rr.getY();
+            ret.resutalt ="found red ring";
+        }
+        return ret;
+    }
+
+    public distReturn sdScan() {
+        distReturn ret = new distReturn();
+        Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
+        //newFrame = fb.filterBackGround( newFrame, 1 );
+        //ret.found = sd.findQrCenter( newFrame );
+        ret.distFound = sd.findQrCenter( newFrame );
+
+        if ( ret.distFound ){
+            ret.distance = sd.getDistance();
+        }
+        return ret;
+    }
+
+    public imageReturn sdIRscan() {
+        imageReturn ret = new imageReturn();
+        Mat newFrame = utils.Utils.bufferedImageToMat( getFrame() );
+        //newFrame = fb.filterBackGround( newFrame, 1 );
+        //ret.found = sd.findQrCenter( newFrame );
+        ret.found = sd.findQrCenter( newFrame );
+
+        if ( ret.found){
+            ret.x = sd.getX();
+            ret.x = sd.gety();
+
+        }
+        return ret;
+    }
+
+
     //add more after here
+
+    public void emptyCenterCordStack () {
+        rr.emptyStack();
+    }
 
 
 }

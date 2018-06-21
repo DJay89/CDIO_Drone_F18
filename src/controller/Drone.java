@@ -4,6 +4,7 @@ import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.video.ImageListener;
+import utils.distReturn;
 import utils.imageReturn;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -19,7 +20,7 @@ public class Drone implements IDrone, Runnable {
 
     //Return values for Image Recognition
     private imageReturn retValues;
-
+    private distReturn distValues;
     //Camera Settings
     public VideoCapture capture = new VideoCapture();
     private static int cameraId = 0;
@@ -41,6 +42,7 @@ public class Drone implements IDrone, Runnable {
         this.drone = drone;
         this.debug = debug;
         retValues = new imageReturn();
+        distValues = new distReturn();
 
         if(debug){
             System.out.println("Starting Web cam");
@@ -49,6 +51,7 @@ public class Drone implements IDrone, Runnable {
         else{
             System.out.println("Starting drone camera");
             this.cmd = this.drone.getCommandManager();
+            //this.cmd.setMaxAltitude(180);
             droneCamCapture();
         }
         System.out.println("Done constructing the drone");
@@ -106,41 +109,56 @@ public class Drone implements IDrone, Runnable {
     @Override
     public void spinRight (long ms){
         cmd.spinRight(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void spinLeft (long ms){
         cmd.spinLeft(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void up (long ms) {
         cmd.up(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
     }
 
     @Override
     public void down (long ms) {
         cmd.down(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void tiltLeft (long ms) {
         cmd.goLeft(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void tiltRight (long ms) {
         cmd.goRight(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void forward(long ms){
         cmd.forward(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
     public void backward(long ms){
         cmd.backward(SPEED).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     @Override
@@ -156,6 +174,8 @@ public class Drone implements IDrone, Runnable {
     @Override
     public void move3D(int speedX, int speedY, int speedZ, int speedSpin, long ms) {
         cmd.move(speedX, speedY, speedZ, speedSpin).doFor(ms);
+        cmd.hover().doFor(1);
+
     }
 
     //use for drone camera stream
@@ -163,10 +183,7 @@ public class Drone implements IDrone, Runnable {
     public void droneCamCapture() {
         drone.getVideoManager().addImageListener(new ImageListener() {
                 @Override
-                public void imageUpdated(BufferedImage bufferedImage)
-                {
-                    Drone.this.setImg(bufferedImage);
-                }
+                public void imageUpdated(BufferedImage bufferedImage) { Drone.this.setImg(bufferedImage); }
             });
     }
 
@@ -179,4 +196,18 @@ public class Drone implements IDrone, Runnable {
     public synchronized BufferedImage getImg() {
         return this.img;
     }
+
+    public void setDistValues(distReturn distValues) {
+        this.distValues = distValues;
+    }
+
+    public distReturn getDistValues() {
+        return this.distValues;
+    }
+
+    public void reset() {
+        drone.reset();
+    }
+
 }
+

@@ -2,117 +2,178 @@ package algorithms;
 
 import controller.Drone;
 import de.yadrone.apps.paperchase.QRCodeScanner;
+import object_recogniztion.image_recogniztion.ImageRecognition;
 import object_recogniztion.qr_scanner.QRscanner;
+import utils.imageReturn;
 
-public class CenteringAlgorithm implements Runnable{
+import java.awt.*;
+
+
+public class CenteringAlgorithm {
 
     // Video size
-    private static final int imgWidth = 1280;
-    private static final int imgHeight = 720;
-    private static final int marginOfCenter = 10;
+    private static final int imgWidth = 640;
+    private static final int imgHeight = 360;
+    private static final int marginOfCenter = 20;
 
-    private Drone drone = null;
+    private Drone drone;
+    private ImageRecognition IR;
 
-    private boolean findCircle;
-    private boolean findQr;
+    private final int time = 15;
+    private boolean findQR;
+    private boolean findRing;
 
-    private QRscanner qrScanner;
-    private int tagX;
-    private int tagY;
-
-    public CenteringAlgorithm(Drone drone) {
+    public CenteringAlgorithm(Drone drone, ImageRecognition IR) {
         this.drone = drone;
+        this.IR = IR;
     }
 
-    public boolean centerDroneOnCircle() {
-        this.findCircle = true;
+
+    public boolean centerDroneOnQr() {
+        System.out.println("Centering on QR");
+        findQR = true;
         return tagIsCentered();
     }
 
-    public boolean centerDroneOnQR() {
-        this.findQr = true;
+    public boolean centerDroneOnRing() {
+        System.out.println("Centering on Ring");
+        findRing = true;
         return tagIsCentered();
     }
 
     private boolean tagIsCentered() {
-        while (!isDroneCentered()) { // and circle or qr found (otherwise endless loop)
-
+        while (tagIsFound() && !droneIsCentered()) {
+            System.out.println("centering on point: " + drone.getRetValues().x + ", " + drone.getRetValues().y);
             switch (flightDirectionX()) {
                 case -1:
-                    drone.tiltRight(50);
+                    drone.tiltRight(time);
+                    System.out.println("moving right");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.tiltLeft(50);
+                    drone.tiltLeft(time);
+                    System.out.println("moving left");
                     break;
             }
 
             switch (flightDirectionY()) {
                 case -1:
-                    drone.up(50);
+                    drone.up(time);
+                    System.out.println("moving up");
                     break;
                 case 0:
                     break;
                 case 1:
-                    drone.down(50);
+                    drone.down(time);
+                    System.out.println("moving down");
                     break;
             }
+            drone.hover(time);
         }
-        return true;
+
+        findRing = false;
+        findQR = false;
+        if (droneIsCentered()) {
+            System.out.println("Drone is centered");
+            return true;
+        }else {
+            System.out.println("Object lost");
+            return false;
+        }
     }
 
-    private boolean isDroneCentered() {
-        qrScanner = new QRscanner();
-        // get coords from drone
-        if (findQr) {
-            tagX = qrScanner.getX();
-            tagY = qrScanner.getY();
-        }
-        if (findCircle) {
-            tagX = 321;
-            tagY = 456;
-        }
 
-        if (!isTagInCenter(tagX, tagY)) {
+    private boolean droneIsCentered() {
+
+        // Get the return values from video feed
+        imageReturn ir = drone.getRetValues();
+
+        if (!isTagInCenter(ir.x, ir.y)) {
             return false;
         }
 
-        findCircle = false;
-        findQr = false;
         return true;
+    }
+
+    // Checking if a tag is found. if it is, save values
+    private boolean tagIsFound() {
+        int i = 0;
+        while (i < 100) {
+            // Get buffered image
+            IR.setFrame(drone.getImg());
+
+            imageReturn ir = null;
+            // Scan image for object
+            if(findQR) { ir = IR.qrScan(); }
+            if(findRing) { ir = IR.rrScan();
+            System.out.println("scanning for rings"); }
+
+            // Exit if picture havn't been scanned
+            if (ir == null) {
+                System.out.println("Error! No object are being searched for");
+                return false;
+            }
+
+            // Save values
+            drone.setRetValues(ir);
+            ir = drone.getRetValues();
+
+            //System.out.println(ir.resutalt);
+
+            if (ir.found) {
+                System.out.println("Image found on point: " + ir.x + ", " + ir.y);
+                return true;
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            i++;
+        }
+
+        System.out.println("Image not found");
+        return false;
     }
 
     private boolean isTagInCenter(int x, int y) {
 
         if ((
                 x < imgWidth / 2 + marginOfCenter &&
-                x > imgWidth / 2 - marginOfCenter
-                ) && (
+                        x > imgWidth / 2 - marginOfCenter
+        ) && (
                 y < imgHeight / 2 + marginOfCenter &&
-                y > imgHeight / 2 - marginOfCenter)) {
+                        y > imgHeight / 2 - marginOfCenter)) {
             return true;
         }
         return false;
     }
 
     private int flightDirectionX() {
-        if (this.tagX > imgWidth / 2 + marginOfCenter) { return 1; }
-        if (this.tagX < imgWidth / 2 - marginOfCenter) { return -1; }
+        imageReturn ir = drone.getRetValues();
+
+        if (ir.x < (imgWidth / 2 - marginOfCenter)) {
+            return 1;
+        }
+        if (ir.x > (imgWidth / 2 + marginOfCenter)) {
+            return -1;
+        }
         return 0;
     }
 
     private int flightDirectionY() {
-        if (this.tagY > imgHeight + marginOfCenter) { return 1; }
-        if (this.tagY < imgHeight - marginOfCenter) { return -1; }
+        imageReturn ir = drone.getRetValues();
+
+        if (ir.y > (imgHeight / 2 + marginOfCenter)) {
+            return 1;
+        }
+        if (ir.y < (imgHeight / 2 - marginOfCenter)) {
+            return -1;
+        }
         return 0;
     }
-
-    @Override
-    public void run() {
-        System.out.println("centering starter bby!!");
-    }
-
 
     //Placing the drone in front of the circle
 //    private boolean angleAdjusted() {
